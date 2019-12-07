@@ -3,7 +3,15 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import './app.css';
 import * as ROUTES from './constants/routes';
-import { Landing, Home, Account, Admin, SignIn, SignUp } from './pages';
+import {
+  Landing,
+  Home,
+  Account,
+  Admin,
+  SignIn,
+  SignUp,
+  ResetPassword
+} from './pages';
 import { withAuthentication } from './components/Session';
 
 const App = () => (
@@ -15,6 +23,7 @@ const App = () => (
     <Route path={ROUTES.ADMIN} component={Admin} />
     <Route path={ROUTES.SIGN_IN} component={SignIn} />
     <Route path={ROUTES.SIGN_UP} component={SignUp} />
+    <Route path={ROUTES.RESET_PASSWORD} component={ResetPassword} />
   </Router>
 );
 

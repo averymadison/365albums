@@ -1,18 +1,13 @@
 import React from 'react';
 import { History } from 'history';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { SignUpLink } from '../SignUp';
-import { ResetPasswordLink } from '../ResetPassword';
+import { Link } from 'react-router-dom';
 import { withFirebase } from '../../components/Firebase';
 import * as ROUTES from '../../constants/routes';
 
-const SignIn = () => (
+const ResetPassword = () => (
   <div>
-    <h1>Sign In</h1>
-    <SignInForm />
-    <ResetPasswordLink />
-    <SignUpLink />
+    <h1>Reset Password</h1>
+    <ResetPasswordForm />
   </div>
 );
 
@@ -23,30 +18,27 @@ interface Props {
 
 interface State {
   email: string;
-  password: string;
   error: firebase.auth.AuthError | null;
 }
 
 const INITIAL_STATE = {
   email: '',
-  password: '',
   error: null
 };
 
-class SignInFormBase extends React.Component<Props, State> {
+class ResetPasswordFormBase extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { ...INITIAL_STATE };
   }
 
   onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
-    const { email, password } = this.state;
+    const { email } = this.state;
 
     this.props.firebase
-      .doSignInWithEmailAndPassword(email, password)
+      .doPasswordReset(email)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
-        this.props.history.push(ROUTES.HOME);
       })
       .catch((error: firebase.auth.Error) => {
         this.setState({ error });
@@ -63,9 +55,9 @@ class SignInFormBase extends React.Component<Props, State> {
   };
 
   render() {
-    const { email, password, error } = this.state;
+    const { email, error } = this.state;
 
-    const isInvalid = password === '' || email === '';
+    const isInvalid = email === '';
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -76,15 +68,8 @@ class SignInFormBase extends React.Component<Props, State> {
           type="email"
           placeholder="Email Address"
         />
-        <input
-          name="password"
-          value={password}
-          onChange={this.onChange}
-          type="password"
-          placeholder="Password"
-        />
         <button disabled={isInvalid} type="submit">
-          Sign In
+          Reset Password
         </button>
 
         {error && <p>{error.message}</p>}
@@ -93,8 +78,14 @@ class SignInFormBase extends React.Component<Props, State> {
   }
 }
 
-const SignInForm = compose(withRouter, withFirebase)(SignInFormBase as any);
+const ResetPasswordLink = () => (
+  <p>
+    <Link to={ROUTES.RESET_PASSWORD}>Forgot Password?</Link>
+  </p>
+);
 
-export default SignIn;
+const ResetPasswordForm = withFirebase(ResetPasswordFormBase as any);
 
-export { SignInForm };
+export default ResetPassword;
+
+export { ResetPasswordForm, ResetPasswordLink };
