@@ -1,9 +1,9 @@
 import React from 'react';
-import { withFirebase } from '../Firebase';
+import Firebase, { withFirebase } from '../Firebase';
 import { AuthUserContext } from '../Session';
 
 interface Props {
-  firebase: any;
+  firebase: Firebase;
 }
 
 interface State {
@@ -16,16 +16,21 @@ const withAuthentication = (Component: any) => {
       super(props);
 
       this.state = {
-        authUser: null
+        authUser: JSON.parse(localStorage.getItem('authUser') as string)
       };
     }
 
     componentDidMount() {
-      this.props.firebase.auth.onAuthStateChanged((authUser: any) => {
-        authUser
-          ? this.setState({ authUser })
-          : this.setState({ authUser: null });
-      });
+      this.props.firebase.onAuthUserListener(
+        (authUser: any) => {
+          localStorage.setItem('authUser', JSON.stringify(authUser));
+          this.setState({ authUser });
+        },
+        () => {
+          localStorage.removeItem('authUser');
+          this.setState({ authUser: null });
+        }
+      );
     }
 
     render() {

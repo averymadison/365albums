@@ -3,7 +3,8 @@ import { History } from 'history';
 import { Link, withRouter } from 'react-router-dom';
 import { compose } from 'recompose';
 import * as ROUTES from '../../constants/routes';
-import { withFirebase } from '../../components/Firebase';
+import * as ROLES from '../../constants/roles';
+import Firebase, { withFirebase } from '../../components/Firebase';
 
 const SignUp = () => (
   <div>
@@ -13,7 +14,7 @@ const SignUp = () => (
 );
 
 interface Props {
-  firebase: any;
+  firebase: Firebase;
   history: History;
 }
 
@@ -22,6 +23,7 @@ interface State {
   email: string;
   passwordOne: string;
   passwordTwo: string;
+  isAdmin: boolean;
   error: firebase.auth.AuthError | null;
 }
 
@@ -30,6 +32,7 @@ const INITIAL_STATE = {
   email: '',
   passwordOne: '',
   passwordTwo: '',
+  isAdmin: false,
   error: null
 };
 
@@ -40,7 +43,12 @@ class SignUpFormBase extends React.Component<Props, State> {
   }
 
   onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
-    const { username, email, passwordOne } = this.state;
+    const { username, email, passwordOne, isAdmin } = this.state;
+    const roles = {} as any;
+
+    if (isAdmin) {
+      roles[ROLES.ADMIN] = ROLES.ADMIN;
+    }
 
     this.props.firebase
       .doCreateUserWithEmailAndPassword(email, passwordOne)
@@ -48,7 +56,10 @@ class SignUpFormBase extends React.Component<Props, State> {
         // Create a user in the Firebase realtime database
         return this.props.firebase
           .user(authUser.user.uid)
-          .set({ username, email });
+          .set({ username, email, roles });
+      })
+      .then(() => {
+        return this.props.firebase.doSendEmailVerification();
       })
       .then(() => {
         this.setState({ ...INITIAL_STATE });
@@ -66,8 +77,22 @@ class SignUpFormBase extends React.Component<Props, State> {
     >);
   };
 
+  onChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ [event.target.name]: event.target.checked } as Pick<
+      State,
+      any
+    >);
+  };
+
   render() {
-    const { username, email, passwordOne, passwordTwo, error } = this.state;
+    const {
+      username,
+      email,
+      passwordOne,
+      passwordTwo,
+      isAdmin,
+      error
+    } = this.state;
 
     const isInvalid =
       passwordOne !== passwordTwo ||
@@ -82,7 +107,7 @@ class SignUpFormBase extends React.Component<Props, State> {
           value={username}
           onChange={this.onChange}
           type="text"
-          placeholder="Full Name"
+          placeholder="Username"
         />
         <input
           name="email"
@@ -105,6 +130,15 @@ class SignUpFormBase extends React.Component<Props, State> {
           type="password"
           placeholder="Confirm Password"
         />
+        <label>
+          Admin:{' '}
+          <input
+            name="isAdmin"
+            type="checkbox"
+            checked={isAdmin}
+            onChange={this.onChangeCheckbox}
+          />
+        </label>
         <button disabled={isInvalid} type="submit">
           Sign Up
         </button>

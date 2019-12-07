@@ -1,41 +1,30 @@
 import React from 'react';
-import Firebase, { withFirebase } from '../../components/Firebase';
 
 interface Props {
-  firebase: Firebase;
+  onlyOneLeft: boolean;
+  isEnabled: boolean;
+  signInMethod: { id: string; provider: string | null };
+  onLink: (password: string) => void;
+  onUnlink: (providerId: string) => void;
 }
 
 interface State {
   passwordOne: string;
   passwordTwo: string;
-  error: firebase.auth.AuthError | null;
 }
 
-const INITIAL_STATE = {
-  passwordOne: '',
-  passwordTwo: '',
-  error: null
-};
-
-class ChangePasswordForm extends React.Component<Props, State> {
+class DefaultLoginToggle extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
-    this.state = { ...INITIAL_STATE };
+
+    this.state = { passwordOne: '', passwordTwo: '' };
   }
 
   onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
-    const { passwordOne } = this.state;
-
-    this.props.firebase
-      .doPasswordUpdate(passwordOne)
-      .then(() => {
-        this.setState({ ...INITIAL_STATE });
-      })
-      .catch((error: firebase.auth.Error) => {
-        this.setState({ error });
-      });
-
     event.preventDefault();
+
+    this.props.onLink(this.state.passwordOne);
+    this.setState({ passwordOne: '', passwordTwo: '' });
   };
 
   onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,11 +35,21 @@ class ChangePasswordForm extends React.Component<Props, State> {
   };
 
   render() {
-    const { passwordOne, passwordTwo, error } = this.state;
+    const { onlyOneLeft, isEnabled, signInMethod, onUnlink } = this.props;
+
+    const { passwordOne, passwordTwo } = this.state;
 
     const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
 
-    return (
+    return isEnabled ? (
+      <button
+        type="button"
+        onClick={() => onUnlink(signInMethod.id)}
+        disabled={onlyOneLeft}
+      >
+        Deactivate {signInMethod.id}
+      </button>
+    ) : (
       <form onSubmit={this.onSubmit}>
         <input
           name="passwordOne"
@@ -66,14 +65,13 @@ class ChangePasswordForm extends React.Component<Props, State> {
           type="password"
           placeholder="Confirm New Password"
         />
-        <button disabled={isInvalid} type="submit">
-          Change Password
-        </button>
 
-        {error && <p>{error.message}</p>}
+        <button disabled={isInvalid} type="submit">
+          Link {signInMethod.id}
+        </button>
       </form>
     );
   }
 }
 
-export default withFirebase(ChangePasswordForm);
+export default DefaultLoginToggle;

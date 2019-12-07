@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { withFirebase } from '../../components/Firebase';
+import Firebase, { withFirebase } from '../../components/Firebase';
 import * as ROUTES from '../../constants/routes';
 
 const ResetPassword = () => (
@@ -11,7 +11,7 @@ const ResetPassword = () => (
 );
 
 interface Props {
-  firebase: any;
+  firebase: Firebase;
 }
 
 interface State {
