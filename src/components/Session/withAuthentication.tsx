@@ -4,7 +4,6 @@ import { AuthUserContext } from '../Session';
 
 interface Props {
   firebase: any;
-  listener: any;
 }
 
 interface State {

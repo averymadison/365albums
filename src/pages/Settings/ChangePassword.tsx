@@ -1,40 +1,33 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { withFirebase } from '../../components/Firebase';
-import * as ROUTES from '../../constants/routes';
-
-const ResetPassword = () => (
-  <div>
-    <h1>Reset Password</h1>
-    <ResetPasswordForm />
-  </div>
-);
 
 interface Props {
   firebase: any;
 }
 
 interface State {
-  email: string;
+  passwordOne: string;
+  passwordTwo: string;
   error: firebase.auth.AuthError | null;
 }
 
 const INITIAL_STATE = {
-  email: '',
+  passwordOne: '',
+  passwordTwo: '',
   error: null
 };
 
-class ResetPasswordFormBase extends React.Component<Props, State> {
+class ChangePasswordForm extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { ...INITIAL_STATE };
   }
 
   onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
-    const { email } = this.state;
+    const { passwordOne } = this.state;
 
     this.props.firebase
-      .doPasswordReset(email)
+      .doPasswordUpdate(passwordOne)
       .then(() => {
         this.setState({ ...INITIAL_STATE });
       })
@@ -53,21 +46,28 @@ class ResetPasswordFormBase extends React.Component<Props, State> {
   };
 
   render() {
-    const { email, error } = this.state;
+    const { passwordOne, passwordTwo, error } = this.state;
 
-    const isInvalid = email === '';
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
 
     return (
       <form onSubmit={this.onSubmit}>
         <input
-          name="email"
-          value={email}
+          name="passwordOne"
+          value={passwordOne}
           onChange={this.onChange}
-          type="email"
-          placeholder="Email Address"
+          type="password"
+          placeholder="New Password"
+        />
+        <input
+          name="passwordTwo"
+          value={passwordTwo}
+          onChange={this.onChange}
+          type="password"
+          placeholder="Confirm New Password"
         />
         <button disabled={isInvalid} type="submit">
-          Reset Password
+          Change Password
         </button>
 
         {error && <p>{error.message}</p>}
@@ -76,14 +76,4 @@ class ResetPasswordFormBase extends React.Component<Props, State> {
   }
 }
 
-const ResetPasswordLink = () => (
-  <p>
-    <Link to={ROUTES.RESET_PASSWORD}>Forgot Password?</Link>
-  </p>
-);
-
-const ResetPasswordForm = withFirebase(ResetPasswordFormBase as any);
-
-export default ResetPassword;
-
-export { ResetPasswordForm, ResetPasswordLink };
+export default withFirebase(ChangePasswordForm);
