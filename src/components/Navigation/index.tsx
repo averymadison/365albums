@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../Logo';
 import * as ROUTES from '../../constants/routes';
 
 const Navigation = () => (
   <div>
+    <Logo />
     <ul>
       <li>
         <Link to={ROUTES.LANDING}>Landing</Link>
