@@ -3,10 +3,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Navigation from './components/Navigation';
 import './app.css';
 import * as ROUTES from './constants/routes';
-import Landing from './pages/Landing';
-import Home from './pages/Home';
-import Account from './pages/Account';
-import Admin from './pages/Admin';
+import { Landing, Home, Account, Admin, SignIn, SignUp } from './pages';
 
 function App() {
   return (
@@ -16,6 +13,8 @@ function App() {
       <Route path={ROUTES.HOME} component={Home} />
       <Route path={ROUTES.ACCOUNT} component={Account} />
       <Route path={ROUTES.ADMIN} component={Admin} />
+      <Route path={ROUTES.SIGN_IN} component={SignIn} />
+      <Route path={ROUTES.SIGN_UP} component={SignUp} />
     </Router>
   );
 }
