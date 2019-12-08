@@ -19,6 +19,7 @@ interface Props {
 }
 
 interface State {
+  name: string;
   username: string;
   email: string;
   passwordOne: string;
@@ -28,6 +29,7 @@ interface State {
 }
 
 const INITIAL_STATE = {
+  name: '',
   username: '',
   email: '',
   passwordOne: '',
@@ -43,7 +45,7 @@ class SignUpFormBase extends React.Component<Props, State> {
   }
 
   onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
-    const { username, email, passwordOne, isAdmin } = this.state;
+    const { name, username, email, passwordOne, isAdmin } = this.state;
     const roles = {} as any;
 
     if (isAdmin) {
@@ -56,7 +58,7 @@ class SignUpFormBase extends React.Component<Props, State> {
         // Create a user in the Firebase realtime database
         return this.props.firebase
           .user(authUser.user.uid)
-          .set({ username, email, roles });
+          .set({ name, username, email, roles });
       })
       .then(() => {
         return this.props.firebase.doSendEmailVerification();
@@ -86,6 +88,7 @@ class SignUpFormBase extends React.Component<Props, State> {
 
   render() {
     const {
+      name,
       username,
       email,
       passwordOne,
@@ -98,16 +101,26 @@ class SignUpFormBase extends React.Component<Props, State> {
       passwordOne !== passwordTwo ||
       passwordOne === '' ||
       email === '' ||
+      name === '' ||
       username === '';
 
     return (
       <form onSubmit={this.onSubmit}>
+        <input
+          name="name"
+          value={name}
+          onChange={this.onChange}
+          type="text"
+          placeholder="Name"
+          maxLength={40}
+        />
         <input
           name="username"
           value={username}
           onChange={this.onChange}
           type="text"
           placeholder="Username"
+          pattern="[a-zd.]{1,20}"
         />
         <input
           name="email"

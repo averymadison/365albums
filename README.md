@@ -3,8 +3,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 ## To-Do
 
 - Add development .env, prod .env file — manage email confirmation redirect differently
-- Fix Typescript typings?
+- Fix Typescript typings
 - Styles
+- Add username checking / serverside validation
 
 ## Data Model
 
@@ -12,26 +13,34 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   "users": {
     “kyle”: {
       "name": “Kyle Decker”,
-      “email”: “kylebdecker@gmail.com”
+      "email": “kylebdecker@gmail.com”
+      "primaryChart": "chartA"
+      "joinDate": 2019-12-03
     },
     “ryan”: { ... },
   },
   "charts": {
-    "kyle": {
-      2019-01-02: {
-        "sourceType": "spotify"
-        "sourceUri": "XXXXXXXXX"
-      },
-      2019-01-03: {
-        "sourceType": "spotify"
-        "sourceUri": "XXXXXXXXX"
-      },
-      2019-01-04: {
-        "sourceType": "bandcamp"
-        "sourceUri": "XXXXXXXXX"
-      },
+    "chartA": {
+      "title": "My 2019 chart"
+      "createdBy": "kyle",
+      "createdAt": 2019-03-19
+      "updatedAt": 
+      "albums": {
+        2019-01-02: {
+          "sourceType": "spotify"
+          "sourceUri": "XXXXXXXXX"
+        },
+        2019-01-03: {
+          "sourceType": "spotify"
+          "sourceUri": "XXXXXXXXX"
+        },
+        2019-01-04: {
+          "sourceType": "bandcamp"
+          "sourceUri": "XXXXXXXXX"
+        },
+      }
     },
-    "ryan": { ... },
+    "chartB": { ... },
   },
 }
 

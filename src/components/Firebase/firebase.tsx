@@ -16,10 +16,12 @@ class Firebase {
   db: app.database.Database;
   googleProvider: app.auth.GoogleAuthProvider;
   emailAuthProvider: typeof app.auth.EmailAuthProvider;
+  serverValue: typeof app.database.ServerValue;
 
   constructor() {
     app.initializeApp(config);
 
+    this.serverValue = app.database.ServerValue;
     this.emailAuthProvider = app.auth.EmailAuthProvider;
     this.auth = app.auth();
     this.db = app.database();
@@ -90,8 +92,8 @@ class Firebase {
 
   // Charts API
 
-  albums = () => this.db.ref('albums');
-  album = (uid: string) => this.db.ref(`albums/${uid}`);
+  charts = () => this.db.ref('charts');
+  chart = (uid: string) => this.db.ref(`charts/${uid}`);
 }
 
 export default Firebase;
