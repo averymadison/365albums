@@ -1,8 +1,13 @@
 import React from 'react';
+import { compose } from 'recompose';
 import { ResetPasswordForm } from '../ResetPassword';
 import ChangePasswordForm from './ChangePassword';
 import LoginManagement from './LoginManagement';
-import { withPermissions, AuthUserContext } from '../../components/Session';
+import {
+  AuthUserContext,
+  withEmailVerification,
+  withPermissions
+} from '../../components/Session';
 
 const Settings = () => (
   <AuthUserContext.Consumer>
@@ -20,4 +25,7 @@ const Settings = () => (
 
 const condition = (authUser: any) => !!authUser;
 
-export default withPermissions(condition)(Settings);
+export default compose(
+  withEmailVerification,
+  withPermissions(condition)
+)(Settings);

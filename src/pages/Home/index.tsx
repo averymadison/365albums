@@ -1,5 +1,9 @@
 import React from 'react';
-import { withPermissions } from '../../components/Session';
+import { compose } from 'recompose';
+import {
+  withEmailVerification,
+  withPermissions
+} from '../../components/Session';
 
 const Home = () => (
   <div>
@@ -10,4 +14,4 @@ const Home = () => (
 
 const condition = (authUser: any) => !!authUser;
 
-export default withPermissions(condition)(Home);
+export default compose(withEmailVerification, withPermissions(condition))(Home);
