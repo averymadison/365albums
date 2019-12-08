@@ -6,6 +6,35 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Fix Typescript typings?
 - Styles
 
+## Data Model
+
+{
+  "users": {
+    “kyle”: {
+      "name": “Kyle Decker”,
+      “email”: “kylebdecker@gmail.com”
+    },
+    “ryan”: { ... },
+  },
+  "charts": {
+    "kyle": {
+      2019-01-02: {
+        "sourceType": "spotify"
+        "sourceUri": "XXXXXXXXX"
+      },
+      2019-01-03: {
+        "sourceType": "spotify"
+        "sourceUri": "XXXXXXXXX"
+      },
+      2019-01-04: {
+        "sourceType": "bandcamp"
+        "sourceUri": "XXXXXXXXX"
+      },
+    },
+    "ryan": { ... },
+  },
+}
+
 ## Available Scripts
 
 In the project directory, you can run:
