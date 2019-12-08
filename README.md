@@ -1,5 +1,11 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## To-Do
+
+- Add development .env, prod .env file — manage email confirmation redirect differently
+- Fix Typescript typings?
+- Styles
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -27,7 +27,7 @@ class ChangePasswordForm extends React.Component<Props, State> {
     const { passwordOne } = this.state;
 
     this.props.firebase
-      .doPasswordUpdate(passwordOne)
+      .doPasswordUpdate(passwordOne)!
       .then(() => {
         this.setState({ ...INITIAL_STATE });
       })

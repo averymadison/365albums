@@ -21,7 +21,7 @@ const SocialLoginToggle = ({
       onClick={() => onUnlink(signInMethod.id)}
       disabled={onlyOneLeft}
     >
-      Deactivate {signInMethod.id}
+      Unlink {signInMethod.id}
     </button>
   ) : (
     <button type="button" onClick={() => onLink(signInMethod.provider)}>

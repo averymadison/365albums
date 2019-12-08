@@ -47,7 +47,7 @@ class DefaultLoginToggle extends React.Component<Props, State> {
         onClick={() => onUnlink(signInMethod.id)}
         disabled={onlyOneLeft}
       >
-        Deactivate {signInMethod.id}
+        Unlink {signInMethod.id}
       </button>
     ) : (
       <form onSubmit={this.onSubmit}>

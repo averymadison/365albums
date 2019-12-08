@@ -83,7 +83,7 @@ class Firebase {
 
   // User API
 
-  user = (uid: any) => this.db.ref(`users/${uid}`);
+  user = (uid: string) => this.db.ref(`users/${uid}`);
   users = () => this.db.ref('users');
 }
 
