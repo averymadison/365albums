@@ -20,32 +20,26 @@ class Home extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      activeChartId: ''
+      activeChartId: '-LvcieNl76DuwPQtuy4v'
     };
   }
 
-  componentDidMount() {
-    this.props.firebase.db
-      .ref('users/rSQ41HpnxPT3oumxzhAPtjG51Gj2/primaryChart')
-      .on('value', snapshot => {
-        const primaryChartId = snapshot.val();
+  // componentDidMount() {
+  //   this.props.firebase.db
+  //     .ref('users/rSQ41HpnxPT3oumxzhAPtjG51Gj2/primaryChart')
+  //     .on('value', snapshot => {
+  //       const primaryChartId = snapshot.val();
 
-        this.setState({
-          activeChartId: primaryChartId
-        });
-      });
-  }
+  //       this.setState({
+  //         activeChartId: primaryChartId
+  //       });
+  //     });
+  // }
 
   render() {
     const { activeChartId } = this.state;
 
-    return (
-      <div>
-        <h1>Home</h1>
-
-        <Chart chartId={activeChartId} />
-      </div>
-    );
+    return <Chart chartId={activeChartId} />;
   }
 }
 

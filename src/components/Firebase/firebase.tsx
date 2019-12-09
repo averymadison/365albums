@@ -59,7 +59,7 @@ class Firebase {
       if (authUser) {
         this.user(authUser.uid)
           .once('value')
-          .then((snapshot: any) => {
+          .then(snapshot => {
             const dbUser = snapshot.val();
 
             // Default empty roles
