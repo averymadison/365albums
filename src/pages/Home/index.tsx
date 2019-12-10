@@ -6,6 +6,7 @@ import {
 } from '../../components/Session';
 import Chart from '../../components/Chart';
 import Firebase from '../../components/Firebase';
+import Spotify from '../../components/Spotify';
 
 interface Props {
   firebase: Firebase;
@@ -22,6 +23,8 @@ class Home extends React.Component<Props, State> {
     this.state = {
       activeChartId: '-LvcieNl76DuwPQtuy4v'
     };
+
+    Spotify();
   }
 
   // componentDidMount() {

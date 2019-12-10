@@ -136,7 +136,7 @@ class ChartBase extends React.Component<Props, State> {
     event.preventDefault();
   };
 
-  onDayClick = (day: any) => {
+  onDayClick = (day: Date) => {
     this.setState({ selectedDay: day });
   };
 
@@ -237,6 +237,7 @@ class ChartBase extends React.Component<Props, State> {
         <DayPicker
           onDayClick={this.onDayClick}
           selectedDays={selectedDay}
+          todayButton="Today"
           renderDay={this.renderDay.bind(this)}
         />
 
