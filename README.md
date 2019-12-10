@@ -7,43 +7,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Styles
 - Add username checking / serverside validation
 
-## Data Model
-
-{
-  "users": {
-    “kyle”: {
-      "name": “Kyle Decker”,
-      "email": “kylebdecker@gmail.com”
-      "primaryChart": "chartA"
-      "joinDate": 2019-12-03
-    },
-    “ryan”: { ... },
-  },
-  "charts": {
-    "chartA": {
-      "title": "My 2019 chart"
-      "createdBy": "kyle",
-      "createdAt": 2019-03-19
-      "updatedAt": 
-      "albums": {
-        2019-01-02: {
-          "sourceType": "spotify"
-          "sourceUri": "XXXXXXXXX"
-        },
-        2019-01-03: {
-          "sourceType": "spotify"
-          "sourceUri": "XXXXXXXXX"
-        },
-        2019-01-04: {
-          "sourceType": "bandcamp"
-          "sourceUri": "XXXXXXXXX"
-        },
-      }
-    },
-    "chartB": { ... },
-  },
-}
-
 ## Available Scripts
 
 In the project directory, you can run:
