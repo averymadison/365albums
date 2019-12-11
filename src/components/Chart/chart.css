@@ -68,7 +68,7 @@
   padding: 0.5em;
   color: #8B9898;
   text-align: center;
-  font-size: 0.875em;
+  font-size: 2.5vw;
 }
 
 .DayPicker-Weekday abbr[title] {
@@ -81,8 +81,9 @@
   cursor: pointer;
   position: relative;
   outline: none;
-  font-size: 8vmin;
+  font-size: 6vw;
   padding-top: 100%;
+  color: #666;
 }
 
 .dayContents {
@@ -104,25 +105,10 @@
   cursor: default;
 }
 
-.DayPicker-Footer {
-  padding-top: 0.5em;
-}
-
-.DayPicker-TodayButton {
-  border: none;
-  background-color: transparent;
-  background-image: none;
-  box-shadow: none;
-  color: #4A90E2;
-  font-size: 0.875em;
-  cursor: pointer;
-}
-
 /* Default modifiers */
 
 .DayPicker-Day--today {
-  color: #D0021B;
-  font-weight: 700;
+
 }
 
 .DayPicker-Day--outside {
@@ -140,7 +126,7 @@
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
   background-color: #4A90E2;
-  color: #F0F8FF;
+  color: #FFF;
 }
 
 .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) .dayContents::after {
@@ -157,6 +143,7 @@
 .DayPicker:not(.DayPicker--interactionDisabled)
   .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
   background-color: #333;
+  color: #fff;
 }
 
 .calendar {
