@@ -1,5 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns';
+import { format, isEqual, getWeekOfMonth } from 'date-fns';
 import { AuthUserContext } from '../Session';
 import Firebase, { withFirebase } from '../Firebase';
 // import Album from '../Album';
@@ -18,7 +18,7 @@ interface State {
   title: string;
   updatedAt: string | null;
   albums: any;
-  selectedDay: Date;
+  selectedDay: Date | null;
   newAlbumUri: string;
   newAlbumSource: string;
 }
@@ -30,12 +30,14 @@ const INITIAL_STATE = {
   title: '',
   updatedAt: null,
   albums: {},
-  selectedDay: new Date(),
+  selectedDay: null,
   newAlbumUri: '',
   newAlbumSource: 'spotify'
 };
 
 class ChartBase extends React.Component<Props, State> {
+  private calendarRef = React.createRef<DayPicker>();
+
   constructor(props: Props) {
     super(props);
 
@@ -59,6 +61,7 @@ class ChartBase extends React.Component<Props, State> {
           updatedAt: chart.updatedAt ? chart.updatedAt : null,
           albums: chart.albums ? chart.albums : {}
         });
+        document.addEventListener('keydown', this.onKeyDown);
       } else {
         this.setState({ ...INITIAL_STATE });
         this.setState({ error: "Couldn't locate chart." });
@@ -68,6 +71,7 @@ class ChartBase extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { firebase, chartId } = this.props;
+    document.removeEventListener('keydown', this.onKeyDown);
 
     firebase.chart(chartId).off();
   }
@@ -121,7 +125,7 @@ class ChartBase extends React.Component<Props, State> {
     const { firebase, chartId } = this.props;
     const { selectedDay, newAlbumSource, newAlbumUri } = this.state;
 
-    const dateAsString = format(selectedDay, 'yyyy-MM-dd');
+    const dateAsString = format(selectedDay!, 'yyyy-MM-dd');
 
     firebase
       .chart(chartId)
@@ -137,7 +141,27 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   onDayClick = (day: Date) => {
-    this.setState({ selectedDay: day });
+    const { selectedDay } = this.state;
+    isEqual(day, selectedDay!)
+      ? this.setState({ selectedDay: null })
+      : this.setState({ selectedDay: day });
+  };
+
+  onKeyDown = (event: KeyboardEvent) => {
+    if (event.key === 'ArrowRight') {
+      this.calendarRef.current!.showNextMonth();
+    }
+
+    if (event.key === 'ArrowLeft') {
+      this.calendarRef.current!.showPreviousMonth();
+    }
+  };
+
+  getAlbumInfoForDay = (day: Date) => {
+    const { albums } = this.state;
+    const dateAsString = format(day, 'yyyy-MM-dd');
+
+    return albums[dateAsString];
   };
 
   renderChartHeader = () => {
@@ -169,59 +193,74 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderDay(day: Date) {
-    const { albums } = this.state;
-    const dateAsString = format(day, 'yyyy-MM-dd');
+  renderDay = (day: Date) => {
+    const { selectedDay } = this.state;
 
-    if (albums[dateAsString]) {
-      return (
-        <div>
-          {albums[dateAsString].source} {albums[dateAsString].uri}
-        </div>
-      );
-    } else {
-      return <div>+</div>;
-    }
-  }
+    return (
+      <div className="dayContents">
+        {selectedDay && isEqual(day, selectedDay) ? (
+          format(selectedDay, 'd')
+        ) : this.getAlbumInfoForDay(day) ? (
+          <img src="http://placekitten.com/300/300" alt="A kitten" />
+        ) : (
+          '+'
+        )}
+      </div>
+    );
+  };
 
-  renderSelectedAlbum = () => {
-    const { albums, selectedDay, newAlbumSource, newAlbumUri } = this.state;
+  renderAlbumDetails = () => {
+    const { selectedDay, newAlbumSource, newAlbumUri } = this.state;
 
-    if (selectedDay) {
-      const dateAsString = format(selectedDay, 'yyyy-MM-dd');
+    const inlineGridRow = selectedDay && {
+      gridRowStart: getWeekOfMonth(selectedDay) + 3
+    };
 
-      if (albums[dateAsString]) {
-        return (
-          <div>
-            {albums[dateAsString].source} {albums[dateAsString].uri}
-          </div>
-        );
-      } else {
-        return (
-          <form onSubmit={this.onCreateAlbum}>
-            <div>Add an album for {format(selectedDay, 'MMM d')}</div>
-            <select
-              name="newAlbumSource"
-              value={newAlbumSource}
-              onChange={this.onChange}
-            >
-              <option value="spotify">Spotify</option>
-              <option value="bandcamp">Bandcamp</option>
-            </select>
-            <input
-              name="newAlbumUri"
-              type="text"
-              placeholder="Album URI"
-              value={newAlbumUri}
-              onChange={this.onChange}
+    return selectedDay ? (
+      <div
+        className="expandedInfo"
+        style={inlineGridRow ? inlineGridRow : undefined}
+      >
+        {this.getAlbumInfoForDay(selectedDay) ? (
+          <React.Fragment>
+            <img
+              src="http://placekitten.com/300/300"
+              alt="A kitten"
+              className="albumImage"
             />
-            <button type="submit">Add album</button>
-          </form>
-        );
-      }
-    } else {
-      return 'No selected day';
-    }
+            <div>
+              <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
+                {format(selectedDay, 'MMM d, yyyy')}
+              </time>
+              <h3>{this.getAlbumInfoForDay(selectedDay).source}</h3>
+              <div>{this.getAlbumInfoForDay(selectedDay).uri}</div>
+            </div>
+          </React.Fragment>
+        ) : (
+          <React.Fragment>
+            <form onSubmit={this.onCreateAlbum}>
+              <div>Add an album for {format(selectedDay, 'MMM d')}</div>
+              <select
+                name="newAlbumSource"
+                value={newAlbumSource}
+                onChange={this.onChange}
+              >
+                <option value="spotify">Spotify</option>
+                <option value="bandcamp">Bandcamp</option>
+              </select>
+              <input
+                name="newAlbumUri"
+                type="text"
+                placeholder="Album URI"
+                value={newAlbumUri}
+                onChange={this.onChange}
+              />
+              <button type="submit">Add album</button>
+            </form>
+          </React.Fragment>
+        )}
+      </div>
+    ) : null;
   };
 
   render() {
@@ -234,14 +273,15 @@ class ChartBase extends React.Component<Props, State> {
       <div>
         {this.renderChartHeader()}
 
-        <DayPicker
-          onDayClick={this.onDayClick}
-          selectedDays={selectedDay}
-          todayButton="Today"
-          renderDay={this.renderDay.bind(this)}
-        />
-
-        {this.renderSelectedAlbum()}
+        <div className="calendar">
+          <DayPicker
+            ref={this.calendarRef}
+            onDayClick={this.onDayClick}
+            selectedDays={selectedDay!}
+            renderDay={this.renderDay}
+          />
+          {this.renderAlbumDetails()}
+        </div>
       </div>
     ) : (
       <AuthUserContext.Consumer>
