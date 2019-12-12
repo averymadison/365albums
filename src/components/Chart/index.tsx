@@ -1,10 +1,20 @@
 import React from 'react';
-import { format, isEqual, getWeekOfMonth } from 'date-fns';
+import classNames from 'classnames';
+import {
+  format,
+  isEqual,
+  getWeekOfMonth,
+  formatDistanceToNow,
+  isPast
+} from 'date-fns';
 import { AuthUserContext } from '../Session';
 import Firebase, { withFirebase } from '../Firebase';
 // import Album from '../Album';
 import DayPicker from 'react-day-picker';
 import './chart.css';
+import { FaSpotify, FaBandcamp } from 'react-icons/fa';
+import { FiEdit3 } from 'react-icons/fi';
+import { Palette } from 'react-palette';
 
 interface Props {
   firebase: Firebase;
@@ -140,6 +150,10 @@ class ChartBase extends React.Component<Props, State> {
     event.preventDefault();
   };
 
+  onMonthChange = () => {
+    this.setState({ selectedDay: null });
+  };
+
   onDayClick = (day: Date) => {
     const { selectedDay } = this.state;
     isEqual(day, selectedDay!)
@@ -167,13 +181,15 @@ class ChartBase extends React.Component<Props, State> {
   renderChartHeader = () => {
     const { title, isEditing, updatedAt } = this.state;
 
+    const readableDate = formatDistanceToNow(new Date(updatedAt!));
+
     return (
       <div>
         {!isEditing ? (
           <React.Fragment>
             <strong>{title ? title : 'Add a title...'}</strong>
             <button type="button" onClick={this.onToggleEditMode}>
-              Edit
+              <FiEdit3 />
             </button>
           </React.Fragment>
         ) : (
@@ -188,112 +204,183 @@ class ChartBase extends React.Component<Props, State> {
             <button type="submit">Save</button>
           </form>
         )}
-        <div>{updatedAt && `Updated ${updatedAt}`}</div>
+        <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
+      </div>
+    );
+  };
+
+  renderAlbum = (day: Date) => {
+    return this.getAlbumInfoForDay(day) ? (
+      <img src="http://placekitten.com/320/320" alt="A kitten" />
+    ) : (
+      '+'
+    );
+  };
+
+  renderDayDetails = (day: Date) => {
+    return (
+      <div className="dayDetails">
+        {this.getAlbumInfoForDay(day) && (
+          <div className="dayDetails__text">
+            <div>{this.getAlbumInfoForDay(day).source}</div>
+            <div>{this.getAlbumInfoForDay(day).uri}</div>
+          </div>
+        )}
+        <time dateTime={format(day, 'yyyy-MM-dd')} className="dateBadge">
+          {format(day, 'd')}
+        </time>
       </div>
     );
   };
 
   renderDay = (day: Date) => {
+    const classname = classNames('dayContents', {
+      isPast: isPast(day)
+    });
+
+    return (
+      <React.Fragment>
+        <div className="dateBadgeSelected">
+          <div>{format(day, 'MMM')}</div>
+          <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
+          <div>
+            {`${format(day, 'DDD')} / 
+              ${format(day.getFullYear(), 'DDD')}`}
+          </div>
+        </div>
+        <div className={classname}>
+          <div className="dayAlbum">{this.renderAlbum(day)}</div>
+          {this.renderDayDetails(day)}
+        </div>
+      </React.Fragment>
+    );
+  };
+
+  renderCalendar = () => {
     const { selectedDay } = this.state;
 
     return (
-      <div className="dayContents">
-        {selectedDay && isEqual(day, selectedDay) ? (
-          format(selectedDay, 'd')
-        ) : this.getAlbumInfoForDay(day) ? (
-          <img src="http://placekitten.com/300/300" alt="A kitten" />
-        ) : (
-          '+'
-        )}
+      <div className="calendar">
+        <DayPicker
+          ref={this.calendarRef}
+          onMonthChange={this.onMonthChange}
+          onDayClick={this.onDayClick}
+          selectedDays={selectedDay!}
+          renderDay={this.renderDay}
+          weekdaysShort={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
+        />
+        {this.renderExpandedInfo()}
       </div>
     );
   };
 
-  renderAlbumDetails = () => {
-    const { selectedDay, newAlbumSource, newAlbumUri } = this.state;
-
-    const inlineGridRow = selectedDay && {
-      gridRowStart: getWeekOfMonth(selectedDay) + 3
-    };
-
-    return selectedDay ? (
-      <div
-        className="expandedInfo"
-        style={inlineGridRow ? inlineGridRow : undefined}
-      >
-        {this.getAlbumInfoForDay(selectedDay) ? (
-          <React.Fragment>
-            <img
-              src="http://placekitten.com/300/300"
-              alt="A kitten"
-              className="albumImage"
-            />
-            <div>
-              <time dateTime={format(selectedDay, 'yyyy-MM-dd')}>
-                {format(selectedDay, 'MMM d, yyyy')}
-              </time>
-              <h3>{this.getAlbumInfoForDay(selectedDay).source}</h3>
-              <div>{this.getAlbumInfoForDay(selectedDay).uri}</div>
-            </div>
-          </React.Fragment>
-        ) : (
-          <React.Fragment>
-            <form onSubmit={this.onCreateAlbum}>
-              <div>Add an album for {format(selectedDay, 'MMM d')}</div>
-              <select
-                name="newAlbumSource"
-                value={newAlbumSource}
-                onChange={this.onChange}
-              >
-                <option value="spotify">Spotify</option>
-                <option value="bandcamp">Bandcamp</option>
-              </select>
-              <input
-                name="newAlbumUri"
-                type="text"
-                placeholder="Album URI"
-                value={newAlbumUri}
-                onChange={this.onChange}
-              />
-              <button type="submit">Add album</button>
-            </form>
-          </React.Fragment>
-        )}
-      </div>
-    ) : null;
-  };
-
-  render() {
-    const { chartId } = this.props;
-    const { selectedDay, error, isLoading } = this.state;
-
-    return isLoading ? (
-      <div>Loading...</div>
-    ) : chartId && !error ? (
-      <div>
-        {this.renderChartHeader()}
-
-        <div className="calendar">
-          <DayPicker
-            ref={this.calendarRef}
-            onDayClick={this.onDayClick}
-            selectedDays={selectedDay!}
-            renderDay={this.renderDay}
-          />
-          {this.renderAlbumDetails()}
-        </div>
-      </div>
-    ) : (
+  renderEmptyChart = () => {
+    return (
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
-            {error && error}
             <form onSubmit={event => this.onCreateChart(event, authUser)}>
               <button type="submit">Create a chart</button>
             </form>
           </div>
         )}
       </AuthUserContext.Consumer>
+    );
+  };
+
+  renderAlbumDetails = () => {
+    const { selectedDay } = this.state;
+
+    if (!selectedDay) return null;
+
+    return (
+      <React.Fragment>
+        <div className="albumImage">{this.renderAlbum(selectedDay)}</div>
+        <div>
+          <h3>{this.getAlbumInfoForDay(selectedDay).source}</h3>
+          <div>{this.getAlbumInfoForDay(selectedDay).uri}</div>
+          <div>Genre &middot; Year</div>
+          {this.getAlbumInfoForDay(selectedDay).source === 'spotify' ? (
+            <button>
+              <FaSpotify /> Listen on Spotify
+            </button>
+          ) : (
+            <button>
+              <FaBandcamp /> Listen on Bandcamp
+            </button>
+          )}
+        </div>
+      </React.Fragment>
+    );
+  };
+
+  renderAddAlbum = () => {
+    const { selectedDay, newAlbumSource, newAlbumUri } = this.state;
+
+    if (!selectedDay) return null;
+
+    return (
+      <React.Fragment>
+        <form onSubmit={this.onCreateAlbum}>
+          <div>Add an album for {format(selectedDay, 'MMM d')}</div>
+          <select
+            name="newAlbumSource"
+            value={newAlbumSource}
+            onChange={this.onChange}
+          >
+            <option value="spotify">Spotify</option>
+            <option value="bandcamp">Bandcamp</option>
+          </select>
+          <input
+            name="newAlbumUri"
+            type="text"
+            placeholder="Album URI"
+            value={newAlbumUri}
+            onChange={this.onChange}
+          />
+          <button type="submit">Add album</button>
+        </form>
+      </React.Fragment>
+    );
+  };
+
+  renderExpandedInfo = () => {
+    const { selectedDay } = this.state;
+    if (!selectedDay) return null;
+
+    return (
+      <Palette src="http://placekitten.com/320/320">
+        {({ data }) => (
+          <div
+            className="expandedInfo"
+            style={{
+              gridRowStart: getWeekOfMonth(selectedDay) + 3,
+              backgroundColor: data.lightVibrant,
+              color: data.darkVibrant
+            }}
+          >
+            {this.getAlbumInfoForDay(selectedDay)
+              ? this.renderAlbumDetails()
+              : this.renderAddAlbum()}
+          </div>
+        )}
+      </Palette>
+    );
+  };
+
+  render() {
+    const { chartId } = this.props;
+    const { error, isLoading } = this.state;
+
+    return isLoading ? (
+      <div>Loading...</div>
+    ) : chartId && !error ? (
+      <React.Fragment>
+        {this.renderChartHeader()}
+        {this.renderCalendar()}
+      </React.Fragment>
+    ) : (
+      this.renderEmptyChart()
     );
   }
 }

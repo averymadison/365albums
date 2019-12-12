@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Fix Typescript typings
 - Styles
 - Add username checking / serverside validation
+- Add "share" link
+- Test test test
+- Write homepage copy
+- Motion
 
 ## Available Scripts
 

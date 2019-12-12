@@ -68,7 +68,7 @@
   padding: 0.5em;
   color: #8B9898;
   text-align: center;
-  font-size: 2.5vw;
+  font-size: 1em;
 }
 
 .DayPicker-Weekday abbr[title] {
@@ -77,28 +77,28 @@
 }
 
 .DayPicker-Day {
-  text-align: center;
   cursor: pointer;
   position: relative;
   outline: none;
-  font-size: 6vw;
-  padding-top: 100%;
-  color: #666;
+  transition-property: background-color, color;
+  overflow: hidden;
+  transition: 0.1s ease-out;
+}
+
+.DayPicker-Day:active {
+  transform: scale(0.95);
 }
 
 .dayContents {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  transition: 0.2s ease-out;
 }
 
-.DayPicker-Day:not(.DayPicker-Day--outside) {
-  background-color: #222;
+.dayContents.isPast {
+  opacity: 0.5;
 }
 
 .DayPicker--interactionDisabled .DayPicker-Day {
@@ -107,8 +107,9 @@
 
 /* Default modifiers */
 
-.DayPicker-Day--today {
-
+.DayPicker-Day--today .dateBadge {
+  background-color: red;
+  color: white;
 }
 
 .DayPicker-Day--outside {
@@ -124,45 +125,122 @@
 
 /* Example modifiers */
 
-.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
-  background-color: #4A90E2;
-  color: #FFF;
+.DayPicker-Day--selected .dayContents {
+  transform: scale(0);
 }
 
-.DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) .dayContents::after {
-  content: '';
-  position: absolute;
-  top: calc(100% - 2vw);
-  width: 0; 
-  height: 0; 
-  border-left: 2vw solid transparent;
-  border-right: 2vw solid transparent;
-  border-bottom: 2vw solid black;
+.dayAlbum {
+  overflow: hidden;
 }
 
-.DayPicker:not(.DayPicker--interactionDisabled)
-  .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-  background-color: #333;
-  color: #fff;
+.dayAlbum img {
+  transition: 0.2s ease-out;
+}
+
+.DayPicker-Day:not(.DayPicker-Day--outside):hover .dayAlbum img {
+  transform: scale(1.1);
+}
+
+.DayPicker-Day.DayPicker-Day--selected {
+  transition: none;
 }
 
 .calendar {
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 1px;
+  column-gap: 1px;
+  row-gap: 1em;
 }
 
 .expandedInfo {
   grid-row-start: 4;
   grid-column-end: span 7;
-  background: #000;
+  background: #eee;
   bottom: 0;
   padding: 5vmin;
   display: flex;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .albumImage {
   width: 50vmax;
   max-width: 250px;
+  border-radius: 0.4em;
+  overflow: hidden;
+  margin-right: 2em;
+  flex-shrink: 0;
+  box-shadow: 0 1vw 3vw -0.5vw rgba(0,0,0,0.2);
+}
+
+.dateBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2em;
+  height: 2em;
+  font-weight: 600;
+  border-radius: 50%;
+  z-index: 1;
+  letter-spacing: -0.05em;
+  justify-self: flex-end;
+  margin-left: auto;
+}
+
+.daySelected {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.dateBadgeSelected {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;  
+  font-weight: 600;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: scale(0);
+  transition: 0.2s ease-out;
+}
+
+.dateBadgeSelected time {
+  font-size: 3em;
+}
+
+.DayPicker-Day--today .dateBadgeSelected time {
+  color: red;
+}
+
+.DayPicker-Day--selected .dateBadgeSelected {
+  transform: scale(1);
+}
+
+.dayDetails {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0.5em 0.5em 0.5em 0;
+  font-size: 0.8em;
+}
+
+.dayDetails__text {
+  flex: 1;
+  overflow: hidden;
+}
+
+.dayDetails__text > * {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
