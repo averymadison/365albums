@@ -13,7 +13,7 @@ import Firebase, { withFirebase } from '../Firebase';
 import DayPicker from 'react-day-picker';
 import './chart.css';
 import { FaSpotify, FaBandcamp } from 'react-icons/fa';
-import { FiEdit3 } from 'react-icons/fi';
+import { FiEdit3, FiMusic } from 'react-icons/fi';
 import { Palette } from 'react-palette';
 
 interface Props {
@@ -29,6 +29,10 @@ interface State {
   updatedAt: string | null;
   albums: any;
   selectedDay: Date | null;
+  newAlbumTitle: string;
+  newAlbumArtist: string;
+  newAlbumYear: string;
+  newAlbumArtworkUrl: string;
   newAlbumUri: string;
   newAlbumSource: string;
 }
@@ -40,7 +44,11 @@ const INITIAL_STATE = {
   title: '',
   updatedAt: null,
   albums: {},
-  selectedDay: null,
+  selectedDay: new Date(),
+  newAlbumTitle: '',
+  newAlbumArtist: '',
+  newAlbumYear: '',
+  newAlbumArtworkUrl: '',
   newAlbumUri: '',
   newAlbumSource: 'spotify'
 };
@@ -133,21 +141,40 @@ class ChartBase extends React.Component<Props, State> {
 
   onCreateAlbum = (event: React.ChangeEvent<HTMLFormElement>) => {
     const { firebase, chartId } = this.props;
-    const { selectedDay, newAlbumSource, newAlbumUri } = this.state;
+    const {
+      selectedDay,
+      newAlbumSource,
+      newAlbumUri,
+      newAlbumTitle,
+      newAlbumArtist,
+      newAlbumYear,
+      newAlbumArtworkUrl
+    } = this.state;
 
     const dateAsString = format(selectedDay!, 'yyyy-MM-dd');
 
-    firebase
-      .chart(chartId)
-      .child(`albums/${dateAsString}`)
-      .update({ uri: newAlbumUri, source: newAlbumSource });
+    try {
+      firebase
+        .chart(chartId)
+        .child(`albums/${dateAsString}`)
+        .update({
+          uri: newAlbumUri,
+          source: newAlbumSource,
+          title: newAlbumTitle,
+          artist: newAlbumArtist,
+          year: newAlbumYear,
+          artwork: newAlbumArtworkUrl
+        });
 
-    firebase
-      .chart(chartId)
-      .update({ updatedAt: firebase.serverValue.TIMESTAMP });
+      firebase
+        .chart(chartId)
+        .update({ updatedAt: firebase.serverValue.TIMESTAMP });
 
-    this.setState({ newAlbumUri: '' });
-    event.preventDefault();
+      this.setState({ newAlbumUri: '' });
+      event.preventDefault();
+    } catch (error) {
+      this.setState({ error: error.message });
+    }
   };
 
   onMonthChange = () => {
@@ -210,10 +237,18 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   renderAlbum = (day: Date) => {
-    return this.getAlbumInfoForDay(day) ? (
-      <img src="http://placekitten.com/320/320" alt="A kitten" />
-    ) : (
-      '+'
+    return (
+      <div className="album">
+        <div className="albumContent">
+          {this.getAlbumInfoForDay(day) ? (
+            <img src={this.getAlbumInfoForDay(day).artwork} alt="A kitten" />
+          ) : (
+            <div className="emptyAlbumPlaceholder-plus">
+              <FiMusic />
+            </div>
+          )}
+        </div>
+      </div>
     );
   };
 
@@ -222,8 +257,8 @@ class ChartBase extends React.Component<Props, State> {
       <div className="dayDetails">
         {this.getAlbumInfoForDay(day) && (
           <div className="dayDetails__text">
-            <div>{this.getAlbumInfoForDay(day).source}</div>
-            <div>{this.getAlbumInfoForDay(day).uri}</div>
+            <div>{this.getAlbumInfoForDay(day).title}</div>
+            <div>{this.getAlbumInfoForDay(day).artist}</div>
           </div>
         )}
         <time dateTime={format(day, 'yyyy-MM-dd')} className="dateBadge">
@@ -240,14 +275,28 @@ class ChartBase extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <div className="dateBadgeSelected">
-          <div>{format(day, 'MMM')}</div>
-          <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
-          <div>
-            {`${format(day, 'DDD')} / 
+        <div className="selectedDate">
+          <div className="selectedDate-contents">
+            <div className="selectedDate-month">{format(day, 'MMM')}</div>
+            <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
+            <div>
+              {`${format(day, 'DDD')} / 
               ${format(day.getFullYear(), 'DDD')}`}
+            </div>
           </div>
         </div>
+        <Palette
+          src={
+            this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).artwork
+          }
+        >
+          {({ data }) => (
+            <div
+              className="selectedDate-arrow"
+              style={{ backgroundColor: data.lightVibrant }}
+            ></div>
+          )}
+        </Palette>
         <div className={classname}>
           <div className="dayAlbum">{this.renderAlbum(day)}</div>
           {this.renderDayDetails(day)}
@@ -296,26 +345,40 @@ class ChartBase extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <div className="albumImage">{this.renderAlbum(selectedDay)}</div>
-        <div>
-          <h3>{this.getAlbumInfoForDay(selectedDay).source}</h3>
-          <div>{this.getAlbumInfoForDay(selectedDay).uri}</div>
-          <div>Genre &middot; Year</div>
-          {this.getAlbumInfoForDay(selectedDay).source === 'spotify' ? (
-            <button>
-              <FaSpotify /> Listen on Spotify
-            </button>
-          ) : (
-            <button>
-              <FaBandcamp /> Listen on Bandcamp
-            </button>
-          )}
+        <div className="albumDetails">
+          <h2 className="albumDetails-title">
+            {this.getAlbumInfoForDay(selectedDay).title}
+          </h2>
+          <div className="albumDetails-artist">
+            {this.getAlbumInfoForDay(selectedDay).artist}
+          </div>
+          {this.getAlbumInfoForDay(selectedDay).year}
+          <div className="albumDetails-link">
+            {this.getAlbumInfoForDay(selectedDay).source === 'spotify' ? (
+              <a>
+                Listen on <FaSpotify /> Spotify
+              </a>
+            ) : (
+              <a>
+                Listen on <FaBandcamp /> Bandcamp
+              </a>
+            )}
+          </div>
         </div>
       </React.Fragment>
     );
   };
 
   renderAddAlbum = () => {
-    const { selectedDay, newAlbumSource, newAlbumUri } = this.state;
+    const {
+      selectedDay,
+      newAlbumTitle,
+      newAlbumArtist,
+      newAlbumYear,
+      newAlbumArtworkUrl,
+      newAlbumSource,
+      newAlbumUri
+    } = this.state;
 
     if (!selectedDay) return null;
 
@@ -338,6 +401,36 @@ class ChartBase extends React.Component<Props, State> {
             value={newAlbumUri}
             onChange={this.onChange}
           />
+          <div>
+            <input
+              name="newAlbumTitle"
+              type="text"
+              placeholder="Title"
+              value={newAlbumTitle}
+              onChange={this.onChange}
+            />
+            <input
+              name="newAlbumArtist"
+              type="text"
+              placeholder="Artist"
+              value={newAlbumArtist}
+              onChange={this.onChange}
+            />
+            <input
+              name="newAlbumYear"
+              type="number"
+              placeholder="Year"
+              value={newAlbumYear}
+              onChange={this.onChange}
+            />
+            <input
+              name="newAlbumArtworkUrl"
+              type="url"
+              placeholder="Artwork Url"
+              value={newAlbumArtworkUrl}
+              onChange={this.onChange}
+            />
+          </div>
           <button type="submit">Add album</button>
         </form>
       </React.Fragment>
@@ -349,7 +442,12 @@ class ChartBase extends React.Component<Props, State> {
     if (!selectedDay) return null;
 
     return (
-      <Palette src="http://placekitten.com/320/320">
+      <Palette
+        src={
+          this.getAlbumInfoForDay(selectedDay) &&
+          this.getAlbumInfoForDay(selectedDay).artwork
+        }
+      >
         {({ data }) => (
           <div
             className="expandedInfo"
@@ -372,7 +470,9 @@ class ChartBase extends React.Component<Props, State> {
     const { chartId } = this.props;
     const { error, isLoading } = this.state;
 
-    return isLoading ? (
+    return error ? (
+      <div>{error}</div>
+    ) : isLoading ? (
       <div>Loading...</div>
     ) : chartId && !error ? (
       <React.Fragment>

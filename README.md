@@ -8,8 +8,13 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Add username checking / serverside validation
 - Add "share" link
 - Test test test
+- Security rules security rules security rules
 - Write homepage copy
 - Motion
+- Update manifest with new icons
+- Favicon
+- Speed testing / Lighthouse
+- Add analytics events
 
 ## Available Scripts
 
