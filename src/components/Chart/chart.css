@@ -162,7 +162,6 @@
 .albumImage {
   width: 50vmax;
   max-width: 250px;
-  border-radius: 0.4em;
   overflow: hidden;
   margin-right: 2em;
   flex-shrink: 0;
@@ -312,7 +311,7 @@
   width: 100%;
   padding-top: 100%;
   position: relative;
-    background: #eee;
+  background: #eee;
 }
 
 .albumContent {
