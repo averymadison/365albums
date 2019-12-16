@@ -1,11 +1,11 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import Logo from '../Logo';
-import SignOutButton from '../SignOutButton';
-import * as ROUTES from '../../constants/routes';
-import * as ROLES from '../../constants/roles';
-import { AuthUserContext } from '../Session';
-import './header.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import Logo from "../Logo";
+import SignOutButton from "../SignOutButton";
+import * as ROUTES from "../../constants/routes";
+import * as ROLES from "../../constants/roles";
+import { AuthUserContext } from "../Session";
+import "./header.css";
 
 const Header = () => (
   <header className="header">
@@ -22,7 +22,7 @@ const Header = () => (
 );
 
 const NavigationAuth = ({ authUser }: any) => (
-  <nav>
+  <nav className="header-nav">
     <Link to={ROUTES.HOME}>
       <Logo />
     </Link>
@@ -36,7 +36,7 @@ const NavigationAuth = ({ authUser }: any) => (
 );
 
 const NavigationNonAuth = () => (
-  <nav>
+  <nav className="header-nav">
     <Link to={ROUTES.LANDING}>
       <Logo />
     </Link>

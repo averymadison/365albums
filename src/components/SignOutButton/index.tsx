@@ -1,11 +1,10 @@
-import React from 'react';
-import { FiLogOut } from 'react-icons/fi';
+import React from "react";
 
-import { withFirebase } from '../Firebase';
+import { withFirebase } from "../Firebase";
 
 const SignOutButton = ({ firebase }: any) => (
   <button type="button" onClick={firebase.doSignOut}>
-    <FiLogOut />
+    Log Out
   </button>
 );
 

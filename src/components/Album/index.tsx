@@ -1,13 +1,18 @@
-import React from 'react';
+import React from "react";
+import { FiMusic } from "react-icons/fi";
+import "./album.css";
 
 export interface Props {
-  uri: string;
-  source: 'spotify' | 'bandcamp';
+  // Image to render
+  src: string | null;
+  alt?: string;
 }
 
-const Album = ({ uri, source }: Props) => (
-  <div>
-    {uri} {source}
+const Album = ({ src, alt }: Props) => (
+  <div className="album">
+    <div className="albumContent">
+      {src ? <img src={src} alt={alt} /> : <FiMusic />}
+    </div>
   </div>
 );
 

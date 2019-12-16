@@ -1,20 +1,22 @@
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 import {
   format,
   isEqual,
   getWeekOfMonth,
   formatDistanceToNow,
   isPast
-} from 'date-fns';
-import { AuthUserContext } from '../Session';
-import Firebase, { withFirebase } from '../Firebase';
+} from "date-fns";
+import { AuthUserContext } from "../Session";
+import Firebase, { withFirebase } from "../Firebase";
 // import Album from '../Album';
-import DayPicker from 'react-day-picker';
-import './chart.css';
-import { FaSpotify, FaBandcamp } from 'react-icons/fa';
-import { FiEdit3, FiMusic } from 'react-icons/fi';
-import { Palette } from 'react-palette';
+import DayPicker from "react-day-picker";
+import "./chart.css";
+import { FaSpotify, FaBandcamp } from "react-icons/fa";
+import { FiEdit3, FiMusic, FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { Palette } from "react-palette";
+import { Link } from "react-router-dom";
+import Album from "../Album";
 
 interface Props {
   firebase: Firebase;
@@ -40,17 +42,17 @@ interface State {
 const INITIAL_STATE = {
   isLoading: false,
   isEditing: false,
-  error: '',
-  title: '',
+  error: "",
+  title: "",
   updatedAt: null,
   albums: {},
   selectedDay: new Date(),
-  newAlbumTitle: '',
-  newAlbumArtist: '',
-  newAlbumYear: '',
-  newAlbumArtworkUrl: '',
-  newAlbumUri: '',
-  newAlbumSource: 'spotify'
+  newAlbumTitle: "",
+  newAlbumArtist: "",
+  newAlbumYear: "",
+  newAlbumArtworkUrl: "",
+  newAlbumUri: "",
+  newAlbumSource: "spotify"
 };
 
 class ChartBase extends React.Component<Props, State> {
@@ -69,17 +71,17 @@ class ChartBase extends React.Component<Props, State> {
 
     this.setState({ isLoading: true });
 
-    firebase.chart(chartId).on('value', snapshot => {
+    firebase.chart(chartId).on("value", snapshot => {
       const chart = snapshot.val();
 
       if (chart) {
         this.setState({
           isLoading: false,
-          title: chart.title ? chart.title : '',
+          title: chart.title ? chart.title : "",
           updatedAt: chart.updatedAt ? chart.updatedAt : null,
           albums: chart.albums ? chart.albums : {}
         });
-        document.addEventListener('keydown', this.onKeyDown);
+        document.addEventListener("keydown", this.onKeyDown);
       } else {
         this.setState({ ...INITIAL_STATE });
         this.setState({ error: "Couldn't locate chart." });
@@ -89,7 +91,7 @@ class ChartBase extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { firebase, chartId } = this.props;
-    document.removeEventListener('keydown', this.onKeyDown);
+    document.removeEventListener("keydown", this.onKeyDown);
 
     firebase.chart(chartId).off();
   }
@@ -102,7 +104,7 @@ class ChartBase extends React.Component<Props, State> {
       createdAt: firebase.serverValue.TIMESTAMP,
       updatedAt: firebase.serverValue.TIMESTAMP,
       owner: authUser.uid,
-      title: '',
+      title: "",
       albums: {}
     }).key;
 
@@ -151,7 +153,7 @@ class ChartBase extends React.Component<Props, State> {
       newAlbumArtworkUrl
     } = this.state;
 
-    const dateAsString = format(selectedDay!, 'yyyy-MM-dd');
+    const dateAsString = format(selectedDay!, "yyyy-MM-dd");
 
     try {
       firebase
@@ -170,7 +172,7 @@ class ChartBase extends React.Component<Props, State> {
         .chart(chartId)
         .update({ updatedAt: firebase.serverValue.TIMESTAMP });
 
-      this.setState({ newAlbumUri: '' });
+      this.setState({ newAlbumUri: "" });
       event.preventDefault();
     } catch (error) {
       this.setState({ error: error.message });
@@ -189,32 +191,35 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'ArrowRight') {
+    if (event.key === "ArrowRight") {
       this.calendarRef.current!.showNextMonth();
     }
 
-    if (event.key === 'ArrowLeft') {
+    if (event.key === "ArrowLeft") {
       this.calendarRef.current!.showPreviousMonth();
     }
   };
 
   getAlbumInfoForDay = (day: Date) => {
     const { albums } = this.state;
-    const dateAsString = format(day, 'yyyy-MM-dd');
+    const dateAsString = format(day, "yyyy-MM-dd");
 
     return albums[dateAsString];
   };
 
-  renderChartHeader = () => {
+  renderChartHeader = (props: any) => {
+    const { chartId } = this.props;
+    const { month, onPreviousClick, onNextClick } = props;
+
     const { title, isEditing, updatedAt } = this.state;
 
     const readableDate = formatDistanceToNow(new Date(updatedAt!));
 
     return (
-      <div>
+      <header className="chart-header">
         {!isEditing ? (
           <React.Fragment>
-            <strong>{title ? title : 'Add a title...'}</strong>
+            <h2 className="chart-title">{title ? title : "Add a title..."}</h2>
             <button type="button" onClick={this.onToggleEditMode}>
               <FiEdit3 />
             </button>
@@ -227,28 +232,21 @@ class ChartBase extends React.Component<Props, State> {
               placeholder="title"
               value={title}
               onChange={this.onChange}
+              maxLength={32}
             />
             <button type="submit">Save</button>
           </form>
         )}
         <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
-      </div>
-    );
-  };
-
-  renderAlbum = (day: Date) => {
-    return (
-      <div className="album">
-        <div className="albumContent">
-          {this.getAlbumInfoForDay(day) ? (
-            <img src={this.getAlbumInfoForDay(day).artwork} alt="A kitten" />
-          ) : (
-            <div className="emptyAlbumPlaceholder-plus">
-              <FiMusic />
-            </div>
-          )}
-        </div>
-      </div>
+        {format(month, "MMM YYY")}
+        <Link to={`chart/${chartId}`}>Share</Link>
+        <button onClick={() => onPreviousClick()}>
+          <FiArrowLeft />
+        </button>
+        <button onClick={() => onNextClick()}>
+          <FiArrowRight />
+        </button>
+      </header>
     );
   };
 
@@ -261,27 +259,27 @@ class ChartBase extends React.Component<Props, State> {
             <div>{this.getAlbumInfoForDay(day).artist}</div>
           </div>
         )}
-        <time dateTime={format(day, 'yyyy-MM-dd')} className="dateBadge">
-          {format(day, 'd')}
+        <time dateTime={format(day, "yyyy-MM-dd")} className="dateBadge">
+          {format(day, "d")}
         </time>
       </div>
     );
   };
 
   renderDay = (day: Date) => {
-    const classname = classNames('dayContents', {
-      isPast: isPast(day)
+    const classname = classNames("dayContents", {
+      isPast: isPast(day.setHours(23, 59, 59))
     });
 
     return (
       <React.Fragment>
         <div className="selectedDate">
           <div className="selectedDate-contents">
-            <div className="selectedDate-month">{format(day, 'MMM')}</div>
-            <time dateTime={format(day, 'yyyy-MM-dd')}>{format(day, 'd')}</time>
+            <div className="selectedDate-month">{format(day, "MMM")}</div>
+            <time dateTime={format(day, "yyyy-MM-dd")}>{format(day, "d")}</time>
             <div>
-              {`${format(day, 'DDD')} / 
-              ${format(day.getFullYear(), 'DDD')}`}
+              {`${format(day, "DDD")} / 
+              ${format(day.getFullYear(), "DDD")}`}
             </div>
           </div>
         </div>
@@ -298,7 +296,16 @@ class ChartBase extends React.Component<Props, State> {
           )}
         </Palette>
         <div className={classname}>
-          <div className="dayAlbum">{this.renderAlbum(day)}</div>
+          <Album
+            src={
+              this.getAlbumInfoForDay(day)
+                ? this.getAlbumInfoForDay(day).artwork
+                : null
+            }
+            alt={
+              this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).title
+            }
+          />
           {this.renderDayDetails(day)}
         </div>
       </React.Fragment>
@@ -312,11 +319,13 @@ class ChartBase extends React.Component<Props, State> {
       <div className="calendar">
         <DayPicker
           ref={this.calendarRef}
+          captionElement={() => null}
           onMonthChange={this.onMonthChange}
           onDayClick={this.onDayClick}
           selectedDays={selectedDay!}
           renderDay={this.renderDay}
-          weekdaysShort={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']}
+          weekdaysShort={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+          navbarElement={this.renderChartHeader}
         />
         {this.renderExpandedInfo()}
       </div>
@@ -344,7 +353,19 @@ class ChartBase extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <div className="albumImage">{this.renderAlbum(selectedDay)}</div>
+        <div className="albumImage">
+          <Album
+            src={
+              this.getAlbumInfoForDay(selectedDay)
+                ? this.getAlbumInfoForDay(selectedDay).artwork
+                : null
+            }
+            alt={
+              this.getAlbumInfoForDay(selectedDay) &&
+              this.getAlbumInfoForDay(selectedDay).title
+            }
+          />
+        </div>
         <div className="albumDetails">
           <h2 className="albumDetails-title">
             {this.getAlbumInfoForDay(selectedDay).title}
@@ -354,14 +375,14 @@ class ChartBase extends React.Component<Props, State> {
           </div>
           {this.getAlbumInfoForDay(selectedDay).year}
           <div className="albumDetails-link">
-            {this.getAlbumInfoForDay(selectedDay).source === 'spotify' ? (
-              <a>
+            {this.getAlbumInfoForDay(selectedDay).source === "spotify" ? (
+              <button>
                 Listen on <FaSpotify /> Spotify
-              </a>
+              </button>
             ) : (
-              <a>
+              <button>
                 Listen on <FaBandcamp /> Bandcamp
-              </a>
+              </button>
             )}
           </div>
         </div>
@@ -385,7 +406,7 @@ class ChartBase extends React.Component<Props, State> {
     return (
       <React.Fragment>
         <form onSubmit={this.onCreateAlbum}>
-          <div>Add an album for {format(selectedDay, 'MMM d')}</div>
+          <div>Add an album for {format(selectedDay, "MMM d")}</div>
           <select
             name="newAlbumSource"
             value={newAlbumSource}
@@ -475,10 +496,7 @@ class ChartBase extends React.Component<Props, State> {
     ) : isLoading ? (
       <div>Loading...</div>
     ) : chartId && !error ? (
-      <React.Fragment>
-        {this.renderChartHeader()}
-        {this.renderCalendar()}
-      </React.Fragment>
+      this.renderCalendar()
     ) : (
       this.renderEmptyChart()
     );
