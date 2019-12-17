@@ -16,6 +16,7 @@ import { FiEdit3, FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { Palette } from "react-palette";
 import { Link } from "react-router-dom";
 import Album from "../Album";
+const bandcamp = require("bandcamp-scraper");
 
 interface Props {
   firebase: Firebase;
@@ -489,6 +490,15 @@ class ChartBase extends React.Component<Props, State> {
   render() {
     const { chartId } = this.props;
     const { error, isLoading } = this.state;
+
+    const albumUrl = "http://musique.coeurdepirate.com/album/blonde";
+    bandcamp.getAlbumInfo(albumUrl, function(error: any, albumInfo: any) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log(albumInfo);
+      }
+    });
 
     return error ? (
       <div>{error}</div>
