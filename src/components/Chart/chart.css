@@ -58,7 +58,7 @@
 
 .DayPicker-Weekday {
   padding: 0.5em;
-  color: #8b9898;
+  color: #999;
   text-align: center;
   font-size: 1em;
 }
@@ -129,7 +129,7 @@
   grid-template-columns: repeat(7, minmax(0, 1fr));
   column-gap: 1px;
   row-gap: 1em;
-  padding: 2em;
+  padding: 0 2em 2em;
 }
 
 .expandedInfo {

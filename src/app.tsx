@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import Header from "./components/Header";
+import Footer from "./components/Footer";
 import "./app.css";
 import * as ROUTES from "./constants/routes";
 import {
@@ -29,6 +30,7 @@ const App = () => (
         <Route path={ROUTES.SIGN_UP} component={SignUp} />
         <Route path={ROUTES.RESET_PASSWORD} component={ResetPassword} />
       </main>
+      <Footer />
     </div>
   </Router>
 );

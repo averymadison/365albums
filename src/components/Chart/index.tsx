@@ -9,11 +9,10 @@ import {
 } from "date-fns";
 import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
-// import Album from '../Album';
 import DayPicker from "react-day-picker";
 import "./chart.css";
 import { FaSpotify, FaBandcamp } from "react-icons/fa";
-import { FiEdit3, FiMusic, FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import { FiEdit3, FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { Palette } from "react-palette";
 import { Link } from "react-router-dom";
 import Album from "../Album";

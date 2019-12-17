@@ -1,12 +1,12 @@
-import React from 'react';
-import { compose } from 'recompose';
+import React from "react";
+import { compose } from "recompose";
 import {
   withEmailVerification,
   withPermissions
-} from '../../components/Session';
-import Chart from '../../components/Chart';
-import Firebase from '../../components/Firebase';
-// import Spotify from '../../components/Spotify';
+} from "../../components/Session";
+import Chart from "../../components/Chart";
+import Firebase from "../../components/Firebase";
+import Spotify from "../../components/Spotify";
 
 interface Props {
   firebase: Firebase;
@@ -21,10 +21,10 @@ class Home extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      activeChartId: '-LvwyJmrHWXx1CUfTkOD'
+      activeChartId: "-LvwyJmrHWXx1CUfTkOD"
     };
 
-    // Spotify();
+    Spotify();
   }
 
   // componentDidMount() {
