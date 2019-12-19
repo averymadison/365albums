@@ -36,7 +36,9 @@ class SearchBase extends React.Component<Props, State> {
     title: string,
     artist: string,
     releaseDate: Date,
-    artworkUrl: string
+    artworkUrl: string,
+    tracks: number,
+    length: number
   ) => {
     const { firebase, chartId, selectedDay } = this.props;
 
@@ -51,7 +53,9 @@ class SearchBase extends React.Component<Props, State> {
         title: title,
         artist: artist,
         releaseDate: releaseDate,
-        artwork: artworkUrl
+        artwork: artworkUrl,
+        tracks: tracks,
+        length: length
       });
 
     firebase
@@ -83,7 +87,7 @@ class SearchBase extends React.Component<Props, State> {
 
   // Bandcamp uses an underscore and number at the end of the image URL to
   // denote different resolutions of image. _5 is higher quality than _7 but
-  // the bandcamp scraper API only returns _7.
+  // the bandcamp-scraper API only returns _7.
   getHigherResBandcampAlbumArt = (imageUrl: string) => {
     return imageUrl.replace("_7", "_5");
   };
@@ -109,7 +113,9 @@ class SearchBase extends React.Component<Props, State> {
                 album.name,
                 album.artist,
                 new Date(album.releaseDate),
-                this.getHigherResBandcampAlbumArt(album.imageUrl)
+                this.getHigherResBandcampAlbumArt(album.imageUrl),
+                album.numTracks,
+                album.numMinutes
               );
               this.setState({ ...INITIAL_STATE });
             }}

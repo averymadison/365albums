@@ -11,9 +11,7 @@ import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
-import { FaSpotify, FaBandcamp } from "react-icons/fa";
-import { FiEdit3, FiArrowRight, FiArrowLeft } from "react-icons/fi";
-import { Palette } from "react-palette";
+import { FiEdit3, FiArrowRight, FiArrowLeft, FiTrash } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Album from "../Album";
 import Search from "../Search";
@@ -250,18 +248,10 @@ class ChartBase extends React.Component<Props, State> {
             </div>
           </div>
         </div>
-        <Palette
-          src={
-            this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).artwork
-          }
-        >
-          {({ data }) => (
-            <div
-              className="selectedDate-arrow"
-              style={{ backgroundColor: data.lightVibrant }}
-            ></div>
-          )}
-        </Palette>
+        <div
+          className="selectedDate-arrow"
+          // style={{ backgroundColor: data.lightVibrant }}
+        ></div>
         <div className={classname}>
           <Album
             src={
@@ -313,10 +303,6 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderDeleteButton = () => {
-    const { selectedDay } = this.state;
-  };
-
   renderAlbumDetails = () => {
     const { selectedDay } = this.state;
 
@@ -344,20 +330,22 @@ class ChartBase extends React.Component<Props, State> {
           <div className="albumDetails-artist">
             {this.getAlbumInfoForDay(selectedDay).artist}
           </div>
+          {`${this.getAlbumInfoForDay(selectedDay).tracks} tracks`}
+          {`${this.getAlbumInfoForDay(selectedDay).length} minutes`}
           {`Released ${this.getAlbumInfoForDay(selectedDay).releaseDate}`}
           <div className="albumDetails-link">
-            {this.getAlbumInfoForDay(selectedDay).source === "spotify" ? (
-              <a href={this.getAlbumInfoForDay(selectedDay).uri}>
-                Listen on <FaSpotify /> Spotify
-              </a>
-            ) : (
-              <a href={this.getAlbumInfoForDay(selectedDay).uri}>
-                Listen on <FaBandcamp /> Bandcamp
-              </a>
-            )}
+            <a
+              href={this.getAlbumInfoForDay(selectedDay).uri}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {this.getAlbumInfoForDay(selectedDay).source === "spotify"
+                ? "Listen on Spotify"
+                : "Listen on Bandcamp"}
+            </a>
           </div>
           <button onClick={() => this.onDeleteAlbum(selectedDay)}>
-            Remove
+            <FiTrash />
           </button>
         </div>
       </React.Fragment>
@@ -370,29 +358,20 @@ class ChartBase extends React.Component<Props, State> {
     if (!selectedDay) return null;
 
     return (
-      <Palette
-        src={
-          this.getAlbumInfoForDay(selectedDay) &&
-          this.getAlbumInfoForDay(selectedDay).artwork
-        }
+      <div
+        className="expandedInfo"
+        style={{
+          gridRowStart: getWeekOfMonth(selectedDay) + 3
+          // backgroundColor: data.lightVibrant,
+          // color: data.darkVibrant
+        }}
       >
-        {({ data }) => (
-          <div
-            className="expandedInfo"
-            style={{
-              gridRowStart: getWeekOfMonth(selectedDay) + 3,
-              backgroundColor: data.lightVibrant,
-              color: data.darkVibrant
-            }}
-          >
-            {this.getAlbumInfoForDay(selectedDay) ? (
-              this.renderAlbumDetails()
-            ) : (
-              <Search selectedDay={selectedDay} chartId={chartId} />
-            )}
-          </div>
+        {this.getAlbumInfoForDay(selectedDay) ? (
+          this.renderAlbumDetails()
+        ) : (
+          <Search selectedDay={selectedDay} chartId={chartId} />
         )}
-      </Palette>
+      </div>
     );
   };
 
