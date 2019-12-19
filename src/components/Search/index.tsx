@@ -75,7 +75,7 @@ class SearchBase extends React.Component<Props, State> {
     this.setState({ isSearching: true });
 
     fetch(
-      `http://us-central1-daily-album.cloudfunctions.net/searchBandcamp?q=${searchQuery}`
+      `https://us-central1-daily-album.cloudfunctions.net/searchBandcamp?q=${searchQuery}`
     )
       .then(res => res.json())
       .then(result =>
