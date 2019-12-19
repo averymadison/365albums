@@ -1,7 +1,6 @@
 const functions = require("firebase-functions");
 const cors = require("cors")({ origin: true });
 const bandcamp = require("bandcamp-scraper");
-const vibrant = require("node-vibrant");
 
 exports.getBandcampAlbumInfo = functions.https.onRequest(
   (req: any, res: any) => {
