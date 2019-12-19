@@ -13,16 +13,14 @@ interface Props {
 
 interface State {
   searchQuery: string;
-  bandcampSearchResults: [] | null;
-  spotifySearchResults: {} | null;
+  searchResults: [] | null;
   isSearching: boolean;
   source: Source;
 }
 
 const INITIAL_STATE = {
   searchQuery: "",
-  bandcampSearchResults: null,
-  spotifySearchResults: null,
+  searchResults: null,
   isSearching: false,
   source: "spotify" as Source
 };
@@ -85,10 +83,10 @@ class SearchBase extends React.Component<Props, State> {
     )
       .then(res => res.json())
       .then(result => {
-        source === "spotify" && this.setState({ spotifySearchResults: result });
-        source === "bandcamp" &&
-          this.setState({ bandcampSearchResults: result });
-        this.setState({ isSearching: false });
+        this.setState({ searchResults: result, isSearching: false });
+      })
+      .catch(rejected => {
+        console.log(rejected);
       });
 
     event.preventDefault();
@@ -104,15 +102,11 @@ class SearchBase extends React.Component<Props, State> {
   renderBandcampSearchResults = (searchResults: []) => {
     if (!searchResults) return;
 
-    const filteredResults = searchResults.filter(
-      (item: any) => item.type === "album"
-    ) as [];
-
-    return !filteredResults.length ? (
+    return !searchResults.length ? (
       <div>No results</div>
     ) : (
       <div className="search-results">
-        {filteredResults.map((album: any, i) => (
+        {searchResults.map((album: any, i) => (
           <button
             key={i}
             onClick={() => {
@@ -154,23 +148,17 @@ class SearchBase extends React.Component<Props, State> {
     );
   };
 
-  renderSpotifySearchResults = (searchResults: {}) => {
+  renderSpotifySearchResults = (searchResults: []) => {
     if (!searchResults) return;
 
-    // const filteredResults = Object.keys(searchResults).filter(
-    //   (item: any) => item.type === "album"
-    // );
+    console.log("renderSpotifySearchResults: " + searchResults);
 
-    // !filteredResults.length ? (
-    //   <div>No results</div>
-    // ) : (
-    console.log(searchResults);
-    return (
+    return !searchResults.length ? (
+      <div>No results</div>
+    ) : (
       <div className="search-results">
-        {Object.keys(searchResults).map((album: any, i) => (
-          <button key={i} onClick={() => null} className="search-result">
-            {console.log(album)}
-            {/* <img
+        <button onClick={() => null} className="search-result">
+          {/* <img
               src={album.items[i].album.images[0].url}
               alt={`${album.name} cover art`}
               className="search-result-image"
@@ -184,21 +172,15 @@ class SearchBase extends React.Component<Props, State> {
                 length={album.numMinutes}
               />
             </span> */}
-          </button>
-        ))}
+        </button>
+        {/* ))} */}
       </div>
     );
   };
 
   render() {
     const { selectedDay } = this.props;
-    const {
-      searchQuery,
-      bandcampSearchResults,
-      spotifySearchResults,
-      isSearching,
-      source
-    } = this.state;
+    const { searchQuery, searchResults, isSearching, source } = this.state;
 
     if (!selectedDay) return null;
 
@@ -239,13 +221,13 @@ class SearchBase extends React.Component<Props, State> {
           />
         </form>
         {isSearching && `Searching ${source}...`}
-        {bandcampSearchResults &&
-          bandcampSearchResults.length &&
-          source === "bandcamp" &&
-          this.renderBandcampSearchResults(bandcampSearchResults)}
-        {spotifySearchResults &&
-          source === "spotify" &&
-          this.renderSpotifySearchResults(spotifySearchResults)}
+        {searchResults &&
+          searchResults.length &&
+          (source === "bandcamp"
+            ? this.renderBandcampSearchResults(searchResults)
+            : source === "spotify"
+            ? this.renderSpotifySearchResults(searchResults)
+            : null)}
       </div>
     );
   }

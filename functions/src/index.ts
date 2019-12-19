@@ -21,22 +21,6 @@ spotify.clientCredentialsGrant().then(
   }
 );
 
-exports.getBandcampAlbumInfo = functions.https.onRequest(
-  (req: any, res: any) => {
-    const albumUrl = req.query.albumUrl;
-
-    cors(req, res, () => {
-      bandcamp.getAlbumInfo(albumUrl, function(error: any, albumInfo: any) {
-        if (error) {
-          return res.send(error);
-        } else {
-          return res.send(albumInfo);
-        }
-      });
-    });
-  }
-);
-
 exports.search = functions.https.onRequest((req: any, res: any) => {
   const type = req.query.type;
   const query = req.query.q;
@@ -45,7 +29,9 @@ exports.search = functions.https.onRequest((req: any, res: any) => {
     if (type === "spotify") {
       spotify.searchTracks(query).then(
         function(data: any) {
-          return res.send(data.body);
+          return res.send(
+            data.body.items.filter((album: any) => album.album_type === "album")
+          );
         },
         function(err: any) {
           return res.send(err);
@@ -61,7 +47,9 @@ exports.search = functions.https.onRequest((req: any, res: any) => {
         if (error) {
           return res.send(error);
         } else {
-          return res.send(searchResults);
+          return res.send(
+            searchResults.filter((item: any) => item.type === "album")
+          );
         }
       });
     }
