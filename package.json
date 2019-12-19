@@ -10,7 +10,6 @@
     "@types/recompose": "^0.30.7",
     "@types/request": "^2.48.3",
     "@types/spotify-web-api-js": "^0.21.0",
-    "bandcamp-scraper": "^1.2.4",
     "classnames": "^2.2.6",
     "date-fns": "^2.8.1",
     "firebase": "^7.5.0",

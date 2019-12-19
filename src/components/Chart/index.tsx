@@ -16,7 +16,9 @@ import { FiEdit3, FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { Palette } from "react-palette";
 import { Link } from "react-router-dom";
 import Album from "../Album";
-const bandcamp = require("bandcamp-scraper");
+import Search from "../Search";
+
+export type Source = "bandcamp" | "spotify";
 
 interface Props {
   firebase: Firebase;
@@ -31,12 +33,12 @@ interface State {
   updatedAt: string | null;
   albums: any;
   selectedDay: Date | null;
-  newAlbumTitle: string;
-  newAlbumArtist: string;
-  newAlbumYear: string;
-  newAlbumArtworkUrl: string;
-  newAlbumUri: string;
-  newAlbumSource: string;
+  newAlbumTitle?: string;
+  newAlbumArtist?: string;
+  newAlbumYear?: string;
+  newAlbumArtworkUrl?: string;
+  newAlbumUri?: string;
+  newAlbumSource?: Source;
 }
 
 const INITIAL_STATE = {
@@ -46,13 +48,7 @@ const INITIAL_STATE = {
   title: "",
   updatedAt: null,
   albums: {},
-  selectedDay: new Date(),
-  newAlbumTitle: "",
-  newAlbumArtist: "",
-  newAlbumYear: "",
-  newAlbumArtworkUrl: "",
-  newAlbumUri: "",
-  newAlbumSource: "spotify"
+  selectedDay: new Date()
 };
 
 class ChartBase extends React.Component<Props, State> {
@@ -81,7 +77,7 @@ class ChartBase extends React.Component<Props, State> {
           updatedAt: chart.updatedAt ? chart.updatedAt : null,
           albums: chart.albums ? chart.albums : {}
         });
-        document.addEventListener("keydown", this.onKeyDown);
+        // document.addEventListener("keydown", this.onKeyDown);
       } else {
         this.setState({ ...INITIAL_STATE });
         this.setState({ error: "Couldn't locate chart." });
@@ -91,7 +87,7 @@ class ChartBase extends React.Component<Props, State> {
 
   componentWillUnmount() {
     const { firebase, chartId } = this.props;
-    document.removeEventListener("keydown", this.onKeyDown);
+    // document.removeEventListener("keydown", this.onKeyDown);
 
     firebase.chart(chartId).off();
   }
@@ -141,42 +137,13 @@ class ChartBase extends React.Component<Props, State> {
     event.preventDefault();
   };
 
-  onCreateAlbum = (event: React.ChangeEvent<HTMLFormElement>) => {
+  onDeleteAlbum = (day: Date) => {
     const { firebase, chartId } = this.props;
-    const {
-      selectedDay,
-      newAlbumSource,
-      newAlbumUri,
-      newAlbumTitle,
-      newAlbumArtist,
-      newAlbumYear,
-      newAlbumArtworkUrl
-    } = this.state;
-
-    const dateAsString = format(selectedDay!, "yyyy-MM-dd");
-
-    try {
-      firebase
-        .chart(chartId)
-        .child(`albums/${dateAsString}`)
-        .update({
-          uri: newAlbumUri,
-          source: newAlbumSource,
-          title: newAlbumTitle,
-          artist: newAlbumArtist,
-          year: newAlbumYear,
-          artwork: newAlbumArtworkUrl
-        });
-
-      firebase
-        .chart(chartId)
-        .update({ updatedAt: firebase.serverValue.TIMESTAMP });
-
-      this.setState({ newAlbumUri: "" });
-      event.preventDefault();
-    } catch (error) {
-      this.setState({ error: error.message });
-    }
+    const dateAsString = format(day, "yyyy-MM-dd");
+    firebase
+      .chart(chartId)
+      .child(`albums/${dateAsString}`)
+      .remove();
   };
 
   onMonthChange = () => {
@@ -346,6 +313,10 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
+  renderDeleteButton = () => {
+    const { selectedDay } = this.state;
+  };
+
   renderAlbumDetails = () => {
     const { selectedDay } = this.state;
 
@@ -373,92 +344,28 @@ class ChartBase extends React.Component<Props, State> {
           <div className="albumDetails-artist">
             {this.getAlbumInfoForDay(selectedDay).artist}
           </div>
-          {this.getAlbumInfoForDay(selectedDay).year}
+          {`Released ${this.getAlbumInfoForDay(selectedDay).releaseDate}`}
           <div className="albumDetails-link">
             {this.getAlbumInfoForDay(selectedDay).source === "spotify" ? (
-              <button>
+              <a href={this.getAlbumInfoForDay(selectedDay).uri}>
                 Listen on <FaSpotify /> Spotify
-              </button>
+              </a>
             ) : (
-              <button>
+              <a href={this.getAlbumInfoForDay(selectedDay).uri}>
                 Listen on <FaBandcamp /> Bandcamp
-              </button>
+              </a>
             )}
           </div>
+          <button onClick={() => this.onDeleteAlbum(selectedDay)}>
+            Remove
+          </button>
         </div>
       </React.Fragment>
     );
   };
 
-  renderAddAlbum = () => {
-    const {
-      selectedDay,
-      newAlbumTitle,
-      newAlbumArtist,
-      newAlbumYear,
-      newAlbumArtworkUrl,
-      newAlbumSource,
-      newAlbumUri
-    } = this.state;
-
-    if (!selectedDay) return null;
-
-    return (
-      <React.Fragment>
-        <form onSubmit={this.onCreateAlbum}>
-          <div>Add an album for {format(selectedDay, "MMM d")}</div>
-          <select
-            name="newAlbumSource"
-            value={newAlbumSource}
-            onChange={this.onChange}
-          >
-            <option value="spotify">Spotify</option>
-            <option value="bandcamp">Bandcamp</option>
-          </select>
-          <input
-            name="newAlbumUri"
-            type="text"
-            placeholder="Album URI"
-            value={newAlbumUri}
-            onChange={this.onChange}
-          />
-          <div>
-            <input
-              name="newAlbumTitle"
-              type="text"
-              placeholder="Title"
-              value={newAlbumTitle}
-              onChange={this.onChange}
-            />
-            <input
-              name="newAlbumArtist"
-              type="text"
-              placeholder="Artist"
-              value={newAlbumArtist}
-              onChange={this.onChange}
-            />
-            <input
-              name="newAlbumYear"
-              type="number"
-              placeholder="Year"
-              value={newAlbumYear}
-              onChange={this.onChange}
-            />
-            <input
-              name="newAlbumArtworkUrl"
-              type="url"
-              placeholder="Artwork Url"
-              value={newAlbumArtworkUrl}
-              onChange={this.onChange}
-            />
-          </div>
-          <button type="submit">Add album</button>
-        </form>
-      </React.Fragment>
-    );
-  };
-
   renderExpandedInfo = () => {
+    const { chartId } = this.props;
     const { selectedDay } = this.state;
     if (!selectedDay) return null;
 
@@ -478,9 +385,11 @@ class ChartBase extends React.Component<Props, State> {
               color: data.darkVibrant
             }}
           >
-            {this.getAlbumInfoForDay(selectedDay)
-              ? this.renderAlbumDetails()
-              : this.renderAddAlbum()}
+            {this.getAlbumInfoForDay(selectedDay) ? (
+              this.renderAlbumDetails()
+            ) : (
+              <Search selectedDay={selectedDay} chartId={chartId} />
+            )}
           </div>
         )}
       </Palette>
@@ -490,15 +399,6 @@ class ChartBase extends React.Component<Props, State> {
   render() {
     const { chartId } = this.props;
     const { error, isLoading } = this.state;
-
-    const albumUrl = "http://musique.coeurdepirate.com/album/blonde";
-    bandcamp.getAlbumInfo(albumUrl, function(error: any, albumInfo: any) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log(albumInfo);
-      }
-    });
 
     return error ? (
       <div>{error}</div>

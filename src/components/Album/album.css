@@ -17,3 +17,7 @@
   font-size: 2em;
   color: #bbb;
 }
+
+.albumContent img {
+  width: 100%;
+}

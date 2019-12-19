@@ -1,12 +1,36 @@
-import * as functions from "firebase-functions";
-import * as cors from "cors";
-import * as express from "express";
+const functions = require("firebase-functions");
+const cors = require("cors")({ origin: true });
+const bandcamp = require("bandcamp-scraper");
 
-const app = express();
+exports.getBandcampAlbumInfo = functions.https.onRequest(
+  (req: any, res: any) => {
+    const albumUrl = req.query.albumUrl;
 
-app.use(cors({ origin: true }));
-app.get("*", (req: express.Request, res: express.Response) => {
-  res.send("Hello from express on Firebase with CORS!");
+    cors(req, res, () => {
+      bandcamp.getAlbumInfo(albumUrl, function(error: any, albumInfo: any) {
+        if (error) {
+          return res.send(error);
+        } else {
+          return res.send(albumInfo);
+        }
+      });
+    });
+  }
+);
+
+exports.searchBandcamp = functions.https.onRequest((req: any, res: any) => {
+  const params = {
+    query: req.query.q,
+    page: 1
+  };
+
+  cors(req, res, () => {
+    bandcamp.search(params, function(error: any, searchResults: any) {
+      if (error) {
+        return res.send(error);
+      } else {
+        return res.send(searchResults);
+      }
+    });
+  });
 });
-
-exports.app = functions.https.onRequest(app);
