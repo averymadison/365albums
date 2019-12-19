@@ -8,6 +8,19 @@ const spotify = new spotifyWebApi({
   clientSecret: functions.config().spotify.secret
 });
 
+spotify.clientCredentialsGrant().then(
+  function(data: any) {
+    console.log("The access token expires in " + data.body["expires_in"]);
+    console.log("The access token is " + data.body["access_token"]);
+
+    // Save the access token so that it's used in future calls
+    spotify.setAccessToken(data.body["access_token"]);
+  },
+  function(err: any) {
+    console.log("Something went wrong when retrieving an access token", err);
+  }
+);
+
 exports.getBandcampAlbumInfo = functions.https.onRequest(
   (req: any, res: any) => {
     const albumUrl = req.query.albumUrl;
@@ -24,34 +37,33 @@ exports.getBandcampAlbumInfo = functions.https.onRequest(
   }
 );
 
-exports.searchBandcamp = functions.https.onRequest((req: any, res: any) => {
-  const params = {
-    query: req.query.q,
-    page: 1
-  };
-
-  cors(req, res, () => {
-    bandcamp.search(params, function(error: any, searchResults: any) {
-      if (error) {
-        return res.send(error);
-      } else {
-        return res.send(searchResults);
-      }
-    });
-  });
-});
-
-exports.searchSpotify = functions.https.onRequest((req: any, res: any) => {
+exports.search = functions.https.onRequest((req: any, res: any) => {
+  const type = req.query.type;
   const query = req.query.q;
 
   cors(req, res, () => {
-    spotify.searchTracks(query).then(
-      function(data: any) {
-        console.log("Albums information", data.body);
-      },
-      function(err: any) {
-        console.error(err);
-      }
-    );
+    if (type === "spotify") {
+      spotify.searchTracks(query).then(
+        function(data: any) {
+          return res.send(data.body);
+        },
+        function(err: any) {
+          return res.send(err);
+        }
+      );
+    }
+
+    if (type === "bandcamp") {
+      bandcamp.search({ query, page: 1 }, function(
+        error: any,
+        searchResults: any
+      ) {
+        if (error) {
+          return res.send(error);
+        } else {
+          return res.send(searchResults);
+        }
+      });
+    }
   });
 });
