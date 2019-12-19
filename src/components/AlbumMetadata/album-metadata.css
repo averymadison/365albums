@@ -1,0 +1,11 @@
+albumDetails-meta {
+  display: block;
+}
+
+.albumDetails-meta-releaseDate + *:before {
+  content: " · ";
+}
+
+.albumDetails-meta-songs + .albumDetails-meta-minutes::before {
+  content: ", ";
+}

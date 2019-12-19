@@ -73,15 +73,15 @@
   position: relative;
   outline: none;
   transition-property: background-color, color;
-  transition: 0.1s ease-out;
+  transition: 0.15s ease-out;
 }
 
 .dayContents {
-  transition: 0.2s ease-out;
+  transition: 0.15s ease-out;
 }
 
 .dayContents.isPast {
-  opacity: 0.5;
+  opacity: 0.2;
 }
 
 .DayPicker--interactionDisabled .DayPicker-Day {
@@ -109,7 +109,15 @@
 /* Example modifiers */
 
 .DayPicker-Day--selected .dayContents {
-  transform: scale(0);
+  opacity: 0;
+}
+
+.DayPicker-Day .album {
+  transition: 0.15s ease-out;
+}
+
+.DayPicker-Day--selected .album {
+  transform: scale(0.6);
 }
 
 .dayAlbum {
@@ -117,7 +125,7 @@
 }
 
 .dayAlbum img {
-  transition: 0.2s ease-out;
+  transition: 0.15s ease-out;
 }
 
 .DayPicker-Day.DayPicker-Day--selected {
@@ -142,49 +150,10 @@
   display: flex;
   overflow-wrap: break-word;
   word-break: break-word;
-  transition: 0.2s ease-out;
-  transition-property: background, color;
+  transition: 0.1s ease-out;
+  transition-property: background-color, color;
   align-items: center;
   margin-bottom: 0.5em;
-}
-
-.albumImage {
-  width: 50vmax;
-  max-width: 250px;
-  overflow: hidden;
-  margin-right: 2em;
-  flex-shrink: 0;
-  box-shadow: 0 1vw 3vw -0.5vw rgba(0, 0, 0, 0.2);
-}
-
-.albumDetails {
-  display: flex;
-  flex-direction: column;
-  padding: 2em 0;
-}
-
-.albumDetails-title {
-  margin: 0;
-  font-size: 2em;
-  line-height: 1;
-}
-
-.albumDetails-artist {
-  font-size: 1.2em;
-  margin: 0.4em 0 1em;
-  font-family: benton-sans-wide, sans-serif;
-  font-weight: 500;
-  font-style: normal;
-}
-
-.albumDetails-link {
-  margin-top: auto;
-  user-select: none;
-}
-
-.albumDetails-link svg {
-  margin: 0 0 -0.1em 0.1em;
-  font-size: 0.85em;
 }
 
 .dateBadge {
@@ -215,13 +184,15 @@
   font-weight: 600;
   width: 100%;
   padding-top: 100%;
-  transform: scale(0);
-  transition: 0.2s ease-out;
+  transform: scale(1.6);
+  opacity: 0;
+  transition: 0.15s ease-out;
   font-size: 0.8em;
   line-height: 1;
   font-family: benton-sans, sans-serif;
   font-weight: 600;
   font-style: normal;
+  pointer-events: none;
 }
 
 .selectedDate-month {
@@ -257,20 +228,20 @@
 
 .DayPicker-Day--selected .selectedDate {
   transform: scale(1);
+  opacity: 1;
 }
 
 .selectedDate-arrow {
   content: "";
   width: 2em;
   height: 2em;
-  background-color: #eee;
+  background-color: #f9f9f9;
   position: absolute;
   user-select: none;
   bottom: -1em;
   left: 50%;
   transform: translate3d(-50%, 50%, 0) rotate(45deg) scale(0);
-  transition: transform 0.2s ease-out;
-  z-index: -1;
+  transition: transform 0.15s ease-out;
 }
 
 .DayPicker-Day--selected .selectedDate-arrow {
@@ -288,6 +259,7 @@
 .dayDetails__text {
   flex: 1;
   overflow: hidden;
+  font-family: benton-sans-condensed, sans-serif;
 }
 
 .dayDetails__text > * {
@@ -295,6 +267,10 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.dayDetails__title {
+  font-weight: 600;
 }
 
 .chart-header {

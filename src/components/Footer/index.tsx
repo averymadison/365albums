@@ -3,7 +3,7 @@ import "./footer.css";
 
 const Footer = () => (
   <footer className="footer">
-    A project by <a href="https://kyledecker.me">Kyle Decker</a>
+    A doodad by <a href="https://kyledecker.me">Kyle Decker</a> ~♪
   </footer>
 );
 

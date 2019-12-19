@@ -11,10 +11,11 @@ import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
-import { FiEdit3, FiArrowRight, FiArrowLeft, FiTrash } from "react-icons/fi";
+import { FiEdit3, FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Album from "../Album";
 import Search from "../Search";
+import AlbumDetails from "../AlbumDetails";
 
 export type Source = "bandcamp" | "spotify";
 
@@ -31,12 +32,6 @@ interface State {
   updatedAt: string | null;
   albums: any;
   selectedDay: Date | null;
-  newAlbumTitle?: string;
-  newAlbumArtist?: string;
-  newAlbumYear?: string;
-  newAlbumArtworkUrl?: string;
-  newAlbumUri?: string;
-  newAlbumSource?: Source;
 }
 
 const INITIAL_STATE = {
@@ -135,15 +130,6 @@ class ChartBase extends React.Component<Props, State> {
     event.preventDefault();
   };
 
-  onDeleteAlbum = (day: Date) => {
-    const { firebase, chartId } = this.props;
-    const dateAsString = format(day, "yyyy-MM-dd");
-    firebase
-      .chart(chartId)
-      .child(`albums/${dateAsString}`)
-      .remove();
-  };
-
   onMonthChange = () => {
     this.setState({ selectedDay: null });
   };
@@ -220,7 +206,9 @@ class ChartBase extends React.Component<Props, State> {
       <div className="dayDetails">
         {this.getAlbumInfoForDay(day) && (
           <div className="dayDetails__text">
-            <div>{this.getAlbumInfoForDay(day).title}</div>
+            <div className="dayDetails__title">
+              {this.getAlbumInfoForDay(day).title}
+            </div>
             <div>{this.getAlbumInfoForDay(day).artist}</div>
           </div>
         )}
@@ -255,9 +243,8 @@ class ChartBase extends React.Component<Props, State> {
         <div className={classname}>
           <Album
             src={
-              this.getAlbumInfoForDay(day)
-                ? this.getAlbumInfoForDay(day).artwork
-                : null
+              this.getAlbumInfoForDay(day) &&
+              this.getAlbumInfoForDay(day).artwork
             }
             alt={
               this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).title
@@ -266,6 +253,18 @@ class ChartBase extends React.Component<Props, State> {
           {this.renderDayDetails(day)}
         </div>
       </React.Fragment>
+    );
+  };
+
+  renderWeekday = (props: any) => {
+    const { weekday, className, localeUtils, locale } = props;
+    const weekdayShort = localeUtils.formatWeekdayShort(weekday, locale);
+    const weekdayLong = localeUtils.formatWeekdayLong(weekday, locale);
+
+    return (
+      <div className={className}>
+        <abbr title={weekdayLong}>{weekdayShort}</abbr>
+      </div>
     );
   };
 
@@ -281,10 +280,10 @@ class ChartBase extends React.Component<Props, State> {
           onDayClick={this.onDayClick}
           selectedDays={selectedDay!}
           renderDay={this.renderDay}
-          weekdaysShort={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+          weekdayElement={this.renderWeekday}
           navbarElement={this.renderChartHeader}
         />
-        {this.renderExpandedInfo()}
+        {selectedDay && this.renderExpandedInfo(selectedDay)}
       </div>
     );
   };
@@ -303,73 +302,33 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderAlbumDetails = () => {
-    const { selectedDay } = this.state;
-
-    if (!selectedDay) return null;
-
-    return (
-      <React.Fragment>
-        <div className="albumImage">
-          <Album
-            src={
-              this.getAlbumInfoForDay(selectedDay)
-                ? this.getAlbumInfoForDay(selectedDay).artwork
-                : null
-            }
-            alt={
-              this.getAlbumInfoForDay(selectedDay) &&
-              this.getAlbumInfoForDay(selectedDay).title
-            }
-          />
-        </div>
-        <div className="albumDetails">
-          <h2 className="albumDetails-title">
-            {this.getAlbumInfoForDay(selectedDay).title}
-          </h2>
-          <div className="albumDetails-artist">
-            {this.getAlbumInfoForDay(selectedDay).artist}
-          </div>
-          {`${this.getAlbumInfoForDay(selectedDay).tracks} tracks`}
-          {`${this.getAlbumInfoForDay(selectedDay).length} minutes`}
-          {`Released ${this.getAlbumInfoForDay(selectedDay).releaseDate}`}
-          <div className="albumDetails-link">
-            <a
-              href={this.getAlbumInfoForDay(selectedDay).uri}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {this.getAlbumInfoForDay(selectedDay).source === "spotify"
-                ? "Listen on Spotify"
-                : "Listen on Bandcamp"}
-            </a>
-          </div>
-          <button onClick={() => this.onDeleteAlbum(selectedDay)}>
-            <FiTrash />
-          </button>
-        </div>
-      </React.Fragment>
-    );
-  };
-
-  renderExpandedInfo = () => {
+  renderExpandedInfo = (day: Date) => {
     const { chartId } = this.props;
-    const { selectedDay } = this.state;
-    if (!selectedDay) return null;
 
     return (
       <div
         className="expandedInfo"
         style={{
-          gridRowStart: getWeekOfMonth(selectedDay) + 3
+          gridRowStart: getWeekOfMonth(day) + 3
           // backgroundColor: data.lightVibrant,
           // color: data.darkVibrant
         }}
       >
-        {this.getAlbumInfoForDay(selectedDay) ? (
-          this.renderAlbumDetails()
+        {this.getAlbumInfoForDay(day) ? (
+          <AlbumDetails
+            chartId={chartId}
+            title={this.getAlbumInfoForDay(day).title}
+            artist={this.getAlbumInfoForDay(day).artist}
+            albumUrl={this.getAlbumInfoForDay(day).artwork}
+            tracks={this.getAlbumInfoForDay(day).tracks}
+            length={this.getAlbumInfoForDay(day).length}
+            releaseDate={this.getAlbumInfoForDay(day).releaseDate}
+            source={this.getAlbumInfoForDay(day).source}
+            uri={this.getAlbumInfoForDay(day).uri}
+            day={day}
+          />
         ) : (
-          <Search selectedDay={selectedDay} chartId={chartId} />
+          <Search selectedDay={day} chartId={chartId} />
         )}
       </div>
     );

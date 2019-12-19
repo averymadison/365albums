@@ -1,0 +1,39 @@
+.albumImage {
+  width: 50vmax;
+  max-width: 250px;
+  overflow: hidden;
+  margin-right: 2em;
+  flex-shrink: 0;
+  box-shadow: 0 1vw 3vw -0.5vw rgba(0, 0, 0, 0.2);
+}
+
+.albumDetails {
+  display: flex;
+  flex-direction: column;
+}
+
+.albumDetails-title {
+  margin: 0;
+  font-size: 2.5em;
+  line-height: 1;
+  font-family: benton-sans-condensed, sans-serif;
+  font-weight: 600;
+}
+
+.albumDetails-artist {
+  font-size: 1.2em;
+  margin: 0.4em 0 1em;
+  font-family: benton-sans-wide, sans-serif;
+  font-weight: 500;
+  font-style: normal;
+}
+
+.albumDetails-link {
+  margin-top: auto;
+  user-select: none;
+}
+
+.albumDetails-link svg {
+  margin: 0 0 -0.1em 0.1em;
+  font-size: 0.85em;
+}

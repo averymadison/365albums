@@ -1,7 +1,8 @@
 import React from "react";
 import Firebase, { withFirebase } from "../Firebase";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 import "./search.css";
+import AlbumMetadata from "../AlbumMetadata";
 
 interface Props {
   firebase: Firebase;
@@ -112,7 +113,7 @@ class SearchBase extends React.Component<Props, State> {
                 album.url,
                 album.name,
                 album.artist,
-                new Date(album.releaseDate),
+                parse(album.releaseDate, "dd MMMM yyyy", new Date()),
                 this.getHigherResBandcampAlbumArt(album.imageUrl),
                 album.numTracks,
                 album.numMinutes
@@ -129,9 +130,15 @@ class SearchBase extends React.Component<Props, State> {
             <span className="search-result-contents">
               <span className="search-result-album">{album.name}</span>
               <span className="search-result-artist">{album.artist}</span>
-              <span className="search-result-release-date">
-                {album.releaseDate}
-              </span>
+              <AlbumMetadata
+                releaseDate={parse(
+                  album.releaseDate,
+                  "dd MMMM yyyy",
+                  new Date()
+                )}
+                tracks={album.numTracks}
+                length={album.numMinutes}
+              />
             </span>
           </button>
         ))}
@@ -148,14 +155,16 @@ class SearchBase extends React.Component<Props, State> {
     return (
       <div className="search-wrapper">
         <div>Add an album for {format(selectedDay, "MMM d")}</div>
-        <form onSubmit={this.onSearchBandcamp}>
+        <form onSubmit={this.onSearchBandcamp} autoComplete="off">
           <input
             name="searchQuery"
-            type="text"
+            type="search"
             placeholder="Search Bandcamp"
             value={searchQuery}
             onChange={this.onChange}
             className="search"
+            autoFocus
+            ref={input => input && input.focus()}
             disabled={isSearching}
           />
         </form>

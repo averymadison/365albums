@@ -6,14 +6,14 @@ import {
 } from "../../components/Session";
 import Chart from "../../components/Chart";
 import Firebase from "../../components/Firebase";
-import Spotify from "../../components/Spotify";
 
 interface Props {
   firebase: Firebase;
 }
 
 interface State {
-  activeChartId: string;
+  activeChartId: string | null;
+  activeUserId: string;
 }
 
 class Home extends React.Component<Props, State> {
@@ -21,28 +21,29 @@ class Home extends React.Component<Props, State> {
     super(props);
 
     this.state = {
-      activeChartId: "-LvwyJmrHWXx1CUfTkOD"
+      activeChartId: null,
+      activeUserId: "rSQ41HpnxPT3oumxzhAPtjG51Gj2"
     };
-
-    Spotify();
   }
 
-  // componentDidMount() {
-  //   this.props.firebase.db
-  //     .ref('users/rSQ41HpnxPT3oumxzhAPtjG51Gj2/primaryChart')
-  //     .on('value', snapshot => {
-  //       const primaryChartId = snapshot.val();
+  componentDidMount() {
+    const { activeUserId } = this.state;
 
-  //       this.setState({
-  //         activeChartId: primaryChartId
-  //       });
-  //     });
-  // }
+    this.props.firebase.db
+      .ref(`users/${activeUserId}/primaryChart`)
+      .on("value", snapshot => {
+        const primaryChartId = snapshot.val();
+
+        this.setState({
+          activeChartId: primaryChartId
+        });
+      });
+  }
 
   render() {
     const { activeChartId } = this.state;
 
-    return <Chart chartId={activeChartId} />;
+    return !activeChartId ? "Loading..." : <Chart chartId={activeChartId} />;
   }
 }
 

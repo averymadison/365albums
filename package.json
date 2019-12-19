@@ -24,7 +24,6 @@
     "react-spring": "^8.0.27",
     "recompose": "^0.30.0",
     "request": "^2.88.0",
-    "spotify-web-api-js": "^1.2.0",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
   },

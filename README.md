@@ -15,6 +15,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Favicon
 - Speed testing / Lighthouse
 - Add analytics events
+- Add Buy Me A Coffee link
+- Keyboard support, focus states for calendar
 
 ## Available Scripts
 
