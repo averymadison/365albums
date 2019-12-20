@@ -26,32 +26,42 @@ exports.search = functions.https.onRequest((req: any, res: any) => {
   const query = req.query.q;
 
   cors(req, res, () => {
-    if (type === "spotify") {
-      spotify.searchTracks(query).then(
-        function(data: any) {
-          return res.send(
-            data.body.items.filter((album: any) => album.album_type === "album")
-          );
-        },
-        function(err: any) {
-          return res.send(err);
-        }
-      );
-    }
+    switch (type) {
+      case "spotify":
+        spotify
+          .searchAlbums(query)
+          .then(
+            function(data: any) {
+              console.log(data.body);
+              return res.send(
+                data.body.albums.items.filter(
+                  (item: any) => item.album_type === ("album" || "compilation")
+                )
+              );
+            },
+            function(err: any) {
+              return res.send(err);
+            }
+          )
+          .catch((rejected: any) => {
+            console.log(rejected);
+          });
+        break;
 
-    if (type === "bandcamp") {
-      bandcamp.search({ query, page: 1 }, function(
-        error: any,
-        searchResults: any
-      ) {
-        if (error) {
-          return res.send(error);
-        } else {
-          return res.send(
-            searchResults.filter((item: any) => item.type === "album")
-          );
-        }
-      });
+      case "bandcamp":
+        bandcamp.search({ query, page: 1 }, function(
+          error: any,
+          searchResults: any
+        ) {
+          if (error) {
+            return res.send(error);
+          } else {
+            return res.send(
+              searchResults.filter((item: any) => item.type === "album")
+            );
+          }
+        });
+        break;
     }
   });
 });
