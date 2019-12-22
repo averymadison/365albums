@@ -44,7 +44,7 @@ const AlbumDetails = (props: Props) => {
   };
 
   return (
-    <React.Fragment>
+    <div className="album-details">
       <div className="albumImage">
         <Album src={albumUrl} alt={title} />
       </div>
@@ -55,17 +55,25 @@ const AlbumDetails = (props: Props) => {
         tracks={tracks}
         length={length}
       />
-      {source && (
-        <div className="albumDetails-link">
-          <a href={uri} target="_blank" rel="noopener noreferrer">
+      <div className="albumDetails-buttons">
+        {source && (
+          <a
+            className={`button button-fill button-large button-${source}`}
+            href={uri}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {`Listen on ${source.charAt(0).toUpperCase() + source.slice(1)}`}
           </a>
-        </div>
-      )}
-      <button onClick={() => onDeleteAlbum(day)}>
-        <FiTrash />
-      </button>
-    </React.Fragment>
+        )}
+        <button
+          className="button icon-button button-large"
+          onClick={() => onDeleteAlbum(day)}
+        >
+          <FiTrash />
+        </button>
+      </div>
+    </div>
   );
 };
 

@@ -196,18 +196,30 @@ class ChartBase extends React.Component<Props, State> {
         </div>
         <div className="chart-actions">
           <div className="chart-month">
-            <button onClick={() => onPreviousClick()}>
+            <button
+              className="button icon-button"
+              onClick={() => onPreviousClick()}
+            >
               <FiArrowLeft />
             </button>
-            <button onClick={() => onNextClick()}>
+            <button
+              className="button icon-button"
+              onClick={() => onNextClick()}
+            >
               <FiArrowRight />
             </button>
             <h3>{format(month, "MMMM YYY")}</h3>
           </div>
           <div className="chart-buttons">
-            <button onClick={this.onTodayClick}>Today</button>
-            <button onClick={this.onToggleMinimalView}>Toggle Details</button>
-            <Link to={`chart/${chartId}`}>Share</Link>
+            <button className="button" onClick={this.onTodayClick}>
+              Today
+            </button>
+            <button className="button" onClick={this.onToggleMinimalView}>
+              Toggle Details
+            </button>
+            <Link className="button" to={`chart/${chartId}`}>
+              Share
+            </Link>
           </div>
         </div>
       </header>
@@ -264,18 +276,6 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderWeekday = (props: any) => {
-    const { weekday, className, localeUtils, locale } = props;
-    const weekdayShort = localeUtils.formatWeekdayShort(weekday, locale);
-    const weekdayLong = localeUtils.formatWeekdayLong(weekday, locale);
-
-    return (
-      <div className={className}>
-        <abbr title={weekdayLong}>{weekdayShort}</abbr>
-      </div>
-    );
-  };
-
   renderCalendar = () => {
     const { selectedDay } = this.state;
 
@@ -290,7 +290,7 @@ class ChartBase extends React.Component<Props, State> {
           navbarElement={this.renderChartHeader}
           weekdaysShort={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
         />
-        {this.renderExpandedInfo(selectedDay)}
+        {this.renderDetails(selectedDay)}
       </div>
     );
   };
@@ -310,17 +310,23 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderExpandedInfo = (day: Date) => {
+  renderDetails = (day: Date) => {
     const { chartId } = this.props;
 
     return (
-      <div className="expandedInfo">
+      <div className="detail-pane">
         <div className="current-day">
           <div className="current-day-buttons">
-            <button onClick={this.onPreviousDayClick}>
+            <button
+              className="button icon-button"
+              onClick={this.onPreviousDayClick}
+            >
               <FiArrowLeft />
             </button>
-            <button onClick={this.onNextDayClick}>
+            <button
+              className="button icon-button"
+              onClick={this.onNextDayClick}
+            >
               <FiArrowRight />
             </button>
           </div>

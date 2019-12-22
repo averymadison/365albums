@@ -6,6 +6,7 @@ import { FaSpotify, FaBandcamp } from "react-icons/fa";
 import { FiEdit3 } from "react-icons/fi";
 import SearchResult from "../SearchResult";
 import { Source } from "../Chart";
+import Album from "../Album";
 
 interface Props {
   firebase: Firebase;
@@ -189,38 +190,40 @@ class SearchBase extends React.Component<Props, State> {
 
     return (
       <div className="search-wrapper">
-        <div>Add an album</div>
+        <Album src={null} />
         <form onSubmit={this.onSearch} autoComplete="off">
-          <label>
-            <input
-              type="radio"
-              name="source"
-              value="spotify"
-              checked={source === "spotify"}
-              onChange={this.onToggleSource}
-            />
-            <FaSpotify /> Spotify
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="source"
-              value="bandcamp"
-              checked={source === "bandcamp"}
-              onChange={this.onToggleSource}
-            />
-            <FaBandcamp /> Bandcamp
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="source"
-              value="custom"
-              checked={source === "custom"}
-              onChange={this.onToggleSource}
-            />
-            <FiEdit3 /> Custom
-          </label>
+          <div className="radio-bar">
+            <label>
+              <input
+                type="radio"
+                name="source"
+                value="spotify"
+                checked={source === "spotify"}
+                onChange={this.onToggleSource}
+              />
+              <div className="radio-button">Spotify</div>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="source"
+                value="bandcamp"
+                checked={source === "bandcamp"}
+                onChange={this.onToggleSource}
+              />
+              <div className="radio-button">Bandcamp</div>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="source"
+                value="custom"
+                checked={source === "custom"}
+                onChange={this.onToggleSource}
+              />
+              <div className="radio-button">Custom</div>
+            </label>
+          </div>
           {source !== "custom" ? (
             <input
               name="searchQuery"

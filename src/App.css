@@ -13,3 +13,10 @@
   min-width: 0;
   grid-area: content;
 }
+
+@media screen and (max-width: 1100px) {
+  .app {
+    width: calc(100vw + 140px);
+    transform: translateX(-140px);
+  }
+}

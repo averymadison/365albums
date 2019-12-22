@@ -15,10 +15,64 @@
 
 .search:focus {
   outline: none;
-  background-color: var(--bg);
-  box-shadow: 0 0 0 4px rgba(0, 0, 255, 0.4);
+  box-shadow: var(--focus);
 }
 
 .search::placeholder {
   text-transform: capitalize;
+}
+
+.radio-bar {
+  width: 100%;
+  display: flex;
+  justify-content: stretch;
+  margin: 1em 0;
+}
+
+.radio-bar label {
+  flex: 1;
+}
+
+.radio-bar label + label .radio-button {
+  border-left: none;
+}
+
+.radio-bar input[type="radio"] {
+  display: none;
+}
+
+.radio-bar .radio-button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  height: 2.5em;
+  padding: 0 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: 100%;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.radio-bar label:first-child .radio-button {
+  border-top-left-radius: 0.5em;
+  border-bottom-left-radius: 0.5em;
+}
+
+.radio-bar label:last-child .radio-button {
+  border-top-right-radius: 0.5em;
+  border-bottom-right-radius: 0.5em;
+}
+
+.radio-bar input[type="radio"]:checked ~ .radio-button {
+  background-color: var(--text);
+  border-color: var(--text);
+  color: var(--bg);
+}
+
+.radio-bar .radio-button svg {
+  margin-right: 0.5em;
 }

@@ -4,15 +4,17 @@
   --bg: #fff;
   --bg-alt: #eee;
   --border: #ddd;
+  --focus: 0 0 0 4px rgba(0, 90, 255, 0.5);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     --text: #eee;
     --text-light: #ccc;
-    --bg: #111;
+    --bg: #1a1a1a;
     --bg-alt: #222;
     --border: #333;
+    --focus: 0 0 0 4px rgba(0, 90, 255, 0.8);
   }
 }
 
@@ -31,6 +33,7 @@ body {
   font-family: benton-sans, sans-serif;
   font-weight: 500;
   font-style: normal;
+  font-size: 16px;
   background: var(--bg);
   color: var(--text);
 }
@@ -56,4 +59,59 @@ button {
 
 button svg {
   display: block;
+}
+
+.button {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 0.5em;
+  text-decoration: none;
+  height: 2.5em;
+  padding: 0 1em;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: var(--border);
+  color: var(--text);
+}
+
+.button:focus {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.button:not(.icon-button) + .button:not(.icon-button) {
+  margin-left: 0.5em;
+}
+
+.button-fill {
+  width: 100%;
+}
+
+.button-large {
+  height: 3em;
+}
+
+.icon-button {
+  background-color: transparent;
+  color: var(--text-light);
+  width: 2.5em;
+  padding: 0;
+  border-radius: 50%;
+  border: none;
+  flex-shrink: 0;
+}
+
+.icon-button.button-large {
+  width: 3em;
+}
+
+.button svg {
+  font-size: 1.2em;
+  margin: 0.25em;
 }

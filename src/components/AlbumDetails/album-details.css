@@ -1,3 +1,9 @@
+.album-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .albumImage {
   box-shadow: 0 1vw 3vw -0.5vw rgba(0, 0, 0, 0.2);
   margin-bottom: 2em;
@@ -5,26 +11,51 @@
 
 .albumDetails-title {
   margin: 0;
-  font-size: 5vmin;
+  font-size: 3vmax;
   line-height: 1;
   font-family: benton-sans-condensed, sans-serif;
   font-weight: 600;
 }
 
 .albumDetails-artist {
-  font-size: 3vmin;
+  font-size: 2.5vmax;
   margin: 0.4em 0 1em;
   font-family: benton-sans-wide, sans-serif;
   font-weight: 500;
   font-style: normal;
 }
 
-.albumDetails-link {
+.albumDetails-buttons {
   margin-top: auto;
-  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: flex-end;
 }
 
-.albumDetails-link svg {
-  margin: 0 0 -0.1em 0.1em;
-  font-size: 0.85em;
+.albumDetails-buttons > * + * {
+  margin-left: 0.5em;
+}
+
+.button-bandcamp,
+.button-spotify {
+  border-radius: 4em;
+  border: none;
+  font-weight: 600;
+}
+
+.button-bandcamp {
+  background-color: #629aa9;
+}
+
+.button-bandcamp:hover {
+  background-color: #598a97;
+}
+
+.button-spotify {
+  background-color: #1db954;
+}
+
+.button-spotify:hover {
+  background-color: #19d65b;
 }

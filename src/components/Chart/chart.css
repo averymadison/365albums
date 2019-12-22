@@ -1,15 +1,19 @@
 .calendar {
   display: grid;
   height: 100vh;
-  grid-template-columns: 1fr 2.5fr;
-  grid-template-rows: 60px minmax(0, 1fr);
+  grid-template-columns: minmax(360px, 1fr) 2.5fr;
+  grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas:
     "header header"
     "details calendar";
 }
 
 .DayPicker,
-.DayPicker-wrapper {
+.DayPicker-wrapper,
+.DayPicker-Body,
+.DayPicker-Week,
+.DayPicker-Weekdays,
+.DayPicker-WeekdaysRow {
   display: contents;
 }
 
@@ -21,31 +25,25 @@
 
 .DayPicker-Month {
   grid-area: calendar;
-  display: table;
-  table-layout: fixed;
-  border-spacing: 1px;
-  border-collapse: separate;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: auto;
+  gap: 1px;
   user-select: none;
   width: 100%;
 }
 
-.DayPicker-Weekdays {
-  display: table-header-group;
-  font-family: input-mono-narrow, monospace;
-  font-weight: 400;
-  font-style: normal;
-}
-
-.DayPicker-WeekdaysRow {
-  display: table-row;
-}
-
 .DayPicker-Weekday {
-  display: table-cell;
   color: var(--text-light);
   text-align: center;
   font-size: 1em;
-  padding: 1.5em 0;
+  display: flex;
+  align-items: center;
+  justify-self: center;
+  height: 4em;
+  font-family: input-mono-narrow, monospace;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .DayPicker-Weekday abbr[title] {
@@ -53,16 +51,7 @@
   text-decoration: none;
 }
 
-.DayPicker-Body {
-  display: table-row-group;
-}
-
-.DayPicker-Week {
-  display: table-row;
-}
-
 .DayPicker-Day {
-  display: table-cell;
   cursor: pointer;
   position: relative;
   outline: none;
@@ -126,14 +115,16 @@
   transition: none;
 }
 
-.expandedInfo {
-  padding: 1.5em 2em;
+.detail-pane {
+  padding: 0 2em 2em;
   overflow-wrap: break-word;
   word-break: break-word;
   transition: 0.1s ease-out;
   grid-area: details;
   overflow-y: auto;
   border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
 }
 
 .dateBadge {
@@ -232,7 +223,7 @@
 
 .chart-header {
   display: grid;
-  grid-template-columns: 1fr 2.5fr;
+  grid-template-columns: minmax(360px, 1fr) 2.5fr;
   align-items: center;
   justify-content: space-between;
   text-align: left;
@@ -262,7 +253,7 @@
   align-items: center;
 }
 
-.chart-month > * + * {
+.chart-month h3 {
   margin-left: 0.5em;
 }
 
@@ -276,9 +267,29 @@
   font-family: input-mono-narrow, monospace;
   font-weight: 400;
   font-style: normal;
+  height: 4em;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.5em;
   font-variant-numeric: tabular-nums;
+}
+
+@media screen and (max-width: 900px) {
+  .calendar {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas:
+      "header"
+      "calendar"
+      "details";
+  }
+
+  .chart-header {
+    display: block;
+  }
+
+  .chart-buttons {
+    display: none;
+  }
 }

@@ -5,6 +5,7 @@ import SignOutButton from "../SignOutButton";
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
 import { AuthUserContext } from "../Session";
+import { FiSettings, FiHome } from "react-icons/fi";
 import "./nav.css";
 
 const Nav = () => (
@@ -28,9 +29,12 @@ const NavigationAuth = ({ authUser }: any) => (
     </Link>
 
     {!!authUser.roles[ROLES.ADMIN] && <Link to={ROUTES.ADMIN}>Admin</Link>}
-
-    <Link to={ROUTES.SETTINGS}>Settings</Link>
-    {authUser.email}
+    <Link className="button icon-button" to={ROUTES.HOME}>
+      <FiHome />
+    </Link>
+    <Link className="button icon-button" to={ROUTES.SETTINGS}>
+      <FiSettings />
+    </Link>
     <SignOutButton />
   </nav>
 );

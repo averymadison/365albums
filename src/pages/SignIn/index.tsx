@@ -6,6 +6,7 @@ import { SignUpLink } from "../SignUp";
 import { ResetPasswordLink } from "../ResetPassword";
 import Firebase, { withFirebase } from "../../components/Firebase";
 import * as ROUTES from "../../constants/routes";
+import { FaGoogle } from "react-icons/fa";
 
 const SignIn = () => (
   <div>
@@ -131,7 +132,9 @@ class SignInGoogleBase extends React.Component<Props, GoogleFormState> {
 
     return (
       <form onSubmit={this.onSubmit}>
-        <button type="submit">Sign In with Google</button>
+        <button className="button" type="submit">
+          <FaGoogle /> Sign In with Google
+        </button>
         {error && <p>{error.message}</p>}
       </form>
     );
