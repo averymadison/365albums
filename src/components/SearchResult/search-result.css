@@ -10,10 +10,11 @@
   font-size: 1em;
   text-align: left;
   width: 100%;
+  color: var(--text);
 }
 
 .search-result:hover {
-  background-color: #eee;
+  background-color: var(--bg-alt);
 }
 
 .search-result-image {

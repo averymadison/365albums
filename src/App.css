@@ -1,6 +1,6 @@
 .app {
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 140px 1fr;
   grid-template-rows: 100vh;
   grid-template-areas: "nav content";
   height: 100vh;
@@ -9,7 +9,6 @@
 }
 
 .app-content {
-  background-color: #fff;
   width: 100%;
   min-width: 0;
   grid-area: content;

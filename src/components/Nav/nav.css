@@ -1,6 +1,8 @@
 .header {
   padding: 1.5em;
   grid-area: nav;
+  background-color: var(--bg-alt);
+  overflow: hidden;
 }
 
 .header-nav {
@@ -10,5 +12,5 @@
 }
 
 .header a {
-  color: #333;
+  color: var(--text);
 }

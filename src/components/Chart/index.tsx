@@ -32,6 +32,7 @@ interface State {
   updatedAt: string | null;
   albums: any;
   selectedDay: Date;
+  isMinimalView: boolean;
 }
 
 const INITIAL_STATE = {
@@ -41,7 +42,8 @@ const INITIAL_STATE = {
   title: "",
   updatedAt: null,
   albums: {},
-  selectedDay: new Date()
+  selectedDay: new Date(),
+  isMinimalView: false
 };
 
 class ChartBase extends React.Component<Props, State> {
@@ -141,6 +143,17 @@ class ChartBase extends React.Component<Props, State> {
     this.setState({ selectedDay: addDays(selectedDay, 1) });
   };
 
+  onToggleMinimalView = () => {
+    const { isMinimalView } = this.state;
+    this.setState({ isMinimalView: !isMinimalView });
+  };
+
+  onTodayClick = () => {
+    const currentCalendarRef = this.calendarRef.current;
+    this.setState({ selectedDay: new Date() });
+    currentCalendarRef!.showMonth(new Date());
+  };
+
   getAlbumInfoForDay = (day: Date) => {
     const { albums } = this.state;
     const dateAsString = format(day, "yyyy-MM-dd");
@@ -155,8 +168,6 @@ class ChartBase extends React.Component<Props, State> {
     const readableDate = formatDistanceToNow(new Date(updatedAt!));
 
     const { month, onPreviousClick, onNextClick } = props;
-
-    const currentCalendarRef = this.calendarRef.current;
 
     return (
       <header className="chart-header">
@@ -194,16 +205,8 @@ class ChartBase extends React.Component<Props, State> {
             <h3>{format(month, "MMMM YYY")}</h3>
           </div>
           <div className="chart-buttons">
-            <button
-              onClick={() => {
-                this.setState({
-                  selectedDay: new Date()
-                });
-                currentCalendarRef!.showMonth(new Date());
-              }}
-            >
-              Today
-            </button>
+            <button onClick={this.onTodayClick}>Today</button>
+            <button onClick={this.onToggleMinimalView}>Toggle Details</button>
             <Link to={`chart/${chartId}`}>Share</Link>
           </div>
         </div>
@@ -212,20 +215,24 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   renderDayDetails = (day: Date) => {
+    const { isMinimalView } = this.state;
+
     return (
-      <div className="dayDetails">
-        {this.getAlbumInfoForDay(day) && (
-          <div className="dayDetails__text">
-            <div className="dayDetails__title">
-              {this.getAlbumInfoForDay(day).title}
+      isMinimalView && (
+        <div className="dayDetails">
+          {this.getAlbumInfoForDay(day) && (
+            <div className="dayDetails__text">
+              <div className="dayDetails__title">
+                {this.getAlbumInfoForDay(day).title}
+              </div>
+              <div>{this.getAlbumInfoForDay(day).artist}</div>
             </div>
-            <div>{this.getAlbumInfoForDay(day).artist}</div>
-          </div>
-        )}
-        <time dateTime={format(day, "yyyy-MM-dd")} className="dateBadge">
-          {format(day, "d")}
-        </time>
-      </div>
+          )}
+          <time dateTime={format(day, "yyyy-MM-dd")} className="dateBadge">
+            {format(day, "d")}
+          </time>
+        </div>
+      )
     );
   };
 
@@ -318,7 +325,7 @@ class ChartBase extends React.Component<Props, State> {
             </button>
           </div>
           <time dateTime={format(day, "yyyy-MM-dd")}>
-            {format(day, "EEE MMM d, yyyy")}
+            {format(day, "EEE MMM d")}
           </time>
           <span>
             {`${format(day, "DDD")} / 

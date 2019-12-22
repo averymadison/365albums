@@ -1,3 +1,21 @@
+:root {
+  --text: #222;
+  --text-light: #666;
+  --bg: #fff;
+  --bg-alt: #eee;
+  --border: #ddd;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #eee;
+    --text-light: #ccc;
+    --bg: #111;
+    --bg-alt: #222;
+    --border: #333;
+  }
+}
+
 html {
   box-sizing: border-box;
 }
@@ -13,11 +31,29 @@ body {
   font-family: benton-sans, sans-serif;
   font-weight: 500;
   font-style: normal;
-  background: #eee;
-  color: #222;
+  background: var(--bg);
+  color: var(--text);
+}
+
+img,
+svg {
+  max-width: 100%;
 }
 
 img {
-  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-size: 1em;
+  font-family: inherit;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+button svg {
   display: block;
 }

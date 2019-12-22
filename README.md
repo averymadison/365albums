@@ -17,6 +17,8 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 - Add analytics events
 - Add Buy Me A Coffee link
 - Keyboard support, focus states for calendar
+- Supprt hires/lowres album artwork, use lowres in calendar view
+- Add user setting for "prefersMinimalView"
 
 ## Available Scripts
 
