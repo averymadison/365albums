@@ -2,10 +2,10 @@ import React from "react";
 import classNames from "classnames";
 import {
   format,
-  isEqual,
-  getWeekOfMonth,
   formatDistanceToNow,
-  isPast
+  isPast,
+  subDays,
+  addDays
 } from "date-fns";
 import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
@@ -17,7 +17,7 @@ import Album from "../Album";
 import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";
 
-export type Source = "bandcamp" | "spotify";
+export type Source = "bandcamp" | "spotify" | "custom";
 
 interface Props {
   firebase: Firebase;
@@ -31,7 +31,7 @@ interface State {
   title: string;
   updatedAt: string | null;
   albums: any;
-  selectedDay: Date | null;
+  selectedDay: Date;
 }
 
 const INITIAL_STATE = {
@@ -70,17 +70,14 @@ class ChartBase extends React.Component<Props, State> {
           updatedAt: chart.updatedAt ? chart.updatedAt : null,
           albums: chart.albums ? chart.albums : {}
         });
-        // document.addEventListener("keydown", this.onKeyDown);
       } else {
         this.setState({ ...INITIAL_STATE });
-        this.setState({ error: "Couldn't locate chart." });
       }
     });
   }
 
   componentWillUnmount() {
     const { firebase, chartId } = this.props;
-    // document.removeEventListener("keydown", this.onKeyDown);
 
     firebase.chart(chartId).off();
   }
@@ -130,25 +127,18 @@ class ChartBase extends React.Component<Props, State> {
     event.preventDefault();
   };
 
-  onMonthChange = () => {
-    this.setState({ selectedDay: null });
-  };
-
   onDayClick = (day: Date) => {
-    const { selectedDay } = this.state;
-    isEqual(day, selectedDay!)
-      ? this.setState({ selectedDay: null })
-      : this.setState({ selectedDay: day });
+    this.setState({ selectedDay: day });
   };
 
-  onKeyDown = (event: KeyboardEvent) => {
-    if (event.key === "ArrowRight") {
-      this.calendarRef.current!.showNextMonth();
-    }
+  onPreviousDayClick = () => {
+    const { selectedDay } = this.state;
+    this.setState({ selectedDay: subDays(selectedDay, 1) });
+  };
 
-    if (event.key === "ArrowLeft") {
-      this.calendarRef.current!.showPreviousMonth();
-    }
+  onNextDayClick = () => {
+    const { selectedDay } = this.state;
+    this.setState({ selectedDay: addDays(selectedDay, 1) });
   };
 
   getAlbumInfoForDay = (day: Date) => {
@@ -160,43 +150,63 @@ class ChartBase extends React.Component<Props, State> {
 
   renderChartHeader = (props: any) => {
     const { chartId } = this.props;
-    const { month, onPreviousClick, onNextClick } = props;
-
     const { title, isEditing, updatedAt } = this.state;
 
     const readableDate = formatDistanceToNow(new Date(updatedAt!));
 
+    const { month, onPreviousClick, onNextClick } = props;
+
+    const currentCalendarRef = this.calendarRef.current;
+
     return (
       <header className="chart-header">
-        {!isEditing ? (
-          <React.Fragment>
-            <h2 className="chart-title">{title ? title : "Add a title..."}</h2>
-            <button type="button" onClick={this.onToggleEditMode}>
-              <FiEdit3 />
+        <div className="chart-title">
+          {!isEditing ? (
+            <React.Fragment>
+              <h2>{title ? title : "Add a title..."}</h2>
+              <button type="button" onClick={this.onToggleEditMode}>
+                <FiEdit3 />
+              </button>
+            </React.Fragment>
+          ) : (
+            <form onSubmit={this.onSaveTitle}>
+              <input
+                name="title"
+                type="text"
+                placeholder="title"
+                value={title}
+                onChange={this.onChange}
+                maxLength={32}
+              />
+              <button type="submit">Save</button>
+            </form>
+          )}
+          <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
+        </div>
+        <div className="chart-actions">
+          <div className="chart-month">
+            <button onClick={() => onPreviousClick()}>
+              <FiArrowLeft />
             </button>
-          </React.Fragment>
-        ) : (
-          <form onSubmit={this.onSaveTitle}>
-            <input
-              name="title"
-              type="text"
-              placeholder="title"
-              value={title}
-              onChange={this.onChange}
-              maxLength={32}
-            />
-            <button type="submit">Save</button>
-          </form>
-        )}
-        <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
-        {format(month, "MMM YYY")}
-        <Link to={`chart/${chartId}`}>Share</Link>
-        <button onClick={() => onPreviousClick()}>
-          <FiArrowLeft />
-        </button>
-        <button onClick={() => onNextClick()}>
-          <FiArrowRight />
-        </button>
+            <button onClick={() => onNextClick()}>
+              <FiArrowRight />
+            </button>
+            <h3>{format(month, "MMMM YYY")}</h3>
+          </div>
+          <div className="chart-buttons">
+            <button
+              onClick={() => {
+                this.setState({
+                  selectedDay: new Date()
+                });
+                currentCalendarRef!.showMonth(new Date());
+              }}
+            >
+              Today
+            </button>
+            <Link to={`chart/${chartId}`}>Share</Link>
+          </div>
+        </div>
       </header>
     );
   };
@@ -228,18 +238,9 @@ class ChartBase extends React.Component<Props, State> {
       <React.Fragment>
         <div className="selectedDate">
           <div className="selectedDate-contents">
-            <div className="selectedDate-month">{format(day, "MMM")}</div>
             <time dateTime={format(day, "yyyy-MM-dd")}>{format(day, "d")}</time>
-            <div>
-              {`${format(day, "DDD")} / 
-              ${format(day.getFullYear(), "DDD")}`}
-            </div>
           </div>
         </div>
-        <div
-          className="selectedDate-arrow"
-          // style={{ backgroundColor: data.lightVibrant }}
-        ></div>
         <div className={classname}>
           <Album
             src={
@@ -276,14 +277,13 @@ class ChartBase extends React.Component<Props, State> {
         <DayPicker
           ref={this.calendarRef}
           captionElement={() => null}
-          onMonthChange={this.onMonthChange}
           onDayClick={this.onDayClick}
-          selectedDays={selectedDay!}
+          selectedDays={selectedDay}
           renderDay={this.renderDay}
-          weekdayElement={this.renderWeekday}
           navbarElement={this.renderChartHeader}
+          weekdaysShort={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
         />
-        {selectedDay && this.renderExpandedInfo(selectedDay)}
+        {this.renderExpandedInfo(selectedDay)}
       </div>
     );
   };
@@ -293,6 +293,7 @@ class ChartBase extends React.Component<Props, State> {
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
+            <h2>Couldn't find chart</h2>
             <form onSubmit={event => this.onCreateChart(event, authUser)}>
               <button type="submit">Create a chart</button>
             </form>
@@ -306,14 +307,24 @@ class ChartBase extends React.Component<Props, State> {
     const { chartId } = this.props;
 
     return (
-      <div
-        className="expandedInfo"
-        style={{
-          gridRowStart: getWeekOfMonth(day) + 3
-          // backgroundColor: data.lightVibrant,
-          // color: data.darkVibrant
-        }}
-      >
+      <div className="expandedInfo">
+        <div className="current-day">
+          <div className="current-day-buttons">
+            <button onClick={this.onPreviousDayClick}>
+              <FiArrowLeft />
+            </button>
+            <button onClick={this.onNextDayClick}>
+              <FiArrowRight />
+            </button>
+          </div>
+          <time dateTime={format(day, "yyyy-MM-dd")}>
+            {format(day, "EEE MMM d, yyyy")}
+          </time>
+          <span>
+            {`${format(day, "DDD")} / 
+              ${format(day.getFullYear(), "DDD")}`}
+          </span>
+        </div>
         {this.getAlbumInfoForDay(day) ? (
           <AlbumDetails
             chartId={chartId}
@@ -342,7 +353,7 @@ class ChartBase extends React.Component<Props, State> {
       <div>{error}</div>
     ) : isLoading ? (
       <div>Loading...</div>
-    ) : chartId && !error ? (
+    ) : chartId ? (
       this.renderCalendar()
     ) : (
       this.renderEmptyChart()

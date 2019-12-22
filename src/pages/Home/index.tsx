@@ -43,7 +43,7 @@ class Home extends React.Component<Props, State> {
   render() {
     const { activeChartId } = this.state;
 
-    return !activeChartId ? "Loading..." : <Chart chartId={activeChartId} />;
+    return activeChartId && <Chart chartId={activeChartId} />;
   }
 }
 

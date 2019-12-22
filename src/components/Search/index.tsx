@@ -3,6 +3,7 @@ import Firebase, { withFirebase } from "../Firebase";
 import { format, parse } from "date-fns";
 import "./search.css";
 import { FaSpotify, FaBandcamp } from "react-icons/fa";
+import { FiEdit3 } from "react-icons/fi";
 import SearchResult from "../SearchResult";
 import { Source } from "../Chart";
 
@@ -188,7 +189,7 @@ class SearchBase extends React.Component<Props, State> {
 
     return (
       <div className="search-wrapper">
-        <div>Add an album for {format(selectedDay, "MMM d")}</div>
+        <div>Add an album</div>
         <form onSubmit={this.onSearch} autoComplete="off">
           <label>
             <input
@@ -210,17 +211,31 @@ class SearchBase extends React.Component<Props, State> {
             />
             <FaBandcamp /> Bandcamp
           </label>
-          <input
-            name="searchQuery"
-            type="search"
-            placeholder={`Search ${source}`}
-            value={searchQuery}
-            onChange={this.onChange}
-            className="search"
-            autoFocus
-            ref={input => input && input.focus()}
-            disabled={isSearching}
-          />
+          <label>
+            <input
+              type="radio"
+              name="source"
+              value="custom"
+              checked={source === "custom"}
+              onChange={this.onToggleSource}
+            />
+            <FiEdit3 /> Custom
+          </label>
+          {source !== "custom" ? (
+            <input
+              name="searchQuery"
+              type="search"
+              placeholder={`Search ${source}…`}
+              value={searchQuery}
+              onChange={this.onChange}
+              className="search"
+              autoFocus
+              ref={input => input && input.focus()}
+              disabled={isSearching}
+            />
+          ) : (
+            "Custom input"
+          )}
         </form>
         {isSearching && `Searching ${source}...`}
         {searchResults &&

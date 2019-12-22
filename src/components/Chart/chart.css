@@ -1,21 +1,32 @@
-/* DayPicker styles */
+.calendar {
+  display: grid;
+  height: 100vh;
+  grid-template-columns: 1fr 2fr;
+  grid-template-rows: 60px minmax(0, 1fr);
+  grid-template-areas:
+    "header header"
+    "details calendar";
+}
 
 .DayPicker,
-.DayPicker-Months,
-.DayPicker-Month,
-.DayPicker-wrapper,
-.DayPicker-Weekdays,
-.DayPicker-Body,
-.DayPicker-Week,
-.DayPicker-WeekdaysRow {
+.DayPicker-wrapper {
   display: contents;
 }
 
+.DayPicker-Months {
+  padding: 2em;
+  overflow-y: auto;
+  height: 100%;
+}
+
 .DayPicker-Month {
-  width: 100%;
-  margin: 0 1em;
-  margin-top: 1em;
+  grid-area: calendar;
+  display: table;
+  table-layout: fixed;
+  border-spacing: 1px;
+  border-collapse: separate;
   user-select: none;
+  width: 100%;
 }
 
 .DayPicker-NavButton {
@@ -56,8 +67,17 @@
   font-size: 1.15em;
 }
 
+.DayPicker-Weekdays {
+  display: table-header-group;
+  margin-top: 1em;
+}
+
+.DayPicker-WeekdaysRow {
+  display: table-row;
+}
+
 .DayPicker-Weekday {
-  padding: 0.5em;
+  display: table-cell;
   color: #999;
   text-align: center;
   font-size: 1em;
@@ -68,12 +88,22 @@
   text-decoration: none;
 }
 
+.DayPicker-Body {
+  display: table-row-group;
+}
+
+.DayPicker-Week {
+  display: table-row;
+}
+
 .DayPicker-Day {
+  display: table-cell;
   cursor: pointer;
   position: relative;
   outline: none;
   transition-property: background-color, color;
   transition: 0.15s ease-out;
+  padding-bottom: 0.5em;
 }
 
 .dayContents {
@@ -132,28 +162,14 @@
   transition: none;
 }
 
-.calendar {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  column-gap: 1px;
-  row-gap: 1em;
-  padding: 0 2em 2em;
-}
-
 .expandedInfo {
-  grid-row-start: 4;
-  grid-column-end: span 7;
-  background: #f9f9f9;
-  bottom: 0;
-  margin: 0 -2em;
-  padding: 2em;
-  display: flex;
+  padding: 1.5em 2em;
   overflow-wrap: break-word;
   word-break: break-word;
   transition: 0.1s ease-out;
-  transition-property: background-color, color;
-  align-items: center;
-  margin-bottom: 0.5em;
+  grid-area: details;
+  overflow-y: auto;
+  border-right: 1px solid #ddd;
 }
 
 .dateBadge {
@@ -195,12 +211,6 @@
   pointer-events: none;
 }
 
-.selectedDate-month {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-right: -0.1em;
-}
-
 .selectedDate-contents {
   position: absolute;
   top: 0;
@@ -231,23 +241,6 @@
   opacity: 1;
 }
 
-.selectedDate-arrow {
-  content: "";
-  width: 2em;
-  height: 2em;
-  background-color: #f9f9f9;
-  position: absolute;
-  user-select: none;
-  bottom: -1em;
-  left: 50%;
-  transform: translate3d(-50%, 50%, 0) rotate(45deg) scale(0);
-  transition: transform 0.15s ease-out;
-}
-
-.DayPicker-Day--selected .selectedDate-arrow {
-  transform: translate3d(-50%, 50%, 0) rotate(45deg) scale(1);
-}
-
 .dayDetails {
   width: 100%;
   display: flex;
@@ -274,21 +267,51 @@
 }
 
 .chart-header {
-  background-color: #fff;
-  padding: 1em 2em;
-  position: sticky;
-  top: 0;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 2fr;
   align-items: center;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  z-index: 2;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
-  grid-column-end: span 7;
-  margin: 0 -2em 0;
+  justify-content: space-between;
   text-align: left;
+  padding: 0 2em;
+  grid-area: header;
+  border-bottom: 1px solid #ddd;
 }
 
-.chart-title {
+.calendar-nav {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5em;
+}
+
+.calendar-nav h3 {
   margin: 0;
+}
+
+.chart-title h2 {
+  margin: 0;
+}
+
+.chart-month {
+  display: flex;
+  align-items: center;
+}
+
+.chart-month > * + * {
+  margin-left: 0.5em;
+}
+
+.chart-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.current-day {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5em;
+  font-variant-numeric: tabular-nums;
 }

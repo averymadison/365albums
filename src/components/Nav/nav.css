@@ -1,10 +1,11 @@
 .header {
-  padding: 1.5em 0;
+  padding: 1.5em;
+  grid-area: nav;
 }
 
 .header-nav {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-between;
 }
 

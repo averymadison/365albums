@@ -5,9 +5,9 @@ import SignOutButton from "../SignOutButton";
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
 import { AuthUserContext } from "../Session";
-import "./header.css";
+import "./nav.css";
 
-const Header = () => (
+const Nav = () => (
   <header className="header">
     <AuthUserContext.Consumer>
       {authUser =>
@@ -45,4 +45,4 @@ const NavigationNonAuth = () => (
   </nav>
 );
 
-export default Header;
+export default Nav;

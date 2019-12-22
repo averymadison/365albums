@@ -1,5 +1,6 @@
 export const LANDING = "/";
 export const HOME = "/home";
+export const CHARTS = "/charts";
 export const CHART = "/chart/:id";
 export const ADMIN = "/admin";
 export const SIGN_IN = "/sign-in";

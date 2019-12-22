@@ -1,11 +1,11 @@
-import React from 'react';
-import { History } from 'history';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'recompose';
-import { SignUpLink } from '../SignUp';
-import { ResetPasswordLink } from '../ResetPassword';
-import Firebase, { withFirebase } from '../../components/Firebase';
-import * as ROUTES from '../../constants/routes';
+import React from "react";
+import { History } from "history";
+import { withRouter } from "react-router-dom";
+import { compose } from "recompose";
+import { SignUpLink } from "../SignUp";
+import { ResetPasswordLink } from "../ResetPassword";
+import Firebase, { withFirebase } from "../../components/Firebase";
+import * as ROUTES from "../../constants/routes";
 
 const SignIn = () => (
   <div>
@@ -33,8 +33,8 @@ interface GoogleFormState {
 }
 
 const INITIAL_STATE = {
-  email: '',
-  password: '',
+  email: "",
+  password: "",
   error: null
 };
 
@@ -70,7 +70,7 @@ class SignInFormBase extends React.Component<Props, SignInFormState> {
   render() {
     const { email, password, error } = this.state;
 
-    const isInvalid = password === '' || email === '';
+    const isInvalid = password === "" || email === "";
 
     return (
       <form onSubmit={this.onSubmit}>
@@ -109,7 +109,7 @@ class SignInGoogleBase extends React.Component<Props, GoogleFormState> {
       .doSignInWithGoogle()
       .then((socialAuthUser: any) => {
         // Create a user in the Firebase realtime database
-        return this.props.firebase.user(socialAuthUser.user.uid).set({
+        return this.props.firebase.user(socialAuthUser.user.uid).update({
           username: socialAuthUser.user.displayName,
           email: socialAuthUser.user.email,
           roles: {}
