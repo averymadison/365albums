@@ -2,12 +2,16 @@ import React from "react";
 import classNames from "classnames";
 import {
   format,
-  formatDistanceToNow,
+  differenceInCalendarMonths,
   isPast,
   subDays,
-  addDays
+  addDays,
+  isWithinInterval,
+  isBefore,
+  isAfter,
+  lastDayOfMonth,
+  parse
 } from "date-fns";
-import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
@@ -33,6 +37,8 @@ interface State {
   albums: any;
   selectedDay: Date;
   isMinimalView: boolean;
+  fromMonth: Date;
+  toMonth: Date;
 }
 
 const INITIAL_STATE = {
@@ -43,7 +49,9 @@ const INITIAL_STATE = {
   updatedAt: null,
   albums: {},
   selectedDay: new Date(),
-  isMinimalView: false
+  isMinimalView: false,
+  fromMonth: new Date(),
+  toMonth: new Date()
 };
 
 class ChartBase extends React.Component<Props, State> {
@@ -66,11 +74,20 @@ class ChartBase extends React.Component<Props, State> {
       const chart = snapshot.val();
 
       if (chart) {
+        // If TODAY is within the range of the cart, default to today,
+        // otherwise default to the first day of the chart
+        const defaultSelectedDay = this.isTodayDisabled
+          ? new Date()
+          : parse(chart.fromMonth, "yyyy-M", new Date());
+
         this.setState({
           isLoading: false,
           title: chart.title ? chart.title : "",
           updatedAt: chart.updatedAt ? chart.updatedAt : null,
-          albums: chart.albums ? chart.albums : {}
+          albums: chart.albums ? chart.albums : {},
+          fromMonth: parse(chart.fromMonth, "yyyy-M", new Date()),
+          toMonth: parse(chart.toMonth, "yyyy-M", new Date()),
+          selectedDay: defaultSelectedDay
         });
       } else {
         this.setState({ ...INITIAL_STATE });
@@ -83,25 +100,6 @@ class ChartBase extends React.Component<Props, State> {
 
     firebase.chart(chartId).off();
   }
-
-  onCreateChart = (event: any, authUser: any) => {
-    const { firebase } = this.props;
-
-    const newChartKey = firebase.charts().push({
-      createdBy: authUser.uid,
-      createdAt: firebase.serverValue.TIMESTAMP,
-      updatedAt: firebase.serverValue.TIMESTAMP,
-      owner: authUser.uid,
-      title: "",
-      albums: {}
-    }).key;
-
-    firebase.user(authUser.uid).update({
-      primaryChart: newChartKey
-    });
-
-    event.preventDefault();
-  };
 
   onToggleEditMode = () => {
     const { isEditing } = this.state;
@@ -149,9 +147,25 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   onTodayClick = () => {
-    const currentCalendarRef = this.calendarRef.current;
     this.setState({ selectedDay: new Date() });
-    currentCalendarRef!.showMonth(new Date());
+  };
+
+  isTodayDisabled = () => {
+    const { fromMonth, toMonth } = this.state;
+    return isWithinInterval(new Date(), {
+      start: fromMonth,
+      end: toMonth
+    });
+  };
+
+  isPreviousDayDisabled = () => {
+    const { selectedDay, fromMonth } = this.state;
+    return isBefore(subDays(selectedDay, 1), fromMonth);
+  };
+
+  isNextDayDisabled = () => {
+    const { selectedDay, toMonth } = this.state;
+    return isAfter(selectedDay, lastDayOfMonth(toMonth));
   };
 
   getAlbumInfoForDay = (day: Date) => {
@@ -203,8 +217,8 @@ class ChartBase extends React.Component<Props, State> {
                 <text
                   x="50%"
                   y="50%"
-                  dominant-baseline="middle"
-                  text-anchor="middle"
+                  dominantBaseline="middle"
+                  textAnchor="middle"
                 >
                   {format(day, "d")}
                 </text>
@@ -229,13 +243,18 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   renderCalendar = () => {
-    const { selectedDay } = this.state;
+    const { selectedDay, toMonth, fromMonth } = this.state;
+
+    const monthRange = differenceInCalendarMonths(toMonth, fromMonth) + 1;
 
     return (
       <div className="calendar">
         <DayPicker
+          fromMonth={fromMonth}
+          toMonth={toMonth}
+          initialMonth={fromMonth}
           ref={this.calendarRef}
-          numberOfMonths={12}
+          numberOfMonths={monthRange}
           onDayClick={this.onDayClick}
           selectedDays={selectedDay}
           renderDay={this.renderDay}
@@ -248,26 +267,8 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderEmptyChart = () => {
-    return (
-      <AuthUserContext.Consumer>
-        {authUser => (
-          <div>
-            <h2>Couldn't find chart</h2>
-            <form onSubmit={event => this.onCreateChart(event, authUser)}>
-              <button type="submit">Create a chart</button>
-            </form>
-          </div>
-        )}
-      </AuthUserContext.Consumer>
-    );
-  };
-
   renderDetails = (day: Date) => {
     const { chartId } = this.props;
-    const { title, isEditing, updatedAt } = this.state;
-
-    const readableDate = formatDistanceToNow(new Date(updatedAt!));
 
     return (
       <div className="detail-pane">
@@ -297,12 +298,14 @@ class ChartBase extends React.Component<Props, State> {
             <button
               className="button icon-button"
               onClick={this.onPreviousDayClick}
+              disabled={this.isPreviousDayDisabled()}
             >
               <FiArrowLeft />
             </button>
             <button
               className="button icon-button"
               onClick={this.onNextDayClick}
+              disabled={this.isNextDayDisabled()}
             >
               <FiArrowRight />
             </button>
@@ -351,17 +354,14 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   render() {
-    const { chartId } = this.props;
     const { error, isLoading } = this.state;
 
     return error ? (
       <div>{error}</div>
     ) : isLoading ? (
       <Spinner />
-    ) : chartId ? (
-      this.renderCalendar()
     ) : (
-      this.renderEmptyChart()
+      this.renderCalendar()
     );
   }
 }
