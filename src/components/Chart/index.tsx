@@ -15,6 +15,7 @@ import { FiArrowRight, FiArrowLeft, FiCalendar, FiGrid } from "react-icons/fi";
 import Album from "../Album";
 import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";
+import Spinner from "../Spinner";
 
 export type Source = "bandcamp" | "spotify" | "custom";
 
@@ -197,7 +198,18 @@ class ChartBase extends React.Component<Props, State> {
       <React.Fragment>
         <div className="selectedDate">
           <div className="selectedDate-contents">
-            <time dateTime={format(day, "yyyy-MM-dd")}>{format(day, "d")}</time>
+            <time dateTime={format(day, "yyyy-MM-dd")}>
+              <svg viewBox="0 0 100 100" fill="currentColor">
+                <text
+                  x="50%"
+                  y="50%"
+                  dominant-baseline="middle"
+                  text-anchor="middle"
+                >
+                  {format(day, "d")}
+                </text>
+              </svg>
+            </time>
           </div>
         </div>
         <div className={classname}>
@@ -345,7 +357,7 @@ class ChartBase extends React.Component<Props, State> {
     return error ? (
       <div>{error}</div>
     ) : isLoading ? (
-      <div>Loading...</div>
+      <Spinner />
     ) : chartId ? (
       this.renderCalendar()
     ) : (

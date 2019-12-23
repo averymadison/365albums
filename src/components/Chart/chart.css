@@ -83,29 +83,16 @@
   filter: grayscale(1);
 }
 
-.DayPicker--interactionDisabled .DayPicker-Day {
-  cursor: default;
-}
-
-/* Default modifiers */
-
 .DayPicker-Day--today .dateBadge {
   background-color: red;
   color: white;
 }
 
+.DayPicker--interactionDisabled .DayPicker-Day,
+.DayPicker-Day--disabled,
 .DayPicker-Day--outside {
-  color: #8b9898;
   cursor: default;
 }
-
-.DayPicker-Day--disabled {
-  color: #dce0e0;
-  cursor: default;
-  /* background-color: #eff1f1; */
-}
-
-/* Example modifiers */
 
 .DayPicker-Day--selected .dayContents {
   opacity: 0;
@@ -164,6 +151,7 @@
   justify-self: flex-end;
   margin-left: auto;
   font-weight: 600;
+  color: var(--text-light);
 }
 
 .daySelected {
@@ -207,6 +195,12 @@
   font-family: titling-gothic-fb-wide, sans-serif;
   font-weight: 300;
   font-style: normal;
+}
+
+.selectedDate svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .DayPicker-Day--today .selectedDate time {
