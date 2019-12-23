@@ -2,7 +2,7 @@
   width: 100%;
   padding-top: 100%;
   position: relative;
-  background: var(--bg-alt);
+  background: var(--bg);
 }
 
 .albumContent {
@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   font-size: 2em;
-  color: var(--text-light);
+  color: var(--border);
 }
 
 .albumContent img {

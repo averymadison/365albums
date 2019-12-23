@@ -10,17 +10,17 @@
 
 .albumDetails-title {
   margin: 0;
-  font-size: 3em;
+  font-size: 2.5em;
   line-height: 1;
-  font-family: benton-sans-condensed, sans-serif;
-  font-weight: 600;
+  font-family: titling-gothic-fb-condensed, sans-serif;
+  font-weight: 400;
 }
 
 .albumDetails-artist {
   font-size: 1.5em;
   margin: 0.4em 0 1em;
-  font-family: benton-sans-wide, sans-serif;
-  font-weight: 500;
+  font-family: titling-gothic-fb-wide, sans-serif;
+  font-weight: 300;
   font-style: normal;
 }
 
