@@ -7,10 +7,15 @@
   padding: 1em;
   cursor: pointer;
   border: none;
-  font-size: 1em;
+  font-size: 0.8rem;
   text-align: left;
   width: 100%;
+  color: var(--text-light);
+}
+
+.search-result-album {
   color: var(--text);
+  font-size: 1rem;
 }
 
 .search-result:hover {

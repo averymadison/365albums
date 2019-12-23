@@ -11,7 +11,13 @@ import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
-import { FiEdit3, FiArrowRight, FiArrowLeft } from "react-icons/fi";
+import {
+  FiEdit3,
+  FiArrowRight,
+  FiArrowLeft,
+  FiCalendar,
+  FiGrid
+} from "react-icons/fi";
 import { Link } from "react-router-dom";
 import Album from "../Album";
 import Search from "../Search";
@@ -161,69 +167,10 @@ class ChartBase extends React.Component<Props, State> {
     return albums[dateAsString];
   };
 
-  renderChartHeader = (props: any) => {
-    const { chartId } = this.props;
-    const { title, isEditing, updatedAt } = this.state;
+  renderMonthHeader = (props: any) => {
+    const { date } = props;
 
-    const readableDate = formatDistanceToNow(new Date(updatedAt!));
-
-    const { month, onPreviousClick, onNextClick } = props;
-
-    return (
-      <header className="chart-header">
-        <div className="chart-title">
-          {!isEditing ? (
-            <React.Fragment>
-              <h2>{title ? title : "Add a title..."}</h2>
-              <button type="button" onClick={this.onToggleEditMode}>
-                <FiEdit3 />
-              </button>
-            </React.Fragment>
-          ) : (
-            <form onSubmit={this.onSaveTitle}>
-              <input
-                name="title"
-                type="text"
-                placeholder="title"
-                value={title}
-                onChange={this.onChange}
-                maxLength={32}
-              />
-              <button type="submit">Save</button>
-            </form>
-          )}
-          <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
-        </div>
-        <div className="chart-actions">
-          <div className="chart-month">
-            <button
-              className="button icon-button"
-              onClick={() => onPreviousClick()}
-            >
-              <FiArrowLeft />
-            </button>
-            <button
-              className="button icon-button"
-              onClick={() => onNextClick()}
-            >
-              <FiArrowRight />
-            </button>
-            <h3>{format(month, "MMMM YYY")}</h3>
-          </div>
-          <div className="chart-buttons">
-            <button className="button" onClick={this.onTodayClick}>
-              Today
-            </button>
-            <button className="button" onClick={this.onToggleMinimalView}>
-              Toggle Details
-            </button>
-            <Link className="button" to={`chart/${chartId}`}>
-              Share
-            </Link>
-          </div>
-        </div>
-      </header>
-    );
+    return <h3 className="month-header">{format(date, "MMMM YYY")}</h3>;
   };
 
   renderDayDetails = (day: Date) => {
@@ -283,12 +230,13 @@ class ChartBase extends React.Component<Props, State> {
       <div className="calendar">
         <DayPicker
           ref={this.calendarRef}
-          captionElement={() => null}
+          numberOfMonths={12}
           onDayClick={this.onDayClick}
           selectedDays={selectedDay}
           renderDay={this.renderDay}
-          navbarElement={this.renderChartHeader}
-          weekdaysShort={["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]}
+          captionElement={this.renderMonthHeader}
+          showWeekDays={false}
+          navbarElement={() => null}
         />
         {this.renderDetails(selectedDay)}
       </div>
@@ -312,11 +260,35 @@ class ChartBase extends React.Component<Props, State> {
 
   renderDetails = (day: Date) => {
     const { chartId } = this.props;
+    const { title, isEditing, updatedAt } = this.state;
+
+    const readableDate = formatDistanceToNow(new Date(updatedAt!));
 
     return (
       <div className="detail-pane">
+        {/* <div className="chart-title">
+          {!isEditing ? (
+            <h2 onClick={this.onToggleEditMode}>
+              {title ? title : "Add a title..."}
+            </h2>
+          ) : (
+            <form onSubmit={this.onSaveTitle}>
+              <input
+                name="title"
+                type="text"
+                placeholder="title"
+                value={title}
+                onChange={this.onChange}
+                maxLength={32}
+                autoFocus
+              />
+              <button type="submit">Save</button>
+            </form>
+          )}
+          <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
+        </div> */}
         <div className="current-day">
-          <div className="current-day-buttons">
+          <div>
             <button
               className="button icon-button"
               onClick={this.onPreviousDayClick}
@@ -330,30 +302,45 @@ class ChartBase extends React.Component<Props, State> {
               <FiArrowRight />
             </button>
           </div>
-          <time dateTime={format(day, "yyyy-MM-dd")}>
-            {format(day, "EEE MMM d")}
-          </time>
-          <span>
-            {`${format(day, "DDD")} / 
+          <div className="current-day-date">
+            <time dateTime={format(day, "yyyy-MM-dd")}>
+              {format(day, "EEE MMM d")}
+            </time>
+            <span>
+              {`${format(day, "DDD")} / 
               ${format(day.getFullYear(), "DDD")}`}
-          </span>
+            </span>
+          </div>
+          <div>
+            <button className="button icon-button" onClick={this.onTodayClick}>
+              <FiCalendar />
+            </button>
+            <button
+              className="button icon-button"
+              onClick={this.onToggleMinimalView}
+            >
+              <FiGrid />
+            </button>
+          </div>
         </div>
-        {this.getAlbumInfoForDay(day) ? (
-          <AlbumDetails
-            chartId={chartId}
-            title={this.getAlbumInfoForDay(day).title}
-            artist={this.getAlbumInfoForDay(day).artist}
-            albumUrl={this.getAlbumInfoForDay(day).artwork}
-            tracks={this.getAlbumInfoForDay(day).tracks}
-            length={this.getAlbumInfoForDay(day).length}
-            releaseDate={this.getAlbumInfoForDay(day).releaseDate}
-            source={this.getAlbumInfoForDay(day).source}
-            uri={this.getAlbumInfoForDay(day).uri}
-            day={day}
-          />
-        ) : (
-          <Search selectedDay={day} chartId={chartId} />
-        )}
+        <div className="detail-pane-contents">
+          {this.getAlbumInfoForDay(day) ? (
+            <AlbumDetails
+              chartId={chartId}
+              title={this.getAlbumInfoForDay(day).title}
+              artist={this.getAlbumInfoForDay(day).artist}
+              albumUrl={this.getAlbumInfoForDay(day).artwork}
+              tracks={this.getAlbumInfoForDay(day).tracks}
+              length={this.getAlbumInfoForDay(day).length}
+              releaseDate={this.getAlbumInfoForDay(day).releaseDate}
+              source={this.getAlbumInfoForDay(day).source}
+              uri={this.getAlbumInfoForDay(day).uri}
+              day={day}
+            />
+          ) : (
+            <Search selectedDay={day} chartId={chartId} />
+          )}
+        </div>
       </div>
     );
   };

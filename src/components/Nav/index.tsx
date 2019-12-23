@@ -9,7 +9,7 @@ import { FiSettings, FiHome } from "react-icons/fi";
 import "./nav.css";
 
 const Nav = () => (
-  <header className="header">
+  <nav className="nav">
     <AuthUserContext.Consumer>
       {authUser =>
         authUser ? (
@@ -19,12 +19,12 @@ const Nav = () => (
         )
       }
     </AuthUserContext.Consumer>
-  </header>
+  </nav>
 );
 
 const NavigationAuth = ({ authUser }: any) => (
-  <nav className="header-nav">
-    <Link to={ROUTES.HOME}>
+  <React.Fragment>
+    <Link to={ROUTES.HOME} className="logo">
       <Logo />
     </Link>
 
@@ -36,17 +36,17 @@ const NavigationAuth = ({ authUser }: any) => (
       <FiSettings />
     </Link>
     <SignOutButton />
-  </nav>
+  </React.Fragment>
 );
 
 const NavigationNonAuth = () => (
-  <nav className="header-nav">
-    <Link to={ROUTES.LANDING}>
+  <React.Fragment>
+    <Link to={ROUTES.LANDING} className="logo">
       <Logo />
     </Link>
     <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
     <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-  </nav>
+  </React.Fragment>
 );
 
 export default Nav;

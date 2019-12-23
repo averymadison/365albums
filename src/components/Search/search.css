@@ -3,6 +3,13 @@
   position: relative;
 }
 
+.search-wrapper .search-form {
+  position: sticky;
+  top: 0;
+  background-color: var(--bg);
+  padding: 1em;
+}
+
 .search {
   width: 100%;
   border-radius: 0.5rem;
@@ -22,11 +29,15 @@
   text-transform: capitalize;
 }
 
+.search-results:not(:empty) {
+  margin-bottom: 1em;
+}
+
 .radio-bar {
   width: 100%;
   display: flex;
   justify-content: stretch;
-  margin: 1em 0;
+  margin-bottom: 1em;
 }
 
 .radio-bar label {

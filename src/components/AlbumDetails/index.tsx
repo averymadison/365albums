@@ -48,13 +48,15 @@ const AlbumDetails = (props: Props) => {
       <div className="albumImage">
         <Album src={albumUrl} alt={title} />
       </div>
-      <h2 className="albumDetails-title">{title}</h2>
-      <div className="albumDetails-artist">{artist}</div>
-      <AlbumMetadata
-        releaseDate={releaseDate}
-        tracks={tracks}
-        length={length}
-      />
+      <div className="albumDetails-content">
+        <h2 className="albumDetails-title">{title}</h2>
+        <div className="albumDetails-artist">{artist}</div>
+        <AlbumMetadata
+          releaseDate={releaseDate}
+          tracks={tracks}
+          length={length}
+        />
+      </div>
       <div className="albumDetails-buttons">
         {source && (
           <a

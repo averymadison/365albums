@@ -1,17 +1,17 @@
-.header {
-  padding: 1.5em;
+.nav {
+  padding: 1em 0;
   grid-area: nav;
   background-color: var(--bg-alt);
-  overflow: hidden;
-}
-
-.header-nav {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
 }
 
-.header a {
+.logo {
   color: var(--text);
+}
+
+.button-signout {
+  margin-top: auto;
 }

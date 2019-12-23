@@ -31,7 +31,7 @@ const SearchResult = (props: Props) => {
         className="search-result-image"
       />
       <span className="search-result-contents">
-        <span className="search-result-album">{title}</span>
+        <strong className="search-result-album">{title}</strong>
         <span className="search-result-artist">{artist}</span>
         <AlbumMetadata
           releaseDate={releaseDate}

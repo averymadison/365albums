@@ -190,8 +190,11 @@ class SearchBase extends React.Component<Props, State> {
 
     return (
       <div className="search-wrapper">
-        <Album src={null} />
-        <form onSubmit={this.onSearch} autoComplete="off">
+        <form
+          className="search-form"
+          onSubmit={this.onSearch}
+          autoComplete="off"
+        >
           <div className="radio-bar">
             <label>
               <input

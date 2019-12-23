@@ -4,7 +4,7 @@ import { FiLogOut } from "react-icons/fi";
 
 const SignOutButton = ({ firebase }: any) => (
   <button
-    className="button icon-button"
+    className="button icon-button button-signout"
     type="button"
     onClick={firebase.doSignOut}
   >

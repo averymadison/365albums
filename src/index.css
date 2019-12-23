@@ -34,7 +34,7 @@ body {
   font-weight: 500;
   font-style: normal;
   font-size: 16px;
-  background: var(--bg);
+  background: var(--bg-alt);
   color: var(--text);
 }
 
@@ -62,7 +62,7 @@ button svg {
 }
 
 .button {
-  background: transparent;
+  background-color: var(--bg);
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 0.5em;
@@ -75,14 +75,11 @@ button svg {
   cursor: pointer;
 }
 
-.button:hover {
-  background-color: var(--border);
-  color: var(--text);
-}
-
+.button:hover,
 .button:focus {
   outline: none;
-  box-shadow: var(--focus);
+  background-color: var(--border);
+  color: var(--text);
 }
 
 .button:not(.icon-button) + .button:not(.icon-button) {
