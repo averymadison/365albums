@@ -2,12 +2,17 @@ const functions = require("firebase-functions");
 const cors = require("cors")({ origin: true });
 const bandcamp = require("bandcamp-scraper");
 const spotifyWebApi = require("spotify-web-api-node");
-const musicbrainz = require("musicbrainz");
+const discogsWebApi = require("disconnect").Client;
 
 const spotify = new spotifyWebApi({
   clientId: functions.config().spotify.id,
   clientSecret: functions.config().spotify.secret
 });
+
+const discogs = new discogsWebApi({
+  consumerKey: functions.config().discogs.key,
+  consumerSecret: functions.config().discogs.secret
+}).database();
 
 spotify.clientCredentialsGrant().then(
   function(data: any) {
@@ -63,12 +68,12 @@ exports.search = functions.https.onRequest((req: any, res: any) => {
         });
         break;
 
-      case "musicbrainz":
-        musicbrainz.searchReleases(query, function(error: any, releases: any) {
+      case "discogs":
+        discogs.search(query, (error: any, results: any) => {
           if (error) {
             return res.send(error);
           } else {
-            return res.send(releases);
+            return res.send(results);
           }
         });
     }
