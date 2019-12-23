@@ -18,6 +18,12 @@
 .month-header {
   grid-column-end: span 7;
   text-align: center;
+  position: sticky;
+  top: 0;
+  padding: 1.5rem;
+  background-color: var(--bg-alt);
+  z-index: 2;
+  margin: 0;
 }
 
 .DayPicker-Months {
@@ -66,8 +72,9 @@
   transition: 0.15s ease-out;
 }
 
-.dayContents.isPast {
-  opacity: 0.4;
+.dayContents.isPast .album {
+  opacity: 0.3;
+  filter: grayscale(1);
 }
 
 .DayPicker--interactionDisabled .DayPicker-Day {

@@ -11,8 +11,8 @@
   :root {
     --text: #eee;
     --text-light: #ccc;
-    --bg: #1a1a1a;
-    --bg-alt: #222;
+    --bg: #222;
+    --bg-alt: #1a1a1a;
     --border: #333;
     --focus: 0 0 0 4px rgba(0, 90, 255, 0.8);
   }

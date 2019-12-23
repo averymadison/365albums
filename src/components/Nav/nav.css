@@ -10,6 +10,13 @@
 
 .logo {
   color: var(--text);
+  width: 32px;
+  margin-top: 0.2em;
+  margin-bottom: 1em;
+}
+
+.logo svg {
+  display: block;
 }
 
 .button-signout {
