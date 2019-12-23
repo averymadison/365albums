@@ -224,21 +224,17 @@ class SearchBase extends React.Component<Props, State> {
               <div className="radio-button">Custom</div>
             </label>
           </div>
-          {source !== "custom" ? (
-            <input
-              name="searchQuery"
-              type="search"
-              placeholder={`Search ${source}…`}
-              value={searchQuery}
-              onChange={this.onChange}
-              className="search"
-              autoFocus
-              ref={input => input && input.focus()}
-              disabled={isSearching}
-            />
-          ) : (
-            "Custom input"
-          )}
+          <input
+            name="searchQuery"
+            type="search"
+            placeholder={`Search ${source}…`}
+            value={searchQuery}
+            onChange={this.onChange}
+            className="search"
+            autoFocus
+            ref={input => input && input.focus()}
+            disabled={isSearching}
+          />
         </form>
         {isSearching && `Searching ${source}...`}
         {searchResults &&
