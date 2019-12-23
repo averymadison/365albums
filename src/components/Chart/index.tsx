@@ -11,14 +11,7 @@ import { AuthUserContext } from "../Session";
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
-import {
-  FiEdit3,
-  FiArrowRight,
-  FiArrowLeft,
-  FiCalendar,
-  FiGrid
-} from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { FiArrowRight, FiArrowLeft, FiCalendar, FiGrid } from "react-icons/fi";
 import Album from "../Album";
 import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";

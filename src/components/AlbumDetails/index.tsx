@@ -3,7 +3,7 @@ import "./album-details.css";
 import { Source } from "../Chart";
 import Album from "../Album";
 import Firebase, { withFirebase } from "../Firebase";
-import { FiTrash, FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { FiTrash } from "react-icons/fi";
 import { format } from "date-fns";
 import AlbumMetadata from "../AlbumMetadata";
 

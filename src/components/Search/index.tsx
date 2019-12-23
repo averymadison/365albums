@@ -2,11 +2,8 @@ import React from "react";
 import Firebase, { withFirebase } from "../Firebase";
 import { format, parse } from "date-fns";
 import "./search.css";
-import { FaSpotify, FaBandcamp } from "react-icons/fa";
-import { FiEdit3 } from "react-icons/fi";
 import SearchResult from "../SearchResult";
 import { Source } from "../Chart";
-import Album from "../Album";
 
 interface Props {
   firebase: Firebase;
