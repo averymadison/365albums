@@ -12,6 +12,7 @@
   width: 100%;
   min-width: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   grid-area: content;
 }
 

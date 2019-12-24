@@ -131,6 +131,7 @@
   z-index: 5;
   position: sticky;
   top: 1.5em;
+  max-height: calc(100vh - 3em);
 }
 
 .detail-pane-contents {
@@ -332,13 +333,14 @@
   }
 
   .detail-pane {
-    margin: 0;
+    margin: 0 auto;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     top: unset;
     bottom: calc(-90vh + 80px);
     transition: 0.2s ease-out;
     height: 90vh;
+    max-width: 420px;
   }
 
   .calendar.detailExpanded .detail-pane {
