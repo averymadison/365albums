@@ -5,11 +5,14 @@ import SignOutButton from "../SignOutButton";
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
 import { AuthUserContext } from "../Session";
-import { FiSettings, FiHome } from "react-icons/fi";
+import { FiSettings, FiHome, FiMenu } from "react-icons/fi";
 import "./nav.css";
 
 const Nav = () => (
   <nav className="nav">
+    <button className="button icon-button mobile-toggle">
+      <FiMenu />
+    </button>
     <AuthUserContext.Consumer>
       {authUser =>
         authUser ? (

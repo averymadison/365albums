@@ -5,6 +5,8 @@
   --bg-alt: #eee;
   --border: #ddd;
   --focus: 0 0 0 4px rgba(0, 90, 255, 0.5);
+
+  --nav-width: 68px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -78,6 +80,7 @@ button svg {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  text-align: center;
 }
 
 .button:not(:disabled):hover,

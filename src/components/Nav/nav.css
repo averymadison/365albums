@@ -22,3 +22,17 @@
 .button-signout {
   margin-top: auto;
 }
+
+.mobile-toggle {
+  display: none;
+}
+
+@media screen and (max-width: 900px) {
+  .mobile-toggle {
+    display: block;
+    position: fixed;
+    left: 0.5em;
+    top: 0.5em;
+    z-index: 5;
+  }
+}

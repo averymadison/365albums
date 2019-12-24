@@ -15,11 +15,13 @@ import {
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
-import { FiArrowRight, FiArrowLeft, FiCalendar, FiGrid } from "react-icons/fi";
+import { FiArrowRight, FiArrowLeft, FiCalendar, FiShare } from "react-icons/fi";
 import Album from "../Album";
 import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";
 import Spinner from "../Spinner";
+import { Link } from "react-router-dom";
+import * as ROUTES from "../../constants/routes";
 
 export type Source = "bandcamp" | "spotify" | "discogs";
 
@@ -36,9 +38,10 @@ interface State {
   updatedAt: string | null;
   albums: any;
   selectedDay: Date;
-  isMinimalView: boolean;
   fromMonth: Date;
   toMonth: Date;
+  // Mobile only: is detail pane expanded?
+  isDetailExpanded: boolean;
 }
 
 const INITIAL_STATE = {
@@ -49,9 +52,9 @@ const INITIAL_STATE = {
   updatedAt: null,
   albums: {},
   selectedDay: new Date(),
-  isMinimalView: false,
   fromMonth: new Date(),
-  toMonth: new Date()
+  toMonth: new Date(),
+  isDetailExpanded: false
 };
 
 class ChartBase extends React.Component<Props, State> {
@@ -121,7 +124,7 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   onDayClick = (day: Date) => {
-    this.setState({ selectedDay: day });
+    this.setState({ selectedDay: day, isDetailExpanded: true });
   };
 
   onPreviousDayClick = () => {
@@ -132,11 +135,6 @@ class ChartBase extends React.Component<Props, State> {
   onNextDayClick = () => {
     const { selectedDay } = this.state;
     this.setState({ selectedDay: addDays(selectedDay, 1) });
-  };
-
-  onToggleMinimalView = () => {
-    const { isMinimalView } = this.state;
-    this.setState({ isMinimalView: !isMinimalView });
   };
 
   onTodayClick = () => {
@@ -175,24 +173,20 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   renderDayDetails = (day: Date) => {
-    const { isMinimalView } = this.state;
-
     return (
-      isMinimalView && (
-        <div className="dayDetails">
-          {this.getAlbumInfoForDay(day) && (
-            <div className="dayDetails__text">
-              <div className="dayDetails__title">
-                {this.getAlbumInfoForDay(day).title}
-              </div>
-              <div>{this.getAlbumInfoForDay(day).artist}</div>
+      <div className="dayDetails">
+        {this.getAlbumInfoForDay(day) && (
+          <div className="dayDetails__text">
+            <div className="dayDetails__title">
+              {this.getAlbumInfoForDay(day).title}
             </div>
-          )}
-          <time dateTime={format(day, "yyyy-MM-dd")} className="dateBadge">
-            {format(day, "d")}
-          </time>
-        </div>
-      )
+            <div>{this.getAlbumInfoForDay(day).artist}</div>
+          </div>
+        )}
+        <time dateTime={format(day, "yyyy-MM-dd")} className="dateBadge">
+          {format(day, "d")}
+        </time>
+      </div>
     );
   };
 
@@ -201,8 +195,25 @@ class ChartBase extends React.Component<Props, State> {
       isPast: isPast(day.setHours(23, 59, 59))
     });
 
+    // const ref = React.createRef();
+
+    // this.ref.current.scrollIntoView({
+    //   behavior: "smooth",
+    //   block: "center",
+    //   inline: "center"
+    // });
+
     return (
-      <React.Fragment>
+      <div className={classname}>
+        <Album
+          src={
+            this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).artwork
+          }
+          alt={
+            this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).title
+          }
+        />
+        {this.renderDayDetails(day)}
         <div className="selectedDate">
           <div className="selectedDate-contents">
             <time dateTime={format(day, "yyyy-MM-dd")}>
@@ -219,29 +230,20 @@ class ChartBase extends React.Component<Props, State> {
             </time>
           </div>
         </div>
-        <div className={classname}>
-          <Album
-            src={
-              this.getAlbumInfoForDay(day) &&
-              this.getAlbumInfoForDay(day).artwork
-            }
-            alt={
-              this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).title
-            }
-          />
-          {this.renderDayDetails(day)}
-        </div>
-      </React.Fragment>
+      </div>
     );
   };
 
   renderCalendar = () => {
-    const { selectedDay, toMonth, fromMonth } = this.state;
+    const { selectedDay, toMonth, fromMonth, isDetailExpanded } = this.state;
 
     const monthRange = differenceInCalendarMonths(toMonth, fromMonth) + 1;
+    const classname = classNames("calendar", {
+      ["detailExpanded"]: isDetailExpanded
+    });
 
     return (
-      <div className="calendar">
+      <div className={classname}>
         <DayPicker
           fromMonth={fromMonth}
           toMonth={toMonth}
@@ -262,9 +264,14 @@ class ChartBase extends React.Component<Props, State> {
 
   renderDetails = (day: Date) => {
     const { chartId } = this.props;
+    const { isDetailExpanded } = this.state;
 
     return (
       <div className="detail-pane">
+        <button
+          className="detail-grabber"
+          onClick={() => this.setState({ isDetailExpanded: !isDetailExpanded })}
+        ></button>
         {/* <div className="chart-title">
           {!isEditing ? (
             <h2 onClick={this.onToggleEditMode}>
@@ -287,7 +294,7 @@ class ChartBase extends React.Component<Props, State> {
           <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
         </div> */}
         <div className="current-day">
-          <div>
+          <div className="current-day-buttons">
             <button
               className="button icon-button"
               onClick={this.onPreviousDayClick}
@@ -312,16 +319,18 @@ class ChartBase extends React.Component<Props, State> {
               ${format(day.getFullYear(), "DDD")}`}
             </span>
           </div>
-          <div>
-            <button className="button icon-button" onClick={this.onTodayClick}>
-              <FiCalendar />
-            </button>
-            <button
-              className="button icon-button"
-              onClick={this.onToggleMinimalView}
-            >
-              <FiGrid />
-            </button>
+          <div className="current-day-buttons">
+            {!this.isTodayDisabled && (
+              <button
+                className="button icon-button"
+                onClick={this.onTodayClick}
+              >
+                <FiCalendar />
+              </button>
+            )}
+            <Link to={ROUTES.CHARTS} className="button icon-button">
+              <FiShare />
+            </Link>
           </div>
         </div>
         <div className="detail-pane-contents">
