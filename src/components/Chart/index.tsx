@@ -86,7 +86,12 @@ class ChartBase extends React.Component<Props, State> {
           toMonth: parse(chart.toMonth, "yyyy-M", new Date())
         });
       } else {
-        this.setState({ ...INITIAL_STATE });
+        this.setState({
+          ...INITIAL_STATE,
+          selectedDay: this.isTodayInRange
+            ? parse(chart.fromMonth, "yyyy-M", new Date())
+            : new Date()
+        });
       }
     });
   }
@@ -141,7 +146,7 @@ class ChartBase extends React.Component<Props, State> {
     this.setState({ selectedDay: new Date() });
   };
 
-  isTodayDisabled = () => {
+  isTodayInRange = () => {
     const { fromMonth, toMonth } = this.state;
     return isWithinInterval(new Date(), {
       start: fromMonth,
@@ -149,12 +154,12 @@ class ChartBase extends React.Component<Props, State> {
     });
   };
 
-  isPreviousDayDisabled = () => {
+  isPreviousDayInRange = () => {
     const { selectedDay, fromMonth } = this.state;
     return isBefore(subDays(selectedDay, 1), fromMonth);
   };
 
-  isNextDayDisabled = () => {
+  isNextDayInRange = () => {
     const { selectedDay, toMonth } = this.state;
     return isAfter(selectedDay, lastDayOfMonth(toMonth));
   };
@@ -195,14 +200,6 @@ class ChartBase extends React.Component<Props, State> {
       isPast: isPast(day.setHours(23, 59, 59))
     });
 
-    // const ref = React.createRef();
-
-    // this.ref.current.scrollIntoView({
-    //   behavior: "smooth",
-    //   block: "center",
-    //   inline: "center"
-    // });
-
     return (
       <div className={classname}>
         <Album
@@ -239,7 +236,7 @@ class ChartBase extends React.Component<Props, State> {
 
     const monthRange = differenceInCalendarMonths(toMonth, fromMonth) + 1;
     const classname = classNames("calendar", {
-      ["detailExpanded"]: isDetailExpanded
+      detailExpanded: isDetailExpanded
     });
 
     return (
@@ -298,14 +295,14 @@ class ChartBase extends React.Component<Props, State> {
             <button
               className="button icon-button"
               onClick={this.onPreviousDayClick}
-              disabled={this.isPreviousDayDisabled()}
+              disabled={this.isPreviousDayInRange()}
             >
               <FiArrowLeft />
             </button>
             <button
               className="button icon-button"
               onClick={this.onNextDayClick}
-              disabled={this.isNextDayDisabled()}
+              disabled={this.isNextDayInRange()}
             >
               <FiArrowRight />
             </button>
@@ -320,7 +317,7 @@ class ChartBase extends React.Component<Props, State> {
             </span>
           </div>
           <div className="current-day-buttons">
-            {!this.isTodayDisabled && (
+            {!this.isTodayInRange && (
               <button
                 className="button icon-button"
                 onClick={this.onTodayClick}

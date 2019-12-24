@@ -10,9 +10,6 @@ import "./nav.css";
 
 const Nav = () => (
   <nav className="nav">
-    <button className="button icon-button mobile-toggle">
-      <FiMenu />
-    </button>
     <AuthUserContext.Consumer>
       {authUser =>
         authUser ? (

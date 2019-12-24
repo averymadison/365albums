@@ -10,6 +10,21 @@
   padding: 1em;
 }
 
+.spinner-wrapper {
+  background-color: var(--bg-alt);
+  position: absolute;
+  right: 0;
+  width: 4em;
+  height: 100%;
+  user-select: none;
+  top: 0;
+  border-radius: 0.5rem;
+}
+
+.search-input-wrapper {
+  position: relative;
+}
+
 .search {
   width: 100%;
   border-radius: 0.5rem;

@@ -4,7 +4,7 @@
   align-items: center;
   list-style: none;
   margin: 0;
-  padding: 1em;
+  padding: 1em 1.5em;
   cursor: pointer;
   border: none;
   font-size: 0.8rem;
@@ -16,6 +16,12 @@
 .search-result-album {
   color: var(--text);
   font-size: 1rem;
+  font-family: titling-gothic-fb-wide, sans-serif;
+  font-weight: 400;
+}
+
+.search-result-artist {
+  font-weight: 300;
 }
 
 .search-result:hover {

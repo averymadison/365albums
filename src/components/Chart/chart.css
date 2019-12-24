@@ -1,6 +1,5 @@
 .calendar {
   display: grid;
-  height: 100vh;
   grid-template-columns: minmax(360px, 1fr) 2.5fr;
   grid-template-rows: auto;
   grid-template-areas: "details calendar";
@@ -31,8 +30,6 @@
 
 .DayPicker-Months {
   padding: 0 2em 2em;
-  overflow-y: auto;
-  height: 100%;
   grid-area: calendar;
   scroll-snap-type: y proximity;
 }
@@ -129,11 +126,11 @@
   flex-direction: column;
   box-shadow: 0 1vw 3vw -0.5vw rgba(0, 0, 0, 0.2);
   border-radius: 1em;
-  margin: 1em 0;
-  margin-bottom: auto;
-  max-height: calc(100% - 2em);
+  margin: 1.5em 0 auto 1.5em;
   overflow: hidden;
   z-index: 5;
+  position: sticky;
+  top: 1.5em;
 }
 
 .detail-pane-contents {
@@ -319,16 +316,7 @@
 
 @media screen and (max-width: 900px) {
   .calendar {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr 80px;
-    grid-template-areas:
-      "calendar"
-      "details";
-    transition: grid-template-rows 0.2s ease-out;
-  }
-
-  .calendar.detailExpanded {
-    grid-template-rows: 80px 1fr;
+    display: block;
   }
 
   .DayPicker-Months {
@@ -347,7 +335,14 @@
     margin: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    max-height: unset;
+    top: unset;
+    bottom: calc(-90vh + 80px);
+    transition: 0.2s ease-out;
+    height: 90vh;
+  }
+
+  .calendar.detailExpanded .detail-pane {
+    bottom: 0;
   }
 
   .detail-grabber {

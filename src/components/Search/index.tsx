@@ -4,6 +4,8 @@ import { format, parse } from "date-fns";
 import "./search.css";
 import SearchResult from "../SearchResult";
 import { Source } from "../Chart";
+import Spinner from "../Spinner";
+import Empty from "../Empty";
 
 interface Props {
   firebase: Firebase;
@@ -110,10 +112,11 @@ class SearchBase extends React.Component<Props, State> {
   renderSearchResults = (searchResults: []) => {
     const { source } = this.state;
 
-    if (!searchResults) return;
-
     return !searchResults.length ? (
-      <div>No results</div>
+      <Empty
+        title="No results"
+        description="Check your spelling and try again."
+      />
     ) : (
       <div className="search-results">
         {source === "bandcamp"
@@ -244,20 +247,24 @@ class SearchBase extends React.Component<Props, State> {
               <div className="radio-button">Discogs</div>
             </label>
           </div>
-          <input
-            name="searchQuery"
-            type="search"
-            placeholder={`Search ${source}…`}
-            value={searchQuery}
-            onChange={this.onChange}
-            className="search"
-            disabled={isSearching}
-          />
+          <div className="search-input-wrapper">
+            <input
+              name="searchQuery"
+              type="search"
+              placeholder={`Search ${source}…`}
+              value={searchQuery}
+              onChange={this.onChange}
+              className="search"
+              disabled={isSearching}
+            />
+            {isSearching && (
+              <div className="spinner-wrapper">
+                <Spinner />
+              </div>
+            )}
+          </div>
         </form>
-        {isSearching && `Searching ${source}...`}
-        {searchResults &&
-          searchResults.length &&
-          this.renderSearchResults(searchResults)}
+        {searchResults && this.renderSearchResults(searchResults)}
       </div>
     );
   }

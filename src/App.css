@@ -11,12 +11,16 @@
 .app-content {
   width: 100%;
   min-width: 0;
+  overflow-y: auto;
   grid-area: content;
 }
 
 @media screen and (max-width: 800px) {
   .app {
-    width: calc(100vw + var(--nav-width));
-    margin-left: calc(var(--nav-width) * -1);
+    grid-template-rows: 1fr var(--nav-width);
+    grid-template-columns: 100vw;
+    grid-template-areas:
+      "content"
+      "nav";
   }
 }
