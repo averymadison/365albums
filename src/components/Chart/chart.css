@@ -97,7 +97,7 @@
 
 .DayPicker-Day--selected .dayContents .album,
 .DayPicker-Day--selected .dayContents .dayDetails {
-  opacity: 0;
+  opacity: 0.4;
 }
 
 .DayPicker-Day .album {
@@ -105,7 +105,7 @@
 }
 
 .DayPicker-Day--selected .album {
-  transform: scale(0.6);
+  transform: scale(0.8);
 }
 
 .dayAlbum {
@@ -128,7 +128,7 @@
   grid-area: details;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0.5vw 3vw -0.5vw rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-large);
   border-radius: 1em;
   margin: 1.5em 0 auto 1.5em;
   overflow: hidden;
@@ -298,6 +298,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-bottom: 1px solid var(--border);
 }
 
 .current-day-date {
@@ -326,7 +327,7 @@
 
   .DayPicker-Months {
     padding: 0;
-    padding-bottom: calc(80px + 2em);
+    margin-bottom: calc(5em);
   }
 
   .chart-header {
