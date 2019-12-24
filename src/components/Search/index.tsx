@@ -251,8 +251,6 @@ class SearchBase extends React.Component<Props, State> {
             value={searchQuery}
             onChange={this.onChange}
             className="search"
-            autoFocus
-            ref={input => input && input.focus()}
             disabled={isSearching}
           />
         </form>
