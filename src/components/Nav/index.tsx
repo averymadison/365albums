@@ -1,10 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Logo from "../Logo";
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
 import { AuthUserContext } from "../Session";
-import { FiSettings, FiHome } from "react-icons/fi";
+import { FiSettings, FiHome, FiMusic } from "react-icons/fi";
 import "./nav.css";
 
 const Nav = () => (
@@ -23,27 +22,30 @@ const Nav = () => (
 
 const NavigationAuth = ({ authUser }: any) => (
   <React.Fragment>
-    <Link to={ROUTES.HOME} className="logo">
-      <Logo />
-    </Link>
-
-    {!!authUser.roles[ROLES.ADMIN] && <Link to={ROUTES.ADMIN}>Admin</Link>}
     <Link className="button icon-button" to={ROUTES.HOME}>
       <FiHome />
+    </Link>
+    <Link className="button icon-button" to={ROUTES.CHARTS}>
+      <FiMusic />
     </Link>
     <Link className="button icon-button" to={ROUTES.SETTINGS}>
       <FiSettings />
     </Link>
+    {!!authUser.roles[ROLES.ADMIN] && <Link to={ROUTES.ADMIN}>Admin</Link>}
   </React.Fragment>
 );
 
 const NavigationNonAuth = () => (
   <React.Fragment>
-    <Link to={ROUTES.LANDING} className="logo">
-      <Logo />
+    <Link className="button icon-button" to={ROUTES.HOME}>
+      <FiHome />
     </Link>
-    <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
-    <Link to={ROUTES.SIGN_IN}>Sign In</Link>
+    <Link to={ROUTES.SIGN_UP} className="button">
+      Sign Up
+    </Link>
+    <Link to={ROUTES.SIGN_IN} className="button">
+      Sign In
+    </Link>
   </React.Fragment>
 );
 

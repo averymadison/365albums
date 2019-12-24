@@ -6,7 +6,7 @@
   --border: #ddd;
   --focus: 0 0 0 4px rgba(0, 90, 255, 0.5);
 
-  --nav-width: 68px;
+  --nav-width: 54px;
 }
 
 @media (prefers-color-scheme: dark) {
