@@ -69,13 +69,17 @@ exports.search = functions.https.onRequest((req: any, res: any) => {
         break;
 
       case "discogs":
-        discogs.search(query, (error: any, results: any) => {
-          if (error) {
-            return res.send(error);
-          } else {
-            return res.send(results);
+        discogs.search(
+          query,
+          { type: "master" },
+          (error: any, results: any) => {
+            if (error) {
+              return res.send(error);
+            } else {
+              return res.send(results.results);
+            }
           }
-        });
+        );
     }
   });
 });

@@ -21,7 +21,7 @@ import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";
 import Spinner from "../Spinner";
 
-export type Source = "bandcamp" | "spotify" | "custom";
+export type Source = "bandcamp" | "spotify" | "discogs";
 
 interface Props {
   firebase: Firebase;
@@ -74,20 +74,13 @@ class ChartBase extends React.Component<Props, State> {
       const chart = snapshot.val();
 
       if (chart) {
-        // If TODAY is within the range of the cart, default to today,
-        // otherwise default to the first day of the chart
-        const defaultSelectedDay = this.isTodayDisabled
-          ? new Date()
-          : parse(chart.fromMonth, "yyyy-M", new Date());
-
         this.setState({
           isLoading: false,
           title: chart.title ? chart.title : "",
           updatedAt: chart.updatedAt ? chart.updatedAt : null,
           albums: chart.albums ? chart.albums : {},
           fromMonth: parse(chart.fromMonth, "yyyy-M", new Date()),
-          toMonth: parse(chart.toMonth, "yyyy-M", new Date()),
-          selectedDay: defaultSelectedDay
+          toMonth: parse(chart.toMonth, "yyyy-M", new Date())
         });
       } else {
         this.setState({ ...INITIAL_STATE });

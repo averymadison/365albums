@@ -7,8 +7,8 @@ export interface Props {
   title: string;
   artist: string;
   releaseDate: Date;
-  length: number;
-  tracks: number;
+  length?: number;
+  tracks?: number;
   onClick: () => void;
 }
 
@@ -35,8 +35,8 @@ const SearchResult = (props: Props) => {
         <span className="search-result-artist">{artist}</span>
         <AlbumMetadata
           releaseDate={releaseDate}
-          tracks={tracks}
-          length={length}
+          tracks={tracks!}
+          length={length!}
         />
       </span>
     </button>

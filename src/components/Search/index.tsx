@@ -91,11 +91,9 @@ class SearchBase extends React.Component<Props, State> {
     )
       .then(res => res.json())
       .then(result => {
-        console.log(result);
         this.setState({ searchResults: result, isSearching: false });
       })
       .catch(rejected => {
-        console.log(rejected);
         this.setState({ isSearching: false });
       });
 
@@ -170,8 +168,30 @@ class SearchBase extends React.Component<Props, State> {
                 title={album.name}
                 imageUrl={album.images[1] && album.images[1].url}
                 tracks={album.total_tracks}
-                length={90}
                 releaseDate={new Date(album.release_date)}
+              />
+            ))
+          : source === "discogs"
+          ? searchResults.map((album: any, i) => (
+              <SearchResult
+                key={i}
+                onClick={() => {
+                  this.onCreateAlbum(
+                    "discogs",
+                    album.resource_url,
+                    album.title.split(" - ")[1],
+                    album.title.split(" - ")[0],
+                    new Date(album.year),
+                    album.cover_image,
+                    12,
+                    90
+                  );
+                  this.setState({ ...INITIAL_STATE });
+                }}
+                artist={album.title.split(" - ")[0]}
+                title={album.title.split(" - ")[1]}
+                imageUrl={album.cover_image}
+                releaseDate={new Date(album.year)}
               />
             ))
           : null}
@@ -217,11 +237,11 @@ class SearchBase extends React.Component<Props, State> {
               <input
                 type="radio"
                 name="source"
-                value="custom"
-                checked={source === "custom"}
+                value="discogs"
+                checked={source === "discogs"}
                 onChange={this.onToggleSource}
               />
-              <div className="radio-button">Custom</div>
+              <div className="radio-button">Discogs</div>
             </label>
           </div>
           <input
