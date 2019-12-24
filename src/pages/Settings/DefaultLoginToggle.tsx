@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface Props {
   onlyOneLeft: boolean;
@@ -17,14 +17,14 @@ class DefaultLoginToggle extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
-    this.state = { passwordOne: '', passwordTwo: '' };
+    this.state = { passwordOne: "", passwordTwo: "" };
   }
 
   onSubmit = (event: React.MouseEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     this.props.onLink(this.state.passwordOne);
-    this.setState({ passwordOne: '', passwordTwo: '' });
+    this.setState({ passwordOne: "", passwordTwo: "" });
   };
 
   onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,13 +39,14 @@ class DefaultLoginToggle extends React.Component<Props, State> {
 
     const { passwordOne, passwordTwo } = this.state;
 
-    const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === "";
 
     return isEnabled ? (
       <button
         type="button"
         onClick={() => onUnlink(signInMethod.id)}
         disabled={onlyOneLeft}
+        className="button"
       >
         Unlink {signInMethod.id}
       </button>

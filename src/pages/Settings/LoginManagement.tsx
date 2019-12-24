@@ -1,7 +1,8 @@
-import React from 'react';
-import Firebase, { withFirebase } from '../../components/Firebase';
-import DefaultLoginToggle from './DefaultLoginToggle';
-import SocialLoginToggle from './SocialLoginToggle';
+import React from "react";
+import Firebase, { withFirebase } from "../../components/Firebase";
+import DefaultLoginToggle from "./DefaultLoginToggle";
+import SocialLoginToggle from "./SocialLoginToggle";
+import Spinner from "../../components/Spinner";
 
 interface Props {
   firebase: Firebase;
@@ -16,12 +17,12 @@ interface State {
 
 const SIGN_IN_METHODS = [
   {
-    id: 'password',
+    id: "password",
     provider: null
   },
   {
-    id: 'google.com',
-    provider: 'googleProvider'
+    id: "google.com",
+    provider: "googleProvider"
   }
 ];
 
@@ -78,41 +79,38 @@ class LoginManagementBase extends React.Component<Props, State> {
   render() {
     const { activeSignInMethods, error, isLoading } = this.state;
 
-    return (
-      !isLoading && (
-        <div>
-          Sign In Methods:
-          <ul>
-            {SIGN_IN_METHODS.map(signInMethod => {
-              const onlyOneLeft = activeSignInMethods.length === 1;
-              const isEnabled = activeSignInMethods.includes(signInMethod.id);
+    return isLoading ? (
+      <Spinner />
+    ) : (
+      <React.Fragment>
+        {SIGN_IN_METHODS.map(signInMethod => {
+          const onlyOneLeft = activeSignInMethods.length === 1;
+          const isEnabled = activeSignInMethods.includes(signInMethod.id);
 
-              return (
-                <li key={signInMethod.id}>
-                  {signInMethod.id === 'password' ? (
-                    <DefaultLoginToggle
-                      onlyOneLeft={onlyOneLeft}
-                      isEnabled={isEnabled}
-                      signInMethod={signInMethod}
-                      onLink={this.onDefaultLoginLink}
-                      onUnlink={this.onUnlink}
-                    />
-                  ) : (
-                    <SocialLoginToggle
-                      onlyOneLeft={onlyOneLeft}
-                      isEnabled={isEnabled}
-                      signInMethod={signInMethod}
-                      onLink={this.onSocialLoginLink}
-                      onUnlink={this.onUnlink}
-                    />
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-          {error && <p>{error.message}</p>}
-        </div>
-      )
+          return (
+            <div key={signInMethod.id}>
+              {signInMethod.id === "password" ? (
+                <DefaultLoginToggle
+                  onlyOneLeft={onlyOneLeft}
+                  isEnabled={isEnabled}
+                  signInMethod={signInMethod}
+                  onLink={this.onDefaultLoginLink}
+                  onUnlink={this.onUnlink}
+                />
+              ) : (
+                <SocialLoginToggle
+                  onlyOneLeft={onlyOneLeft}
+                  isEnabled={isEnabled}
+                  signInMethod={signInMethod}
+                  onLink={this.onSocialLoginLink}
+                  onUnlink={this.onUnlink}
+                />
+              )}
+            </div>
+          );
+        })}
+        {error && <p>{error.message}</p>}
+      </React.Fragment>
     );
   }
 }

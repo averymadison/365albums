@@ -1,13 +1,14 @@
-import React from 'react';
-import { compose } from 'recompose';
-import { ResetPasswordForm } from '../ResetPassword';
-import ChangePasswordForm from './ChangePassword';
-import LoginManagement from './LoginManagement';
+import React from "react";
+import { compose } from "recompose";
+import { ResetPasswordForm } from "../ResetPassword";
+import ChangePasswordForm from "./ChangePassword";
+import LoginManagement from "./LoginManagement";
+import SignOutButton from "../../components/SignOutButton";
 import {
   AuthUserContext,
   withEmailVerification,
   withPermissions
-} from '../../components/Session';
+} from "../../components/Session";
 
 const Settings = () => (
   <AuthUserContext.Consumer>
@@ -18,6 +19,7 @@ const Settings = () => (
         <ResetPasswordForm />
         <ChangePasswordForm />
         <LoginManagement authUser={authUser} />
+        <SignOutButton />
       </div>
     )}
   </AuthUserContext.Consumer>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 interface Props {
   onlyOneLeft: boolean;
@@ -20,11 +20,16 @@ const SocialLoginToggle = ({
       type="button"
       onClick={() => onUnlink(signInMethod.id)}
       disabled={onlyOneLeft}
+      className="button"
     >
       Unlink {signInMethod.id}
     </button>
   ) : (
-    <button type="button" onClick={() => onLink(signInMethod.provider)}>
+    <button
+      className="button"
+      type="button"
+      onClick={() => onLink(signInMethod.provider)}
+    >
       Link {signInMethod.id}
     </button>
   );

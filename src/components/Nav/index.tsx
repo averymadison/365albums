@@ -1,11 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Logo from "../Logo";
-import SignOutButton from "../SignOutButton";
 import * as ROUTES from "../../constants/routes";
 import * as ROLES from "../../constants/roles";
 import { AuthUserContext } from "../Session";
-import { FiSettings, FiHome, FiMenu } from "react-icons/fi";
+import { FiSettings, FiHome } from "react-icons/fi";
 import "./nav.css";
 
 const Nav = () => (
@@ -35,7 +34,6 @@ const NavigationAuth = ({ authUser }: any) => (
     <Link className="button icon-button" to={ROUTES.SETTINGS}>
       <FiSettings />
     </Link>
-    <SignOutButton />
   </React.Fragment>
 );
 
