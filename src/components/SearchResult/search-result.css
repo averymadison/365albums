@@ -15,8 +15,8 @@
 
 .search-result-album {
   color: var(--text);
-  font-size: 1rem;
-  font-family: titling-gothic-fb-wide, sans-serif;
+  font-size: 1.2rem;
+  font-family: titling-gothic-fb-condensed, sans-serif;
   font-weight: 400;
 }
 

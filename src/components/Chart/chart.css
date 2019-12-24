@@ -320,7 +320,7 @@
   text-align: right;
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 800px) {
   .calendar {
     display: block;
   }
@@ -348,7 +348,7 @@
     right: 0;
     bottom: var(--nav-width);
     transition: 0.2s ease-out;
-    height: 90vh;
+    height: calc(100vh - var(--nav-width));
     transform: translate3d(0, calc(100% - 80px), 0);
   }
 
