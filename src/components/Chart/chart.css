@@ -3,8 +3,6 @@
   grid-template-columns: minmax(360px, 1fr) 2.5fr;
   grid-template-rows: auto;
   grid-template-areas: "details calendar";
-  height: 100%;
-  overflow: hidden;
 }
 
 .DayPicker,
@@ -343,13 +341,13 @@
     margin: 0 auto;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    top: unset;
+    top: 0;
     left: 0;
     right: 0;
     bottom: var(--nav-width);
     transition: 0.2s ease-out;
     height: calc(100vh - var(--nav-width));
-    transform: translate3d(0, calc(100% - 80px), 0);
+    transform: translate3d(0, calc(100% - var(--nav-width) - 24px), 0);
   }
 
   .calendar.detailExpanded .DayPicker-Months {
