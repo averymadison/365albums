@@ -44,6 +44,11 @@ body {
   color: var(--text);
 }
 
+a,
+a:visited {
+  color: inherit;
+}
+
 img,
 svg {
   max-width: 100%;
@@ -81,7 +86,7 @@ button svg {
 
 .button {
   background-color: var(--bg);
-  border: 1px solid var(--border);
+  box-shadow: var(--shadow-small);
   color: var(--text);
   border-radius: 0.5em;
   text-decoration: none;
@@ -119,6 +124,7 @@ button svg {
   width: 2.5em;
   padding: 0;
   border-radius: 50%;
+  box-shadow: none;
   border: none;
   flex-shrink: 0;
 }
@@ -130,4 +136,65 @@ button svg {
 .button svg {
   font-size: 1.2em;
   margin: 0.25em;
+}
+
+.input {
+  width: 100%;
+  border-radius: 0.5rem;
+  font-size: 16px;
+  border: none;
+  background-color: var(--bg-alt);
+  color: var(--text);
+  padding: 0.75em 1em;
+}
+
+.input:focus {
+  outline: none;
+  box-shadow: var(--focus);
+}
+
+.sign-in-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.container {
+  background-color: var(--bg);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  transition: 0.1s ease-out;
+  box-shadow: var(--shadow-large);
+  border-radius: 1em;
+  margin: 1.5em auto;
+  width: 340px;
+  padding: 1.5em;
+}
+
+.container h1 {
+  margin: 0;
+  margin-bottom: 1em;
+  font-family: titling-gothic-fb-wide, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.sign-in-form,
+.sign-in-form form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.sign-in-form form {
+  border: 1px solid var(--border);
+  padding: 0.5em;
+  border-radius: 0.5em;
+}
+
+.sign-in-form > * + *,
+.sign-in-form form > * + * {
+  margin-top: 0.5em;
 }

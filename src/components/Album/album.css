@@ -1,16 +1,10 @@
 .album {
   width: 100%;
-  padding-top: 100%;
   position: relative;
   background: var(--bg);
 }
 
 .albumContent {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,4 +15,16 @@
 .albumContent img {
   max-width: 100%;
   max-height: 100%;
+}
+
+.album.square {
+  padding-top: 100%;
+}
+
+.album.square .albumContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }

@@ -15,13 +15,12 @@ import {
 import Firebase, { withFirebase } from "../Firebase";
 import DayPicker from "react-day-picker";
 import "./chart.css";
-import { FiArrowRight, FiArrowLeft, FiCalendar, FiShare } from "react-icons/fi";
+import { FiArrowRight, FiArrowLeft } from "react-icons/fi";
 import Album from "../Album";
 import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";
 import Spinner from "../Spinner";
-import { Link } from "react-router-dom";
-import * as ROUTES from "../../constants/routes";
+import ChartHeader from "../ChartHeader";
 
 export type Source = "bandcamp" | "spotify" | "discogs";
 
@@ -32,10 +31,7 @@ interface Props {
 
 interface State {
   isLoading: boolean;
-  isEditing: boolean;
   error: any;
-  title: string;
-  updatedAt: string | null;
   albums: any;
   selectedDay: Date;
   fromMonth: Date;
@@ -46,10 +42,7 @@ interface State {
 
 const INITIAL_STATE = {
   isLoading: false,
-  isEditing: false,
   error: "",
-  title: "",
-  updatedAt: null,
   albums: {},
   selectedDay: new Date(),
   fromMonth: new Date(),
@@ -73,21 +66,28 @@ class ChartBase extends React.Component<Props, State> {
 
     this.setState({ isLoading: true });
 
+    let chart;
+
     firebase.chart(chartId).on("value", snapshot => {
-      const chart = snapshot.val();
+      chart = snapshot.val();
 
       if (chart) {
         this.setState({
           isLoading: false,
-          title: chart.title ? chart.title : "",
-          updatedAt: chart.updatedAt ? chart.updatedAt : null,
           albums: chart.albums ? chart.albums : {},
           fromMonth: parse(chart.fromMonth, "yyyy-M", new Date()),
           toMonth: parse(chart.toMonth, "yyyy-M", new Date())
         });
       } else {
+        this.setState({ ...INITIAL_STATE });
+      }
+    });
+
+    firebase.chart(chartId).once("value", snapshot => {
+      chart = snapshot.val();
+
+      if (chart) {
         this.setState({
-          ...INITIAL_STATE,
           selectedDay: this.isTodayInRange
             ? parse(chart.fromMonth, "yyyy-M", new Date())
             : new Date()
@@ -102,11 +102,6 @@ class ChartBase extends React.Component<Props, State> {
     firebase.chart(chartId).off();
   }
 
-  onToggleEditMode = () => {
-    const { isEditing } = this.state;
-    this.setState({ isEditing: !isEditing });
-  };
-
   onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -114,18 +109,6 @@ class ChartBase extends React.Component<Props, State> {
       State,
       any
     >);
-  };
-
-  onSaveTitle = (event: React.ChangeEvent<HTMLFormElement>) => {
-    const { firebase, chartId } = this.props;
-    const { title } = this.state;
-
-    firebase
-      .chart(chartId)
-      .update({ title, updatedAt: firebase.serverValue.TIMESTAMP });
-
-    this.onToggleEditMode();
-    event.preventDefault();
   };
 
   onDayClick = (day: Date) => {
@@ -204,11 +187,12 @@ class ChartBase extends React.Component<Props, State> {
       <div className={classname}>
         <Album
           src={
-            this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).artwork
+            this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).thumb
           }
           alt={
             this.getAlbumInfoForDay(day) && this.getAlbumInfoForDay(day).title
           }
+          isAlwaysSquare
         />
         {this.renderDayDetails(day)}
         <div className="selectedDate">
@@ -217,7 +201,7 @@ class ChartBase extends React.Component<Props, State> {
               <svg viewBox="0 0 100 100" fill="currentColor">
                 <text
                   x="50%"
-                  y="50%"
+                  y="52%"
                   dominantBaseline="middle"
                   textAnchor="middle"
                 >
@@ -241,6 +225,7 @@ class ChartBase extends React.Component<Props, State> {
 
     return (
       <div className={classname}>
+        {this.renderDetails(selectedDay)}
         <DayPicker
           fromMonth={fromMonth}
           toMonth={toMonth}
@@ -254,7 +239,6 @@ class ChartBase extends React.Component<Props, State> {
           showWeekDays={false}
           navbarElement={() => null}
         />
-        {this.renderDetails(selectedDay)}
       </div>
     );
   };
@@ -269,44 +253,14 @@ class ChartBase extends React.Component<Props, State> {
           className="detail-grabber"
           onClick={() => this.setState({ isDetailExpanded: !isDetailExpanded })}
         ></button>
-        {/* <div className="chart-title">
-          {!isEditing ? (
-            <h2 onClick={this.onToggleEditMode}>
-              {title ? title : "Add a title..."}
-            </h2>
-          ) : (
-            <form onSubmit={this.onSaveTitle}>
-              <input
-                name="title"
-                type="text"
-                placeholder="title"
-                value={title}
-                onChange={this.onChange}
-                maxLength={32}
-                autoFocus
-              />
-              <button type="submit">Save</button>
-            </form>
-          )}
-          <small>{updatedAt && `Last edited ${readableDate} ago`}</small>
-        </div> */}
         <div className="current-day">
-          <div className="current-day-buttons">
-            <button
-              className="button icon-button"
-              onClick={this.onPreviousDayClick}
-              disabled={this.isPreviousDayInRange()}
-            >
-              <FiArrowLeft />
-            </button>
-            <button
-              className="button icon-button"
-              onClick={this.onNextDayClick}
-              disabled={this.isNextDayInRange()}
-            >
-              <FiArrowRight />
-            </button>
-          </div>
+          <button
+            className="button icon-button"
+            onClick={this.onPreviousDayClick}
+            disabled={this.isPreviousDayInRange()}
+          >
+            <FiArrowLeft />
+          </button>
           <div className="current-day-date">
             <time dateTime={format(day, "yyyy-MM-dd")}>
               {format(day, "EEE MMM d")}
@@ -316,19 +270,13 @@ class ChartBase extends React.Component<Props, State> {
               ${format(day.getFullYear(), "DDD")}`}
             </span>
           </div>
-          <div className="current-day-buttons">
-            {!this.isTodayInRange && (
-              <button
-                className="button icon-button"
-                onClick={this.onTodayClick}
-              >
-                <FiCalendar />
-              </button>
-            )}
-            <Link to={ROUTES.CHARTS} className="button icon-button">
-              <FiShare />
-            </Link>
-          </div>
+          <button
+            className="button icon-button"
+            onClick={this.onNextDayClick}
+            disabled={this.isNextDayInRange()}
+          >
+            <FiArrowRight />
+          </button>
         </div>
         <div className="detail-pane-contents">
           {this.getAlbumInfoForDay(day) ? (
@@ -353,6 +301,7 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   render() {
+    const { chartId } = this.props;
     const { error, isLoading } = this.state;
 
     return error ? (
@@ -360,7 +309,10 @@ class ChartBase extends React.Component<Props, State> {
     ) : isLoading ? (
       <Spinner />
     ) : (
-      this.renderCalendar()
+      <React.Fragment>
+        <ChartHeader chartId={chartId} />
+        {this.renderCalendar()}
+      </React.Fragment>
     );
   }
 }

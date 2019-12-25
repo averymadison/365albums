@@ -1,6 +1,7 @@
 import React from "react";
 import Firebase, { withFirebase } from "../../components/Firebase";
 import { Link } from "react-router-dom";
+import Spinner from "../../components/Spinner";
 
 interface Props {
   firebase: Firebase;
@@ -50,8 +51,7 @@ class Charts extends React.Component<Props, State> {
     return (
       <div>
         <h1>Charts</h1>
-        {loading && <div>Loading...</div>}
-        <ChartList charts={charts} />
+        {loading ? <Spinner /> : <ChartList charts={charts} />}
       </div>
     );
   }

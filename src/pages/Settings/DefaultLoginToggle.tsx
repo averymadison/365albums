@@ -67,7 +67,7 @@ class DefaultLoginToggle extends React.Component<Props, State> {
           placeholder="Confirm New Password"
         />
 
-        <button disabled={isInvalid} type="submit">
+        <button className="button" disabled={isInvalid} type="submit">
           Link {signInMethod.id}
         </button>
       </form>

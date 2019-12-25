@@ -9,12 +9,16 @@ import * as ROUTES from "../../constants/routes";
 import { FaGoogle } from "react-icons/fa";
 
 const SignIn = () => (
-  <div>
-    <h1>Sign In</h1>
-    <SignInForm />
-    <SignInGoogle />
-    <ResetPasswordLink />
-    <SignUpLink />
+  <div className="sign-in-page">
+    <div className="container">
+      <h1>Sign In</h1>
+      <div className="sign-in-form">
+        <SignInForm />
+        <SignInGoogle />
+      </div>
+      <ResetPasswordLink />
+      <SignUpLink />
+    </div>
   </div>
 );
 
@@ -76,6 +80,7 @@ class SignInFormBase extends React.Component<Props, SignInFormState> {
     return (
       <form onSubmit={this.onSubmit}>
         <input
+          className="input"
           name="email"
           value={email}
           onChange={this.onChange}
@@ -83,13 +88,14 @@ class SignInFormBase extends React.Component<Props, SignInFormState> {
           placeholder="Email Address"
         />
         <input
+          className="input"
           name="password"
           value={password}
           onChange={this.onChange}
           type="password"
           placeholder="Password"
         />
-        <button disabled={isInvalid} type="submit">
+        <button className="button" disabled={isInvalid} type="submit">
           Sign In
         </button>
 

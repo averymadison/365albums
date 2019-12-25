@@ -42,6 +42,7 @@ class SearchBase extends React.Component<Props, State> {
     title: string,
     artist: string,
     releaseDate: Date,
+    thumbUrl: string,
     artworkUrl: string,
     tracks: number,
     length: number
@@ -59,6 +60,7 @@ class SearchBase extends React.Component<Props, State> {
         title: title,
         artist: artist,
         releaseDate: releaseDate,
+        thumb: thumbUrl,
         artwork: artworkUrl,
         tracks: tracks,
         length: length
@@ -130,6 +132,7 @@ class SearchBase extends React.Component<Props, State> {
                     album.name,
                     album.artist,
                     parse(album.releaseDate, "dd MMMM yyyy", new Date()),
+                    album.imageUrl,
                     this.getHigherResBandcampAlbumArt(album.imageUrl),
                     album.numTracks,
                     album.numMinutes
@@ -159,7 +162,8 @@ class SearchBase extends React.Component<Props, State> {
                     album.name,
                     album.artists.map((artist: any) => artist.name).join(", "),
                     new Date(album.release_date),
-                    album.images[0] && album.images[0].url,
+                    album.images[1] && album.images[1].url, // 300px image
+                    album.images[0] && album.images[0].url, // 640px image
                     album.total_tracks,
                     90
                   );
@@ -185,6 +189,7 @@ class SearchBase extends React.Component<Props, State> {
                     album.title.split(" - ")[1],
                     album.title.split(" - ")[0],
                     new Date(album.year),
+                    album.thumb,
                     album.cover_image,
                     12,
                     90
@@ -193,7 +198,7 @@ class SearchBase extends React.Component<Props, State> {
                 }}
                 artist={album.title.split(" - ")[0]}
                 title={album.title.split(" - ")[1]}
-                imageUrl={album.cover_image}
+                imageUrl={album.thumb}
                 releaseDate={new Date(album.year)}
               />
             ))

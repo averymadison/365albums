@@ -53,6 +53,7 @@ class ChangePasswordForm extends React.Component<Props, State> {
     return (
       <form onSubmit={this.onSubmit}>
         <input
+          className="input"
           name="passwordOne"
           value={passwordOne}
           onChange={this.onChange}
@@ -60,6 +61,7 @@ class ChangePasswordForm extends React.Component<Props, State> {
           placeholder="New Password"
         />
         <input
+          className="input"
           name="passwordTwo"
           value={passwordTwo}
           onChange={this.onChange}

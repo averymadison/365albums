@@ -1,0 +1,27 @@
+.chart-header {
+  background-color: var(--bg);
+  padding: 3em 1.5em 2em;
+}
+
+.chart-header form {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chart-title {
+  background-color: transparent;
+  color: inherit;
+  padding: 0;
+  border: none;
+  margin: 0;
+  font-size: 3em;
+  font-family: titling-gothic-fb-condensed, sans-serif;
+  font-weight: 400;
+  min-width: 0;
+  outline: none;
+}
+
+.chart-header > * + * {
+  margin-top: 1em;
+}

@@ -101,9 +101,9 @@ class Home extends React.Component<Props, State> {
       <AuthUserContext.Consumer>
         {authUser => (
           <div>
-            <h2>No chart</h2>
+            <h2>Create your first chart</h2>
             <form onSubmit={event => this.onCreateChart(event, authUser)}>
-              From
+              <label>From</label>
               <select
                 name="fromMonth"
                 value={fromMonth}
@@ -132,7 +132,7 @@ class Home extends React.Component<Props, State> {
                 <option value="2021">2021</option>
                 <option value="2022">2022</option>
               </select>
-              To
+              <label>To</label>
               <select name="toMonth" value={toMonth} onChange={this.onChange}>
                 <option value="1">January</option>
                 <option value="2">February</option>
@@ -158,7 +158,7 @@ class Home extends React.Component<Props, State> {
                 <option value="2022">2022</option>
               </select>
               <button className="button" type="submit">
-                Create a chart
+                Create chart
               </button>
             </form>
           </div>

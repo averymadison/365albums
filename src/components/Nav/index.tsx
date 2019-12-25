@@ -7,21 +7,13 @@ import { FiSettings, FiHome, FiMusic } from "react-icons/fi";
 import "./nav.css";
 
 const Nav = () => (
-  <nav className="nav">
-    <AuthUserContext.Consumer>
-      {authUser =>
-        authUser ? (
-          <NavigationAuth authUser={authUser} />
-        ) : (
-          <NavigationNonAuth />
-        )
-      }
-    </AuthUserContext.Consumer>
-  </nav>
+  <AuthUserContext.Consumer>
+    {authUser => authUser && <NavigationAuth authUser={authUser} />}
+  </AuthUserContext.Consumer>
 );
 
 const NavigationAuth = ({ authUser }: any) => (
-  <React.Fragment>
+  <nav className="nav">
     <Link className="button icon-button" to={ROUTES.HOME}>
       <FiHome />
     </Link>
@@ -32,21 +24,7 @@ const NavigationAuth = ({ authUser }: any) => (
       <FiSettings />
     </Link>
     {!!authUser.roles[ROLES.ADMIN] && <Link to={ROUTES.ADMIN}>Admin</Link>}
-  </React.Fragment>
-);
-
-const NavigationNonAuth = () => (
-  <React.Fragment>
-    <Link className="button icon-button" to={ROUTES.HOME}>
-      <FiHome />
-    </Link>
-    <Link to={ROUTES.SIGN_UP} className="button">
-      Sign Up
-    </Link>
-    <Link to={ROUTES.SIGN_IN} className="button">
-      Sign In
-    </Link>
-  </React.Fragment>
+  </nav>
 );
 
 export default Nav;

@@ -4,6 +4,7 @@ import "./app.css";
 import * as ROUTES from "./constants/routes";
 import {
   Admin,
+  Chart,
   Charts,
   Home,
   Landing,
@@ -12,7 +13,6 @@ import {
   SignIn,
   SignUp
 } from "./pages";
-import Chart from "./components/Chart";
 import Nav from "./components/Nav";
 import { withAuthentication } from "./components/Session";
 

@@ -2,13 +2,17 @@
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  display: flex;
+}
+
+.app-content {
+  overflow: hidden;
   overflow-y: auto;
-  padding-left: var(--nav-width);
+  flex: 1;
 }
 
 @media screen and (max-width: 800px) {
   .app {
-    padding-left: 0;
-    padding-bottom: var(--nav-width);
+    flex-direction: column-reverse;
   }
 }

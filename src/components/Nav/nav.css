@@ -9,18 +9,12 @@
   align-items: center;
   justify-content: space-between;
   z-index: 10;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
 }
 
 @media screen and (max-width: 800px) {
   .nav {
     flex-direction: row;
     justify-content: space-around;
-    right: 0;
-    top: unset;
     width: unset;
     height: var(--nav-width);
   }

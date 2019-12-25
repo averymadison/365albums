@@ -60,6 +60,7 @@ class ResetPasswordFormBase extends React.Component<Props, State> {
     return (
       <form onSubmit={this.onSubmit}>
         <input
+          className="input"
           name="email"
           value={email}
           onChange={this.onChange}

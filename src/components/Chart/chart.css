@@ -1,11 +1,12 @@
 .calendar {
-  display: grid;
-  grid-template-columns: minmax(360px, 1fr) 2.5fr;
-  grid-template-rows: auto;
-  grid-template-areas: "details calendar";
+  display: flex;
+  margin: 0 auto;
 }
 
-.DayPicker,
+.DayPicker {
+  flex: 1;
+}
+
 .DayPicker-wrapper,
 .DayPicker-Body,
 .DayPicker-Week,
@@ -30,10 +31,6 @@
 
 .DayPicker-Months {
   padding: 0 2em 2em;
-  grid-area: calendar;
-  height: 100%;
-  overflow-y: auto;
-  scroll-snap-type: y proximity;
 }
 
 .DayPicker-Month {
@@ -123,7 +120,6 @@
   overflow-wrap: break-word;
   word-break: break-word;
   transition: 0.1s ease-out;
-  grid-area: details;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-large);
@@ -134,6 +130,8 @@
   position: sticky;
   top: 1.5em;
   max-height: calc(100vh - 3em);
+  max-width: 360px;
+  flex: 1;
 }
 
 .detail-pane-contents {
@@ -223,7 +221,13 @@
   transition: 0.15s ease-out;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 1100px) and (min-width: 801px) {
+  .dayDetails {
+    display: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
   .dayDetails {
     display: none;
   }
@@ -250,15 +254,6 @@
   color: var(--text);
 }
 
-.chart-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  text-align: left;
-  padding: 1em 2em;
-  grid-area: header;
-}
-
 .calendar-nav {
   grid-area: header;
   display: flex;
@@ -269,21 +264,6 @@
 
 .calendar-nav h3 {
   margin: 0;
-}
-
-.chart-title {
-  padding: 1em;
-  padding-bottom: 0;
-}
-
-.chart-title h2 {
-  margin: 0;
-}
-
-.chart-actions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .current-day {
@@ -310,14 +290,6 @@
   font-size: 0.8em;
 }
 
-.current-day-buttons {
-  width: 5em;
-}
-
-.current-day-buttons:last-child {
-  text-align: right;
-}
-
 @media screen and (max-width: 800px) {
   .calendar {
     display: block;
@@ -326,14 +298,6 @@
   .DayPicker-Months {
     padding: 0;
     margin-bottom: calc(5em);
-  }
-
-  .chart-header {
-    display: block;
-  }
-
-  .chart-buttons {
-    display: none;
   }
 
   .detail-pane {
