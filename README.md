@@ -4,21 +4,14 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Add development .env, prod .env file — manage email confirmation redirect differently
 - Fix Typescript typings
-- Styles
-- Add username checking / serverside validation
-- Add "share" link
 - Test test test
 - Security rules security rules security rules
-- Write homepage copy
-- Motion
 - Update manifest with new icons
 - Favicon
 - Speed testing / Lighthouse
 - Add analytics events
 - Add Buy Me A Coffee link
 - Keyboard support, focus states for calendar
-- Supprt hires/lowres album artwork, use lowres in calendar view
-- Add user setting for "prefersMinimalView"
 
 ## Available Scripts
 
