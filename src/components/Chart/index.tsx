@@ -27,6 +27,7 @@ export type Source = "bandcamp" | "spotify" | "discogs";
 interface Props {
   firebase: Firebase;
   chartId: string;
+  activeUserId: string;
 }
 
 interface State {

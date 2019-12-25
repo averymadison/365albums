@@ -1,11 +1,8 @@
-import React from 'react';
-import { compose } from 'recompose';
-import Firebase, { withFirebase } from '../../components/Firebase';
-import {
-  withEmailVerification,
-  withPermissions
-} from '../../components/Session';
-import * as ROLES from '../../constants/roles';
+import React from "react";
+import { compose } from "recompose";
+import Firebase, { withFirebase } from "../../components/Firebase";
+import { withPermissions } from "../../components/Session";
+import * as ROLES from "../../constants/roles";
 
 interface Props {
   firebase: Firebase;
@@ -30,7 +27,7 @@ class Admin extends React.Component<Props, State> {
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.users().on('value', (snapshot: any) => {
+    this.props.firebase.users().on("value", (snapshot: any) => {
       const usersObject = snapshot.val();
 
       const usersList = Object.keys(usersObject).map(key => ({
@@ -82,8 +79,4 @@ const UserList = ({ users }: any) => (
 
 const condition = (authUser: any) => authUser && !!authUser.roles[ROLES.ADMIN];
 
-export default compose(
-  withEmailVerification,
-  withPermissions(condition),
-  withFirebase
-)(Admin as any);
+export default compose(withPermissions(condition), withFirebase)(Admin as any);

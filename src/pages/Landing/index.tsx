@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import * as ROUTES from "../../constants/routes";
 import "./landing.css";
 import { AuthUserContext } from "../../components/Session";
@@ -11,9 +11,7 @@ const Landing = () => (
     <AuthUserContext.Consumer>
       {authUser =>
         authUser ? (
-          <Link to={ROUTES.HOME} className="button">
-            Go Home
-          </Link>
+          <Redirect to={ROUTES.HOME} />
         ) : (
           <div>
             <Link to={ROUTES.SIGN_UP} className="button">

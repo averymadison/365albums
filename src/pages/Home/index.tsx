@@ -1,56 +1,65 @@
 import React from "react";
+import { RouteComponentProps } from "react-router-dom";
 import { compose } from "recompose";
-import {
-  withEmailVerification,
-  withPermissions,
-  AuthUserContext
-} from "../../components/Session";
+import { withPermissions, AuthUserContext } from "../../components/Session";
 import Chart from "../../components/Chart";
 import Firebase from "../../components/Firebase";
 import Spinner from "../../components/Spinner";
 
-interface Props {
+interface Props extends RouteComponentProps<{}> {
   firebase: Firebase;
 }
 
 interface State {
   isLoading: boolean;
+  activeUserId: string | null;
   activeChartId: string | null;
-  activeUserId: string;
   fromMonth: number;
   fromYear: number;
   toMonth: number;
   toYear: number;
 }
 
+const INITIAL_STATE = {
+  isLoading: true,
+  activeUserId: null,
+  activeChartId: null,
+  fromMonth: 1,
+  fromYear: 2020,
+  toMonth: 12,
+  toYear: 2020
+};
+
 class Home extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      isLoading: true,
-      activeChartId: null,
-      activeUserId: "rSQ41HpnxPT3oumxzhAPtjG51Gj2",
-      fromMonth: new Date().getMonth(),
-      fromYear: new Date().getFullYear(),
-      toMonth: new Date().getMonth(),
-      toYear: new Date().getFullYear() + 1
+      ...INITIAL_STATE
     };
   }
 
   componentDidMount() {
-    const { activeUserId } = this.state;
+    const { firebase } = this.props;
 
-    this.props.firebase.db
-      .ref(`users/${activeUserId}/primaryChart`)
-      .on("value", snapshot => {
-        const primaryChartId = snapshot.val();
-
+    firebase.auth.onAuthStateChanged(async currentUser => {
+      if (currentUser) {
         this.setState({
-          activeChartId: primaryChartId,
-          isLoading: false
+          activeUserId: currentUser.uid
         });
-      });
+
+        await firebase.db
+          .ref(`users/${this.state.activeUserId}/primaryChart`)
+          .on("value", snapshot => {
+            const primaryChartId = snapshot.val();
+
+            this.setState({
+              activeChartId: primaryChartId,
+              isLoading: false
+            });
+          });
+      }
+    });
   }
 
   onChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -86,6 +95,7 @@ class Home extends React.Component<Props, State> {
   };
 
   render() {
+    const { activeUserId } = this.state;
     const {
       activeChartId,
       fromMonth,
@@ -165,14 +175,11 @@ class Home extends React.Component<Props, State> {
         )}
       </AuthUserContext.Consumer>
     ) : (
-      <Chart chartId={activeChartId} />
+      <Chart chartId={activeChartId} activeUserId={activeUserId} />
     );
   }
 }
 
 const condition = (authUser: any) => !!authUser;
 
-export default compose(
-  withEmailVerification,
-  withPermissions(condition)
-)(Home as any);
+export default compose(withPermissions(condition))(Home as any);

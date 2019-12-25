@@ -1,7 +1,7 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import Chart from "../../components/Chart";
-import Firebase from "../../components/Firebase";
+import Firebase, { withFirebase } from "../../components/Firebase";
 import Spinner from "../../components/Spinner";
 
 interface Props {
@@ -52,4 +52,4 @@ class ChartPage extends React.Component<
   }
 }
 
-export default ChartPage;
+export default withFirebase(ChartPage);

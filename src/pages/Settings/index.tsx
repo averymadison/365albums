@@ -4,11 +4,7 @@ import { ResetPasswordForm } from "../ResetPassword";
 import ChangePasswordForm from "./ChangePassword";
 import LoginManagement from "./LoginManagement";
 import SignOutButton from "../../components/SignOutButton";
-import {
-  AuthUserContext,
-  withEmailVerification,
-  withPermissions
-} from "../../components/Session";
+import { AuthUserContext, withPermissions } from "../../components/Session";
 
 const Settings = () => (
   <AuthUserContext.Consumer>
@@ -31,7 +27,4 @@ const Settings = () => (
 
 const condition = (authUser: any) => !!authUser;
 
-export default compose(
-  withEmailVerification,
-  withPermissions(condition)
-)(Settings);
+export default compose(withPermissions(condition))(Settings);
