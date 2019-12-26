@@ -69,18 +69,18 @@ class ChartBase extends React.Component<Props, State> {
 
     let chart;
 
-    firebase.chart(chartId).on("value", snapshot => {
+    firebase.chart(chartId).on("value", async snapshot => {
       chart = snapshot.val();
 
       if (chart) {
-        this.setState({
+        await this.setState({
           isLoading: false,
           albums: chart.albums ? chart.albums : {},
           fromMonth: parse(chart.fromMonth, "yyyy-M", new Date()),
           toMonth: parse(chart.toMonth, "yyyy-M", new Date())
         });
       } else {
-        this.setState({ ...INITIAL_STATE });
+        await this.setState({ ...INITIAL_STATE });
       }
     });
 
