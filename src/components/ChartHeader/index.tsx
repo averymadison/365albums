@@ -1,23 +1,25 @@
 import React from "react";
-import { formatDistanceToNow } from "date-fns";
-import { Link } from "react-router-dom";
+import { formatDistanceToNow, format } from "date-fns";
 import Firebase, { withFirebase } from "../Firebase";
 import "./chart-header.css";
 
 interface Props {
   firebase: Firebase;
   chartId: string;
+  isEditable: boolean;
 }
 
 interface State {
   isEditing: boolean;
   title: string;
+  createdAt: string | null;
   updatedAt: string | null;
 }
 
 const INITIAL_STATE = {
   isEditing: false,
   title: "",
+  createdAt: null,
   updatedAt: null
 };
 
@@ -39,6 +41,7 @@ class ChartHeaderBase extends React.Component<Props, State> {
       if (chart) {
         this.setState({
           title: chart.title ? chart.title : "",
+          createdAt: chart.createdAt ? chart.createdAt : null,
           updatedAt: chart.updatedAt ? chart.updatedAt : null
         });
       } else {
@@ -69,14 +72,16 @@ class ChartHeaderBase extends React.Component<Props, State> {
   };
 
   onToggleEditMode = () => {
+    const { isEditable } = this.props;
     const { isEditing } = this.state;
-    this.setState({ isEditing: !isEditing });
+
+    isEditable && this.setState({ isEditing: !isEditing });
   };
 
   render() {
-    const { chartId } = this.props;
-    const { isEditing, title, updatedAt } = this.state;
-    const readableDate = formatDistanceToNow(new Date(updatedAt!));
+    const { isEditing, title, updatedAt, createdAt } = this.state;
+    const updatedAtHumanReadable = formatDistanceToNow(new Date(updatedAt!));
+    const createdAtHumanReadable = format(new Date(createdAt!), "MMM d, yyyy");
 
     return (
       <div className="chart-header">
@@ -101,10 +106,12 @@ class ChartHeaderBase extends React.Component<Props, State> {
             </button>
           </form>
         )}
-        <div>{updatedAt && `Last edited ${readableDate} ago`}</div>
-        {/* <Link to={`/chart/${chartId}`} className="button">
-          Share
-        </Link> */}
+        <div className="chart-header-meta">
+          {createdAt && <span>{`Created ${createdAtHumanReadable}`}</span>}
+          {updatedAt && (
+            <span>{`Last edited ${updatedAtHumanReadable} ago`}</span>
+          )}
+        </div>
       </div>
     );
   }

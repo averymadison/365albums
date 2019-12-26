@@ -318,7 +318,7 @@ class ChartBase extends React.Component<Props, State> {
 
   render() {
     const { chartId } = this.props;
-    const { error, isLoading } = this.state;
+    const { error, isLoading, isEditable } = this.state;
 
     return error ? (
       <div>{error}</div>
@@ -326,7 +326,7 @@ class ChartBase extends React.Component<Props, State> {
       <Spinner />
     ) : (
       <React.Fragment>
-        <ChartHeader chartId={chartId} />
+        <ChartHeader chartId={chartId} isEditable={isEditable} />
         {this.renderCalendar()}
       </React.Fragment>
     );
