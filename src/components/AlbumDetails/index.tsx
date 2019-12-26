@@ -15,7 +15,6 @@ export interface Props {
   albumUrl: string;
   uri: string;
   releaseDate: Date;
-  length: number;
   tracks: number;
   source: Source;
   day: Date;
@@ -29,7 +28,6 @@ const AlbumDetails = (props: Props) => {
     albumUrl,
     uri,
     releaseDate,
-    length,
     tracks,
     source,
     day,

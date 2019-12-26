@@ -44,8 +44,7 @@ class SearchBase extends React.Component<Props, State> {
     releaseDate: Date,
     thumbUrl: string,
     artworkUrl: string,
-    tracks: number,
-    length: number
+    tracks: number
   ) => {
     const { firebase, chartId, selectedDay } = this.props;
 
@@ -62,8 +61,7 @@ class SearchBase extends React.Component<Props, State> {
         releaseDate: releaseDate,
         thumb: thumbUrl,
         artwork: artworkUrl,
-        tracks: tracks,
-        length: length
+        tracks: tracks
       });
 
     firebase
@@ -134,8 +132,7 @@ class SearchBase extends React.Component<Props, State> {
                     parse(album.releaseDate, "dd MMMM yyyy", new Date()),
                     album.imageUrl,
                     this.getHigherResBandcampAlbumArt(album.imageUrl),
-                    album.numTracks,
-                    album.numMinutes
+                    album.numTracks
                   );
                   this.setState({ ...INITIAL_STATE });
                 }}
@@ -163,8 +160,7 @@ class SearchBase extends React.Component<Props, State> {
                     new Date(album.release_date),
                     album.images[1] && album.images[1].url, // 300px image
                     album.images[0] && album.images[0].url, // 640px image
-                    album.total_tracks,
-                    90
+                    album.total_tracks
                   );
                   this.setState({ ...INITIAL_STATE });
                 }}
@@ -190,8 +186,7 @@ class SearchBase extends React.Component<Props, State> {
                     new Date(album.year),
                     album.thumb,
                     album.cover_image,
-                    12,
-                    90
+                    99999
                   );
                   this.setState({ ...INITIAL_STATE });
                 }}
