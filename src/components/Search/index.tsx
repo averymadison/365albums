@@ -158,7 +158,7 @@ class SearchBase extends React.Component<Props, State> {
                 onClick={() => {
                   this.onCreateAlbum(
                     "spotify",
-                    album.external_urls.spotify,
+                    album.uri,
                     album.name,
                     album.artists.map((artist: any) => artist.name).join(", "),
                     new Date(album.release_date),

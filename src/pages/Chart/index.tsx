@@ -11,7 +11,6 @@ interface Props {
 interface State {
   isLoading: boolean;
   activeChartId: string | null;
-  activeUserId: string;
 }
 
 type RouteParams = {
@@ -27,8 +26,7 @@ class ChartPage extends React.Component<
 
     this.state = {
       isLoading: true,
-      activeChartId: this.props.match.params.id,
-      activeUserId: "rSQ41HpnxPT3oumxzhAPtjG51Gj2"
+      activeChartId: this.props.match.params.id
     };
   }
 
