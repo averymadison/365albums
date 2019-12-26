@@ -143,7 +143,6 @@ class SearchBase extends React.Component<Props, State> {
                 title={album.name}
                 imageUrl={album.imageUrl}
                 tracks={album.numTracks}
-                length={album.numMinutes}
                 releaseDate={parse(
                   album.releaseDate,
                   "dd MMMM yyyy",

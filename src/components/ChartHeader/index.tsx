@@ -102,9 +102,9 @@ class ChartHeaderBase extends React.Component<Props, State> {
           </form>
         )}
         <div>{updatedAt && `Last edited ${readableDate} ago`}</div>
-        <Link to={`/chart/${chartId}`} className="button">
+        {/* <Link to={`/chart/${chartId}`} className="button">
           Share
-        </Link>
+        </Link> */}
       </div>
     );
   }

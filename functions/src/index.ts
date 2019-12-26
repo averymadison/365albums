@@ -83,3 +83,25 @@ exports.search = functions.https.onRequest((req: any, res: any) => {
     }
   });
 });
+
+// Pass in an ID for a master release
+exports.getDiscogsFullInfo = functions.https.onRequest((req: any, res: any) => {
+  const id = req.query.id;
+
+  discogs.getMaster(id, (error: any, results: any) => {
+    if (error) {
+      return res.send(error);
+    } else {
+      console.log("Title: " + results.title);
+      console.log(
+        "Artists: " +
+          results.artists.map((artist: any) => artist.name).join(", ")
+      );
+      console.log("Number of Tracks: " + results.trackList.length());
+      console.log("Lowres image: " + results.images[0].uri150);
+      console.log("Hires image: " + results.images[0].uri);
+      console.log("Release date: " + results.year);
+      return res.send(results);
+    }
+  });
+});

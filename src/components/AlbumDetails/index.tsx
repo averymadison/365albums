@@ -19,6 +19,7 @@ export interface Props {
   tracks: number;
   source: Source;
   day: Date;
+  isEditable: boolean;
 }
 
 const AlbumDetails = (props: Props) => {
@@ -31,7 +32,8 @@ const AlbumDetails = (props: Props) => {
     length,
     tracks,
     source,
-    day
+    day,
+    isEditable
   } = props;
 
   const onDeleteAlbum = (day: Date) => {
@@ -51,11 +53,7 @@ const AlbumDetails = (props: Props) => {
       <div className="albumDetails-content">
         <h2 className="albumDetails-title">{title}</h2>
         <div className="albumDetails-artist">{artist}</div>
-        <AlbumMetadata
-          releaseDate={releaseDate}
-          tracks={tracks}
-          length={length}
-        />
+        <AlbumMetadata releaseDate={releaseDate} tracks={tracks} />
       </div>
       <div className="albumDetails-buttons">
         {source && (
@@ -68,12 +66,14 @@ const AlbumDetails = (props: Props) => {
             {`Listen on ${source.charAt(0).toUpperCase() + source.slice(1)}`}
           </a>
         )}
-        <button
-          className="button icon-button button-large"
-          onClick={() => onDeleteAlbum(day)}
-        >
-          <FiTrash />
-        </button>
+        {isEditable && (
+          <button
+            className="button icon-button button-large"
+            onClick={() => onDeleteAlbum(day)}
+          >
+            <FiTrash />
+          </button>
+        )}
       </div>
     </div>
   );

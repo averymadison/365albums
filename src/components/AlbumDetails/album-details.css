@@ -36,32 +36,36 @@
   margin-left: 0.5em;
 }
 
-.button-bandcamp,
-.button-spotify {
+.albumDetails-buttons .button:not(.icon-button) {
   border-radius: 4em;
   border: none;
   font-weight: 600;
 }
 
-.button-bandcamp,
-.button-spotify,
-.button-bandcamp:hover,
-.button-spotify:hover {
+.albumDetails-buttons .button:not(.icon-button):hover {
   color: #fff;
 }
 
 .button-bandcamp {
-  background-color: #629aa9;
+  background-color: #629aa9 !important;
 }
 
 .button-bandcamp:hover {
-  background-color: #598a97;
+  background-color: #598a97 !important;
 }
 
 .button-spotify {
-  background-color: #1db954;
+  background-color: #1db954 !important;
 }
 
 .button-spotify:hover {
-  background-color: #19d65b;
+  background-color: #19d65b !important;
+}
+
+.button-discogs {
+  background-color: #2f2f2f !important;
+}
+
+.button-discogs:hover {
+  background-color: #333 !important;
 }

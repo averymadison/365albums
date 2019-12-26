@@ -4,12 +4,11 @@ import { format } from "date-fns";
 
 export interface Props {
   releaseDate: Date;
-  length: number;
   tracks: number;
 }
 
 const AlbumMetadata = (props: Props) => {
-  const { releaseDate, tracks, length } = props;
+  const { releaseDate, tracks } = props;
 
   return (
     <span className="albumDetails-meta">
@@ -21,11 +20,6 @@ const AlbumMetadata = (props: Props) => {
       {tracks > 0 && (
         <span className="albumDetails-meta-songs">
           {tracks === 1 ? `${tracks} song` : `${tracks} songs`}
-        </span>
-      )}
-      {length > 0 && (
-        <span className="albumDetails-meta-minutes">
-          {length === 1 ? `${length} minute` : `${length} minutes`}
         </span>
       )}
     </span>

@@ -81,7 +81,7 @@ class Home extends React.Component<Props, State> {
       createdAt: firebase.serverValue.TIMESTAMP,
       updatedAt: firebase.serverValue.TIMESTAMP,
       owner: authUser.uid,
-      title: "",
+      title: "Untitled",
       albums: {},
       fromMonth: from,
       toMonth: to

@@ -21,6 +21,7 @@ import Search from "../Search";
 import AlbumDetails from "../AlbumDetails";
 import Spinner from "../Spinner";
 import ChartHeader from "../ChartHeader";
+import Empty from "../Empty";
 
 export type Source = "bandcamp" | "spotify" | "discogs";
 
@@ -31,6 +32,7 @@ interface Props {
 }
 
 interface State {
+  isEditable: boolean;
   isLoading: boolean;
   error: any;
   albums: any;
@@ -42,6 +44,7 @@ interface State {
 }
 
 const INITIAL_STATE = {
+  isEditable: false,
   isLoading: false,
   error: "",
   albums: {},
@@ -63,7 +66,7 @@ class ChartBase extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    const { firebase, chartId } = this.props;
+    const { firebase, chartId, activeUserId } = this.props;
 
     this.setState({ isLoading: true });
 
@@ -81,6 +84,10 @@ class ChartBase extends React.Component<Props, State> {
         });
       } else {
         await this.setState({ ...INITIAL_STATE });
+      }
+
+      if (chart.owner === activeUserId) {
+        await this.setState({ isEditable: true });
       }
     });
 
@@ -246,7 +253,7 @@ class ChartBase extends React.Component<Props, State> {
 
   renderDetails = (day: Date) => {
     const { chartId } = this.props;
-    const { isDetailExpanded } = this.state;
+    const { isDetailExpanded, isEditable } = this.state;
 
     return (
       <div className="detail-pane">
@@ -262,7 +269,12 @@ class ChartBase extends React.Component<Props, State> {
           >
             <FiArrowLeft />
           </button>
-          <div className="current-day-date">
+          <div
+            className="current-day-date"
+            onClick={() =>
+              this.setState({ isDetailExpanded: !isDetailExpanded })
+            }
+          >
             <time dateTime={format(day, "yyyy-MM-dd")}>
               {format(day, "EEE MMM d")}
             </time>
@@ -282,6 +294,7 @@ class ChartBase extends React.Component<Props, State> {
         <div className="detail-pane-contents">
           {this.getAlbumInfoForDay(day) ? (
             <AlbumDetails
+              isEditable={isEditable}
               chartId={chartId}
               title={this.getAlbumInfoForDay(day).title}
               artist={this.getAlbumInfoForDay(day).artist}
@@ -293,8 +306,10 @@ class ChartBase extends React.Component<Props, State> {
               uri={this.getAlbumInfoForDay(day).uri}
               day={day}
             />
-          ) : (
+          ) : isEditable ? (
             <Search selectedDay={day} chartId={chartId} />
+          ) : (
+            <Empty title="No album for this day" />
           )}
         </div>
       </div>

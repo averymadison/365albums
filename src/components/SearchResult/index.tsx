@@ -7,21 +7,12 @@ export interface Props {
   title: string;
   artist: string;
   releaseDate: Date;
-  length?: number;
   tracks?: number;
   onClick: () => void;
 }
 
 const SearchResult = (props: Props) => {
-  const {
-    releaseDate,
-    tracks,
-    length,
-    title,
-    artist,
-    imageUrl,
-    onClick
-  } = props;
+  const { releaseDate, tracks, title, artist, imageUrl, onClick } = props;
 
   return (
     <button onClick={onClick} className="search-result">
@@ -33,11 +24,7 @@ const SearchResult = (props: Props) => {
       <span className="search-result-contents">
         <strong className="search-result-album">{title}</strong>
         <span className="search-result-artist">{artist}</span>
-        <AlbumMetadata
-          releaseDate={releaseDate}
-          tracks={tracks!}
-          length={length!}
-        />
+        <AlbumMetadata releaseDate={releaseDate} tracks={tracks!} />
       </span>
     </button>
   );

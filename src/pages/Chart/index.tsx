@@ -3,6 +3,7 @@ import { RouteComponentProps } from "react-router";
 import Chart from "../../components/Chart";
 import Firebase, { withFirebase } from "../../components/Firebase";
 import Spinner from "../../components/Spinner";
+import Empty from "../../components/Empty";
 
 interface Props {
   firebase: Firebase;
@@ -10,6 +11,7 @@ interface Props {
 
 interface State {
   isLoading: boolean;
+  activeUserId: string | null;
   activeChartId: string | null;
 }
 
@@ -26,26 +28,37 @@ class ChartPage extends React.Component<
 
     this.state = {
       isLoading: true,
+      activeUserId: null,
       activeChartId: this.props.match.params.id
     };
   }
 
   componentDidMount() {
+    const { firebase } = this.props;
+
     this.setState({
-      activeChartId: this.props.match.params.id,
-      isLoading: false
+      activeChartId: this.props.match.params.id
+    });
+
+    firebase.auth.onAuthStateChanged(async currentUser => {
+      if (currentUser) {
+        await this.setState({
+          activeUserId: currentUser.uid,
+          isLoading: false
+        });
+      }
     });
   }
 
   render() {
-    const { activeChartId, isLoading } = this.state;
+    const { activeChartId, isLoading, activeUserId } = this.state;
 
     return isLoading ? (
       <Spinner />
     ) : !activeChartId ? (
-      <div>No chart found</div>
+      <Empty title="No chart found" />
     ) : (
-      <Chart chartId={activeChartId} />
+      <Chart chartId={activeChartId} activeUserId={activeUserId} />
     );
   }
 }
