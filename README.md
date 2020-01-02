@@ -1,12 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## To-Do
-
-- Fix Typescript typings
-- Speed testing / Lighthouse
-- Add Buy Me A Coffee link
-- Keyboard support, focus states for calendar
-
 ## Available Scripts
 
 In the project directory, you can run:
