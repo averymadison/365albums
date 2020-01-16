@@ -1,18 +1,5 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## To-Do
-
-- Add development .env, prod .env file — manage email confirmation redirect differently
-- Fix Typescript typings
-- Test test test
-- Security rules security rules security rules
-- Update manifest with new icons
-- Favicon
-- Speed testing / Lighthouse
-- Add analytics events
-- Add Buy Me A Coffee link
-- Keyboard support, focus states for calendar
-
 ## Available Scripts
 
 In the project directory, you can run:

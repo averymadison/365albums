@@ -1,10 +1,10 @@
-import React from "react";
-import { compose } from "recompose";
-import { ResetPasswordForm } from "../ResetPassword";
-import ChangePasswordForm from "./ChangePassword";
-import LoginManagement from "./LoginManagement";
-import SignOutButton from "../../components/SignOutButton";
-import { AuthUserContext, withPermissions } from "../../components/Session";
+import React from 'react';
+import { compose } from 'recompose';
+import { ResetPasswordForm } from '../ResetPassword';
+import ChangePasswordForm from './ChangePassword';
+import LoginManagement from './LoginManagement';
+import SignOutButton from '../../components/SignOutButton';
+import { AuthUserContext, withPermissions } from '../../components/Session';
 
 const Settings = () => (
   <AuthUserContext.Consumer>
