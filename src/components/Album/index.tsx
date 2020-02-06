@@ -1,7 +1,7 @@
-import classNames from "classnames";
-import React from "react";
-import { FiMusic } from "react-icons/fi";
-import "./album.css";
+import classNames from 'classnames';
+import React from 'react';
+import { FiMusic } from 'react-icons/fi';
+import './album.css';
 
 export interface Props {
   src: string | null;
@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const Album = ({ src, alt, isAlwaysSquare }: Props) => {
-  const classname = classNames("album", { square: isAlwaysSquare });
+  const classname = classNames('album', { square: isAlwaysSquare });
 
   return (
     <div className={classname}>

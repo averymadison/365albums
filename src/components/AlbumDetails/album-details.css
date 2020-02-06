@@ -4,6 +4,29 @@
   flex: 1;
 }
 
+.current-day {
+  font-family: input-mono-narrow, monospace;
+  font-weight: 400;
+  font-style: normal;
+  height: 4em;
+  flex-shrink: 0;
+  padding: 0 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.current-day-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.current-day-date span {
+  color: var(--text-light);
+  font-size: 0.8em;
+}
+
 .albumDetails-content {
   padding: 1.5em;
 }
@@ -42,8 +65,16 @@
   font-weight: 600;
 }
 
+.albumDetails-buttons .button:not(.icon-button),
 .albumDetails-buttons .button:not(.icon-button):hover {
   color: #fff;
+}
+
+.albumImage {
+  margin: 0 1.5em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  box-shadow: var(--shadow-small);
 }
 
 .button-bandcamp {

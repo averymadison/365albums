@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import {
   format,
   differenceInCalendarMonths,
-  isPast,
   subDays,
   addDays,
   isWithinInterval,
@@ -97,8 +96,8 @@ class ChartBase extends React.Component<Props, State> {
       if (chart) {
         this.setState({
           selectedDay: this.isTodayInRange
-            ? parse(chart.fromMonth, 'yyyy-M', new Date())
-            : new Date()
+            ? new Date()
+            : parse(chart.fromMonth, 'yyyy-M', new Date())
         });
       }
     });
@@ -187,9 +186,7 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   renderDay = (day: Date) => {
-    const classname = classNames('dayContents', {
-      isPast: isPast(day.setHours(23, 59, 59))
-    });
+    const classname = classNames('dayContents');
 
     return (
       <div className={classname}>
@@ -305,6 +302,7 @@ class ChartBase extends React.Component<Props, State> {
               source={this.getAlbumInfoForDay(day).source}
               uri={this.getAlbumInfoForDay(day).uri}
               day={day}
+              isListened={this.getAlbumInfoForDay(day).isListened}
             />
           ) : isEditable ? (
             <Search selectedDay={day} chartId={chartId} />

@@ -1,11 +1,11 @@
-import React from "react";
-import "./album-details.css";
-import { Source } from "../Chart";
-import Album from "../Album";
-import Firebase, { withFirebase } from "../Firebase";
-import { FiTrash } from "react-icons/fi";
-import { format } from "date-fns";
-import AlbumMetadata from "../AlbumMetadata";
+import React from 'react';
+import './album-details.css';
+import { Source } from '../Chart';
+import Album from '../Album';
+import Firebase, { withFirebase } from '../Firebase';
+import { FiCheckCircle, FiCircle, FiTrash } from 'react-icons/fi';
+import { format } from 'date-fns';
+import AlbumMetadata from '../AlbumMetadata';
 
 export interface Props {
   firebase: Firebase;
@@ -19,6 +19,7 @@ export interface Props {
   source: Source;
   day: Date;
   isEditable: boolean;
+  isListened: boolean;
 }
 
 const AlbumDetails = (props: Props) => {
@@ -31,12 +32,24 @@ const AlbumDetails = (props: Props) => {
     tracks,
     source,
     day,
-    isEditable
+    isEditable,
+    isListened
   } = props;
+
+  const onToggleListenedState = (day: Date) => {
+    const { firebase, chartId, isListened } = props;
+    const dateAsString = format(day, 'yyyy-MM-dd');
+    firebase
+      .chart(chartId)
+      .child(`albums/${dateAsString}`)
+      .update({
+        isListened: !isListened
+      });
+  };
 
   const onDeleteAlbum = (day: Date) => {
     const { firebase, chartId } = props;
-    const dateAsString = format(day, "yyyy-MM-dd");
+    const dateAsString = format(day, 'yyyy-MM-dd');
     firebase
       .chart(chartId)
       .child(`albums/${dateAsString}`)
@@ -54,6 +67,14 @@ const AlbumDetails = (props: Props) => {
         <AlbumMetadata releaseDate={releaseDate} tracks={tracks} />
       </div>
       <div className="albumDetails-buttons">
+        {isEditable && (
+          <button
+            className="button icon-button button-large"
+            onClick={() => onToggleListenedState(day)}
+          >
+            {isListened ? <FiCheckCircle /> : <FiCircle />}
+          </button>
+        )}
         {source && (
           <a
             className={`button button-fill button-large button-${source}`}
