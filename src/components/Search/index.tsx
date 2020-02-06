@@ -77,6 +77,7 @@ class SearchBase extends React.Component<Props, State> {
   };
 
   onToggleSource = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { firebase } = this.props;
     this.setState({ [event.target.name]: event.target.value } as Pick<
       State,
       any
