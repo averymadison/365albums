@@ -2,7 +2,7 @@
 import * as functions from 'firebase-functions';
 const cors = require('cors')({ origin: true });
 const bandcamp = require('bandcamp-scraper');
-import spotifyWebApi from 'spotify-web-api-node';
+import spotifyWebApi = require('spotify-web-api-node');
 const discogsWebApi = require('disconnect').Client;
 
 const spotify = new spotifyWebApi({
