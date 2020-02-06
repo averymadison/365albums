@@ -1,11 +1,11 @@
-import React from "react";
-import Firebase, { withFirebase } from "../Firebase";
-import { format, parse } from "date-fns";
-import "./search.css";
-import SearchResult from "../SearchResult";
-import { Source } from "../Chart";
-import Spinner from "../Spinner";
-import Empty from "../Empty";
+import React from 'react';
+import Firebase, { withFirebase } from '../Firebase';
+import { format, parse } from 'date-fns';
+import './search.css';
+import SearchResult from '../SearchResult';
+import { Source } from '../Chart';
+import Spinner from '../Spinner';
+import Empty from '../Empty';
 
 interface Props {
   firebase: Firebase;
@@ -21,10 +21,10 @@ interface State {
 }
 
 const INITIAL_STATE = {
-  searchQuery: "",
+  searchQuery: '',
   searchResults: null,
   isSearching: false,
-  source: "spotify" as Source
+  source: 'spotify' as Source
 };
 
 class SearchBase extends React.Component<Props, State> {
@@ -48,7 +48,7 @@ class SearchBase extends React.Component<Props, State> {
   ) => {
     const { firebase, chartId, selectedDay } = this.props;
 
-    const dateAsString = format(selectedDay!, "yyyy-MM-dd");
+    const dateAsString = format(selectedDay!, 'yyyy-MM-dd');
 
     firebase
       .chart(chartId)
@@ -106,7 +106,7 @@ class SearchBase extends React.Component<Props, State> {
   // denote different resolutions of image. _5 is higher quality than _7 but
   // the bandcamp-scraper API only returns _7.
   getHigherResBandcampAlbumArt = (imageUrl: string) => {
-    return imageUrl.replace("_7", "_5");
+    return imageUrl.replace('_7', '_5');
   };
 
   renderSearchResults = (searchResults: []) => {
@@ -114,22 +114,22 @@ class SearchBase extends React.Component<Props, State> {
 
     return !searchResults.length ? (
       <Empty
-        title="No results"
-        description="Check your spelling and try again."
+        title="Couldn’t find anything"
+        description="Try searching again."
       />
     ) : (
       <div className="search-results">
-        {source === "bandcamp"
+        {source === 'bandcamp'
           ? searchResults.map((album: any, i) => (
               <SearchResult
                 key={i}
                 onClick={() => {
                   this.onCreateAlbum(
-                    "bandcamp",
+                    'bandcamp',
                     album.url,
                     album.name,
                     album.artist,
-                    parse(album.releaseDate, "dd MMMM yyyy", new Date()),
+                    parse(album.releaseDate, 'dd MMMM yyyy', new Date()),
                     album.imageUrl,
                     this.getHigherResBandcampAlbumArt(album.imageUrl),
                     album.numTracks
@@ -142,21 +142,21 @@ class SearchBase extends React.Component<Props, State> {
                 tracks={album.numTracks}
                 releaseDate={parse(
                   album.releaseDate,
-                  "dd MMMM yyyy",
+                  'dd MMMM yyyy',
                   new Date()
                 )}
               />
             ))
-          : source === "spotify"
+          : source === 'spotify'
           ? searchResults.map((album: any, i) => (
               <SearchResult
                 key={i}
                 onClick={() => {
                   this.onCreateAlbum(
-                    "spotify",
+                    'spotify',
                     album.uri,
                     album.name,
-                    album.artists.map((artist: any) => artist.name).join(", "),
+                    album.artists.map((artist: any) => artist.name).join(', '),
                     new Date(album.release_date),
                     album.images[1] && album.images[1].url, // 300px image
                     album.images[0] && album.images[0].url, // 640px image
@@ -166,23 +166,23 @@ class SearchBase extends React.Component<Props, State> {
                 }}
                 artist={album.artists
                   .map((artist: any) => artist.name)
-                  .join(", ")}
+                  .join(', ')}
                 title={album.name}
                 imageUrl={album.images[1] && album.images[1].url}
                 tracks={album.total_tracks}
                 releaseDate={new Date(album.release_date)}
               />
             ))
-          : source === "discogs"
+          : source === 'discogs'
           ? searchResults.map((album: any, i) => (
               <SearchResult
                 key={i}
                 onClick={() => {
                   this.onCreateAlbum(
-                    "discogs",
+                    'discogs',
                     album.resource_url,
-                    album.title.split(" - ")[1],
-                    album.title.split(" - ")[0],
+                    album.title.split(' - ')[1],
+                    album.title.split(' - ')[0],
                     new Date(album.year),
                     album.thumb,
                     album.cover_image,
@@ -190,8 +190,8 @@ class SearchBase extends React.Component<Props, State> {
                   );
                   this.setState({ ...INITIAL_STATE });
                 }}
-                artist={album.title.split(" - ")[0]}
-                title={album.title.split(" - ")[1]}
+                artist={album.title.split(' - ')[0]}
+                title={album.title.split(' - ')[1]}
                 imageUrl={album.thumb}
                 releaseDate={new Date(album.year)}
               />
@@ -220,7 +220,7 @@ class SearchBase extends React.Component<Props, State> {
                 type="radio"
                 name="source"
                 value="spotify"
-                checked={source === "spotify"}
+                checked={source === 'spotify'}
                 onChange={this.onToggleSource}
               />
               <div className="radio-button">Spotify</div>
@@ -230,7 +230,7 @@ class SearchBase extends React.Component<Props, State> {
                 type="radio"
                 name="source"
                 value="bandcamp"
-                checked={source === "bandcamp"}
+                checked={source === 'bandcamp'}
                 onChange={this.onToggleSource}
               />
               <div className="radio-button">Bandcamp</div>
@@ -240,7 +240,7 @@ class SearchBase extends React.Component<Props, State> {
                 type="radio"
                 name="source"
                 value="discogs"
-                checked={source === "discogs"}
+                checked={source === 'discogs'}
                 onChange={this.onToggleSource}
               />
               <div className="radio-button">Discogs</div>
