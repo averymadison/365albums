@@ -1,6 +1,7 @@
 .app {
   overflow: hidden;
   display: flex;
+  flex-direction: column-reverse;
   position: fixed;
   top: 0;
   left: 0;
@@ -13,10 +14,4 @@
   overflow-y: auto;
   flex: 1;
   position: relative;
-}
-
-@media screen and (max-width: 800px) {
-  .app {
-    flex-direction: column-reverse;
-  }
 }

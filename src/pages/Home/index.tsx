@@ -1,10 +1,10 @@
-import React from "react";
-import { RouteComponentProps } from "react-router-dom";
-import { compose } from "recompose";
-import { withPermissions, AuthUserContext } from "../../components/Session";
-import Chart from "../../components/Chart";
-import Firebase from "../../components/Firebase";
-import Spinner from "../../components/Spinner";
+import React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
+import { compose } from 'recompose';
+import { withPermissions, AuthUserContext } from '../../components/Session';
+import Chart from '../../components/Chart';
+import Firebase from '../../components/Firebase';
+import Spinner from '../../components/Spinner';
 
 interface Props extends RouteComponentProps<{}> {
   firebase: Firebase;
@@ -50,7 +50,7 @@ class Home extends React.Component<Props, State> {
 
         await firebase.db
           .ref(`users/${this.state.activeUserId}/primaryChart`)
-          .on("value", snapshot => {
+          .on('value', snapshot => {
             const primaryChartId = snapshot.val();
 
             this.setState({
@@ -81,7 +81,7 @@ class Home extends React.Component<Props, State> {
       createdAt: firebase.serverValue.TIMESTAMP,
       updatedAt: firebase.serverValue.TIMESTAMP,
       owner: authUser.uid,
-      title: "Untitled",
+      title: 'Untitled',
       albums: {},
       fromMonth: from,
       toMonth: to

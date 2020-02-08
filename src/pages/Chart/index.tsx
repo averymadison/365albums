@@ -1,9 +1,9 @@
-import React from "react";
-import { RouteComponentProps } from "react-router";
-import Chart from "../../components/Chart";
-import Firebase, { withFirebase } from "../../components/Firebase";
-import Spinner from "../../components/Spinner";
-import Empty from "../../components/Empty";
+import React from 'react';
+import { RouteComponentProps } from 'react-router';
+import Chart from '../../components/Chart';
+import Firebase, { withFirebase } from '../../components/Firebase';
+import Spinner from '../../components/Spinner';
+import Empty from '../../components/Empty';
 
 interface Props {
   firebase: Firebase;

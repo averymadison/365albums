@@ -1,6 +1,5 @@
 .chart-header {
   padding: 2em 1.5em;
-  border-bottom: 1px solid var(--border);
 }
 
 .chart-title, .chart-description {

@@ -1,7 +1,7 @@
-import React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
-import "./app.css";
-import * as ROUTES from "./constants/routes";
+import React from 'react';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import './app.css';
+import * as ROUTES from './constants/routes';
 import {
   Admin,
   Chart,
@@ -12,9 +12,9 @@ import {
   Settings,
   SignIn,
   SignUp
-} from "./pages";
-import Nav from "./components/Nav";
-import { withAuthentication } from "./components/Session";
+} from './pages';
+import Nav from './components/Nav';
+import { withAuthentication } from './components/Session';
 
 const App = () => (
   <Router>

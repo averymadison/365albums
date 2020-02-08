@@ -221,7 +221,14 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   renderCalendar = () => {
-    const { selectedDay, toMonth, fromMonth, isDetailExpanded } = this.state;
+    const { chartId } = this.props;
+    const {
+      selectedDay,
+      toMonth,
+      fromMonth,
+      isDetailExpanded,
+      isEditable
+    } = this.state;
 
     const monthRange = differenceInCalendarMonths(toMonth, fromMonth) + 1;
     const classname = classNames('calendar', {
@@ -230,20 +237,23 @@ class ChartBase extends React.Component<Props, State> {
 
     return (
       <div className={classname}>
+        <div className="calendar-content">
+          <ChartHeader chartId={chartId} isEditable={isEditable} />
+          <DayPicker
+            fromMonth={fromMonth}
+            toMonth={toMonth}
+            initialMonth={fromMonth}
+            ref={this.calendarRef}
+            numberOfMonths={monthRange}
+            onDayClick={this.onDayClick}
+            selectedDays={selectedDay}
+            renderDay={this.renderDay}
+            captionElement={this.renderMonthHeader}
+            showWeekDays={false}
+            navbarElement={() => null}
+          />
+        </div>
         {this.renderDetails(selectedDay)}
-        <DayPicker
-          fromMonth={fromMonth}
-          toMonth={toMonth}
-          initialMonth={fromMonth}
-          ref={this.calendarRef}
-          numberOfMonths={monthRange}
-          onDayClick={this.onDayClick}
-          selectedDays={selectedDay}
-          renderDay={this.renderDay}
-          captionElement={this.renderMonthHeader}
-          showWeekDays={false}
-          navbarElement={() => null}
-        />
       </div>
     );
   };
@@ -315,18 +325,14 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   render() {
-    const { chartId } = this.props;
-    const { error, isLoading, isEditable } = this.state;
+    const { error, isLoading } = this.state;
 
     return error ? (
       <div>{error}</div>
     ) : isLoading ? (
       <Spinner />
     ) : (
-      <React.Fragment>
-        <ChartHeader chartId={chartId} isEditable={isEditable} />
-        {this.renderCalendar()}
-      </React.Fragment>
+      this.renderCalendar()
     );
   }
 }

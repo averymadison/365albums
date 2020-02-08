@@ -3,6 +3,10 @@
   margin: 0 auto;
 }
 
+.calendar-content {
+  flex: 1;
+}
+
 .DayPicker {
   flex: 1;
 }
@@ -117,14 +121,12 @@
   transition: 0.1s ease-out;
   display: flex;
   flex-direction: column;
-  box-shadow: var(--shadow-large);
-  border-radius: 1em;
-  margin: 1.5em 0 auto 1.5em;
+  border-left: 1px solid var(--border);
   overflow: hidden;
   z-index: 5;
   position: sticky;
-  top: 1.5em;
-  max-height: calc(100vh - 3em);
+  top: 0;
+  max-height: 100vh;
   max-width: 420px;
   flex: 1;
 }
@@ -274,8 +276,8 @@
   .detail-pane {
     position: fixed;
     margin: 0 auto;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
     top: 0;
     left: 0;
     right: 0;
@@ -283,6 +285,8 @@
     transition: 0.2s ease-out;
     height: calc(100vh - var(--nav-width));
     transform: translate3d(0, calc(100% - var(--nav-width) - 24px), 0);
+    border: none;
+    box-shadow: var(--shadow-large);
   }
 
   .calendar.detailExpanded .DayPicker-Months {
