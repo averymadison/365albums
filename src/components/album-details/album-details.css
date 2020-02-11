@@ -1,0 +1,102 @@
+.album-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.current-day {
+  font-family: input-mono-narrow, monospace;
+  font-weight: 400;
+  font-style: normal;
+  height: 4em;
+  flex-shrink: 0;
+  padding: 0 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.current-day-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.current-day-date span {
+  color: var(--text-light);
+  font-size: 0.8em;
+}
+
+.albumDetails-content {
+  padding: 1.5em;
+}
+
+.albumDetails-title {
+  margin: 0;
+  font-size: 2.5em;
+  line-height: 1;
+  font-family: titling-gothic-fb-condensed, sans-serif;
+  font-weight: 400;
+}
+
+.albumDetails-artist {
+  font-size: 1.5em;
+  margin: 0.4em 0 1em;
+  font-family: titling-gothic-fb-wide, sans-serif;
+  font-weight: 300;
+  font-style: normal;
+}
+
+.albumDetails-buttons {
+  padding: 0 1.5em 1.5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: flex-end;
+}
+
+.albumDetails-buttons > * + * {
+  margin-left: 0.5em;
+}
+
+.albumDetails-buttons .button:not(.icon-button) {
+  border-radius: 4em;
+  border: none;
+  font-weight: 600;
+}
+
+.albumDetails-buttons .button:not(.icon-button),
+.albumDetails-buttons .button:not(.icon-button):hover {
+  color: #fff;
+}
+
+.albumImage {
+  margin: 0 1.5em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  box-shadow: var(--shadow-small);
+}
+
+.button-bandcamp {
+  background-color: #629aa9 !important;
+}
+
+.button-bandcamp:hover {
+  background-color: #598a97 !important;
+}
+
+.button-spotify {
+  background-color: #1db954 !important;
+}
+
+.button-spotify:hover {
+  background-color: #19d65b !important;
+}
+
+.button-discogs {
+  background-color: #2f2f2f !important;
+}
+
+.button-discogs:hover {
+  background-color: #333 !important;
+}
