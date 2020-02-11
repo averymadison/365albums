@@ -1,9 +1,9 @@
 import './chart-header.css';
 
 import Firebase, { withFirebase } from '../firebase';
-import { format, formatDistanceToNow } from 'date-fns';
 
 import React from 'react';
+import { formatDistanceToNow } from 'date-fns';
 
 interface Props {
   firebase: Firebase;

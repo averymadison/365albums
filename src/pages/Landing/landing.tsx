@@ -9,7 +9,7 @@ import React from 'react';
 
 const Landing = () => (
   <div className="landing">
-    <h1>365albums</h1>
+    <h1>365 Albums</h1>
     <p>An album a day keeps the ennui away</p>
     <AuthUserContext.Consumer>
       {authUser =>
