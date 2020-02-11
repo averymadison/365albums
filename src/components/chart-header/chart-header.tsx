@@ -1,7 +1,11 @@
 import './chart-header.css';
 
+import * as ROUTES from '../../constants/routes';
+
 import Firebase, { withFirebase } from '../firebase';
 
+import { FiSettings } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import React from 'react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -127,6 +131,9 @@ class ChartHeaderBase extends React.Component<Props, State> {
         <div className="chart-header-meta">
           {updatedAt && <span>{`Edited ${updatedAtHumanReadable} ago`}</span>}
         </div>
+        <Link className="button icon-button" to={ROUTES.SETTINGS}>
+          <FiSettings />
+        </Link>
       </div>
     );
   }

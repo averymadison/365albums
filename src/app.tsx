@@ -15,14 +15,12 @@ import {
 } from './pages';
 import { Route, BrowserRouter as Router } from 'react-router-dom';
 
-import { Nav } from './components';
 import React from 'react';
 import { withAuthentication } from './components/session';
 
 const App = () => (
   <Router>
     <div className="app">
-      <Nav />
       <main className="app-content">
         <Route exact path={ROUTES.LANDING} component={Landing} />
         <Route path={ROUTES.HOME} component={Home} />

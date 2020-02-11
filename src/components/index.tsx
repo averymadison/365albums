@@ -5,7 +5,6 @@ import Chart from './chart/chart';
 import ChartHeader from './chart-header/chart-header';
 import Empty from './empty/empty';
 import Logo from './logo/logo';
-import Nav from './nav/nav';
 import Search from './search/search';
 import SearchResult from './search-result/search-result';
 import SignOutButton from './sign-out-button/sign-out-button';
@@ -19,7 +18,6 @@ export {
   ChartHeader,
   Empty,
   Logo,
-  Nav,
   Search,
   SearchResult,
   SignOutButton,

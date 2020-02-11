@@ -71,10 +71,12 @@
 }
 
 .albumImage {
-  margin: 0 1.5em;
+  margin: 0 auto;
   border-radius: 0.5em;
   overflow: hidden;
   box-shadow: var(--shadow-small);
+  width: calc(100% - 3em);
+  max-width: 380px;
 }
 
 .button-bandcamp {

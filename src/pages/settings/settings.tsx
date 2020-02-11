@@ -1,6 +1,10 @@
+import * as ROUTES from '../../constants/routes';
+
 import { AuthUserContext, withPermissions } from '../../components/session';
 
 import ChangePasswordForm from './change-password';
+import { FiArrowLeft } from 'react-icons/fi';
+import { Link } from 'react-router-dom';
 import LoginManagement from './login-manager';
 import React from 'react';
 import { ResetPasswordForm } from '../reset-password/reset-password';
@@ -12,6 +16,9 @@ const Settings = () => (
     {(authUser: any) => (
       <div className="sign-in-page">
         <div className="container">
+          <Link className="button icon-button" to={ROUTES.HOME}>
+            <FiArrowLeft />
+          </Link>
           <h1>Settings</h1>
           <p>{authUser.email}</p>
           <div className="sign-in-form">

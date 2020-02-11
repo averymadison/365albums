@@ -160,13 +160,10 @@ button svg {
 }
 
 .container {
-  background-color: var(--bg);
   overflow-wrap: break-word;
   word-break: break-word;
   transition: 0.1s ease-out;
-  box-shadow: var(--shadow-large);
-  border-radius: 1em;
-  margin: 1.5em auto;
+  margin: 0 auto;
   width: 340px;
   padding: 1.5em;
 }
