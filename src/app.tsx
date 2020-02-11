@@ -1,7 +1,7 @@
-import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
 import './app.css';
+
 import * as ROUTES from './constants/routes';
+
 import {
   Admin,
   Chart,
@@ -13,8 +13,11 @@ import {
   SignIn,
   SignUp
 } from './pages';
-import Nav from './components/Nav';
-import { withAuthentication } from './components/Session';
+import { Route, BrowserRouter as Router } from 'react-router-dom';
+
+import { Nav } from './components';
+import React from 'react';
+import { withAuthentication } from './components/session';
 
 const App = () => (
   <Router>
