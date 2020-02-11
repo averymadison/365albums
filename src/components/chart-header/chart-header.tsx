@@ -15,7 +15,6 @@ interface State {
   isEditing: boolean;
   title: string;
   description: string;
-  createdAt: string | null;
   updatedAt: string | null;
 }
 
@@ -23,7 +22,6 @@ const INITIAL_STATE = {
   isEditing: false,
   title: '',
   description: '',
-  createdAt: null,
   updatedAt: null
 };
 
@@ -46,7 +44,6 @@ class ChartHeaderBase extends React.Component<Props, State> {
         this.setState({
           title: chart.title ? chart.title : '',
           description: chart.description ? chart.description : '',
-          createdAt: chart.createdAt ? chart.createdAt : null,
           updatedAt: chart.updatedAt ? chart.updatedAt : null
         });
       } else {
@@ -86,9 +83,8 @@ class ChartHeaderBase extends React.Component<Props, State> {
   };
 
   render() {
-    const { isEditing, title, description, updatedAt, createdAt } = this.state;
+    const { isEditing, title, description, updatedAt } = this.state;
     const updatedAtHumanReadable = formatDistanceToNow(new Date(updatedAt!));
-    const createdAtHumanReadable = format(new Date(createdAt!), 'MMM d, yyyy');
 
     return (
       <div className="chart-header">
@@ -129,10 +125,7 @@ class ChartHeaderBase extends React.Component<Props, State> {
           </form>
         )}
         <div className="chart-header-meta">
-          {createdAt && <span>{`Created ${createdAtHumanReadable}`}</span>}
-          {updatedAt && (
-            <span>{`Last edited ${updatedAtHumanReadable} ago`}</span>
-          )}
+          {updatedAt && <span>{`Edited ${updatedAtHumanReadable} ago`}</span>}
         </div>
       </div>
     );
