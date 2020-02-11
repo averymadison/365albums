@@ -1,7 +1,7 @@
 .album {
   width: 100%;
   position: relative;
-  background: var(--bg);
+  background: var(--bg-alt);
 }
 
 .albumContent {
