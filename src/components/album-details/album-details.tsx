@@ -58,7 +58,7 @@ const AlbumDetails = (props: Props) => {
   };
 
   return (
-    <div className="album-details">
+    <React.Fragment>
       <div className="albumImage">
         <Album src={albumUrl} alt={title} />
       </div>
@@ -95,7 +95,7 @@ const AlbumDetails = (props: Props) => {
           </button>
         )}
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

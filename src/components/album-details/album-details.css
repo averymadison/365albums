@@ -1,9 +1,3 @@
-.album-details {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
 .current-day {
   font-family: input-mono-narrow, monospace;
   font-weight: 400;
@@ -53,6 +47,7 @@
   align-items: center;
   justify-content: space-between;
   justify-self: flex-end;
+  margin-top: auto;
 }
 
 .albumDetails-buttons > * + * {
@@ -77,6 +72,7 @@
   box-shadow: var(--shadow-small);
   width: calc(100% - 3em);
   max-width: 380px;
+  flex-shrink: 0;
 }
 
 .button-bandcamp {
