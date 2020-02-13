@@ -1,5 +1,4 @@
 import React from "react";
-import { Search } from "..";
 import { withFirebase } from "../firebase";
 
 const SignOutButton = ({ firebase }: any) => (
