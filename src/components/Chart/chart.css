@@ -1,7 +1,6 @@
 .calendar {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1em;
 }
 
 .DayPicker {
@@ -211,13 +210,19 @@
   opacity: 1;
 }
 
-@media screen and (max-width: 500px) {
-  .dayDetails {
-    display: none;
-  }
-
+@media screen and (max-width: 800px) {
   .detail-pane {
     flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  .detail-pane-contents {
+    margin-top: 1.5em;
+    margin-left: 0;
+  }
+
+  .dayDetails {
+    display: none;
   }
 }
 
