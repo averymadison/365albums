@@ -1,6 +1,5 @@
 import './album.css';
 
-import { FiMusic } from 'react-icons/fi';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -12,11 +11,12 @@ export interface Props {
 
 const Album = ({ src, alt, isAlwaysSquare }: Props) => {
   const classname = classNames('album', { square: isAlwaysSquare });
+  const albumSrc = src ? src : undefined;
 
   return (
     <div className={classname}>
       <div className="albumContent">
-        {src ? <img src={src} alt={alt} /> : <FiMusic />}
+        <img src={albumSrc} alt={alt} />
       </div>
     </div>
   );

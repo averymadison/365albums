@@ -1,23 +1,20 @@
 import './chart.css';
 
 import { Album, AlbumDetails, ChartHeader, Empty, Search, Spinner } from '..';
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import Firebase, { withFirebase } from '../firebase';
 import {
   addDays,
   differenceInCalendarMonths,
   format,
   getWeekOfMonth,
-  isAfter,
-  isBefore,
   isEqual,
   isSameMonth,
   isWithinInterval,
-  lastDayOfMonth,
   parse,
   subDays
 } from 'date-fns';
 
+import DateSwitcher from '../date-switcher/date-switcher';
 import DayPicker from 'react-day-picker';
 import React from 'react';
 import classNames from 'classnames';
@@ -144,16 +141,6 @@ class ChartBase extends React.Component<Props, State> {
     });
   };
 
-  isPreviousDayInRange = () => {
-    const { selectedDay, fromMonth } = this.state;
-    return isBefore(subDays(selectedDay!, 1), fromMonth);
-  };
-
-  isNextDayInRange = () => {
-    const { selectedDay, toMonth } = this.state;
-    return isAfter(selectedDay!, lastDayOfMonth(toMonth));
-  };
-
   getAlbumInfoForDay = (day: Date) => {
     const { albums } = this.state;
     const dateAsString = format(day, 'yyyy-MM-dd');
@@ -251,54 +238,37 @@ class ChartBase extends React.Component<Props, State> {
     );
   };
 
-  renderDateSwitcher = (day: Date) => {
-    return (
-      <div className="current-day">
-        <button
-          className="button icon-button"
-          onClick={this.onPreviousDayClick}
-          disabled={this.isPreviousDayInRange()}
-        >
-          <FiArrowLeft />
-        </button>
-        <div className="current-day-date">
-          <time dateTime={format(day, 'yyyy-MM-dd')}>
-            {format(day, 'EEE MMM d')}
-          </time>
-          <span>
-            {`${format(day, 'DDD')} / 
-              ${format(day.getFullYear(), 'DDD')}`}
-          </span>
-        </div>
-        <button
-          className="button icon-button"
-          onClick={this.onNextDayClick}
-          disabled={this.isNextDayInRange()}
-        >
-          <FiArrowRight />
-        </button>
-      </div>
-    );
-  };
-
   renderDetails = (day: Date) => {
     const { chartId } = this.props;
-    const { isEditable } = this.state;
+    const { isEditable, fromMonth, toMonth } = this.state;
+
+    const albumInfoExistsForDay = this.getAlbumInfoForDay(day);
+    const albumSrc = albumInfoExistsForDay
+      ? this.getAlbumInfoForDay(day).artwork
+      : null;
 
     return (
       <div
         className="detail-pane"
-        style={{ gridRowStart: getWeekOfMonth(day) + 2 }}
+        style={{ gridRowStart: getweekofmonth(day) + 2, }}
       >
-        {this.renderDateSwitcher(day)}
+        <div className="albumImage">
+          <Album src={albumSrc} />
+        </div>
         <div className="detail-pane-contents">
-          {this.getAlbumInfoForDay(day) ? (
+          <DateSwitcher
+            day={day}
+            onNextDayClick={this.onNextDayClick}
+            onPreviousDayClick={this.onPreviousDayClick}
+            fromMonth={fromMonth}
+            toMonth={toMonth}
+          />
+          {albumInfoExistsForDay ? (
             <AlbumDetails
               isEditable={isEditable}
               chartId={chartId}
               title={this.getAlbumInfoForDay(day).title}
               artist={this.getAlbumInfoForDay(day).artist}
-              albumUrl={this.getAlbumInfoForDay(day).artwork}
               tracks={this.getAlbumInfoForDay(day).tracks}
               length={this.getAlbumInfoForDay(day).length}
               releaseDate={this.getAlbumInfoForDay(day).releaseDate}

@@ -1,7 +1,7 @@
 .calendar {
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1em;
-  max-width: 1200px;
 }
 
 .DayPicker {
@@ -20,17 +20,17 @@
 }
 
 .month-header {
-  grid-column-end: span 7;
-  text-align: center;
   position: sticky;
   top: 0;
-  padding: 1.5rem;
   z-index: 2;
+  grid-column-end: span 7;
   margin: 0;
+  padding: 1.5rem;
+  font-weight: 300;
   font-size: 1.5em;
   font-family: titling-gothic-fb-wide, sans-serif;
-  font-weight: 300;
   font-style: normal;
+  text-align: center;
 }
 
 .DayPicker-Months {
@@ -38,47 +38,70 @@
 }
 
 .DayPicker-Month {
-  user-select: none;
-  width: 100%;
-  scroll-snap-align: start;
-  margin-bottom: 2em;
   display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
   grid-template-rows: auto;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   gap: 1px;
+  width: 100%;
+  margin-bottom: 2em;
+  user-select: none;
+  scroll-snap-align: start;
 }
 
 .DayPicker-Weekday {
-  color: var(--text-light);
-  text-align: center;
-  font-size: 1em;
   display: flex;
   align-items: center;
   justify-self: center;
   height: 4em;
-  font-family: input-mono-narrow, monospace;
+  color: var(--text-light);
   font-weight: 400;
+  font-size: 1em;
+  font-family: input-mono-narrow, monospace;
   font-style: normal;
+  text-align: center;
 }
 
 .DayPicker-Weekday abbr[title] {
-  border-bottom: none;
   text-decoration: none;
+  border-bottom: none;
 }
 
 .DayPicker-Day {
   outline: none;
 }
 
-.dayContents {
-  cursor: pointer;
-  position: relative;
+.dayDetails {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 0.5em 0.5em 1em 0;
+  font-size: 0.8em;
   transition: 0.15s ease-out;
 }
 
+.dayContents {
+  position: relative;
+  cursor: pointer;
+  transition: 0.15s ease-out;
+}
+
+.dateBadge {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: flex-end;
+  width: 2em;
+  height: 2em;
+  margin-left: auto;
+  color: var(--text-light);
+  font-weight: 600;
+  border-radius: 50%;
+}
+
 .DayPicker-Day--today .dateBadge {
-  background-color: red;
   color: white;
+  background-color: red;
 }
 
 .DayPicker--interactionDisabled .DayPicker-Day,
@@ -87,17 +110,17 @@
   cursor: default;
 }
 
-.DayPicker-Day--selected .dayContents .album,
-.DayPicker-Day--selected .dayContents .dayDetails {
-  opacity: 0.4;
-}
-
 .DayPicker-Day .album {
   transition: 0.15s ease-out;
 }
 
 .DayPicker-Day--selected .album {
   transform: scale(0.8);
+}
+
+.DayPicker-Day--selected .dayContents .album,
+.DayPicker-Day--selected .dayContents .dayDetails {
+  opacity: 0.4;
 }
 
 .dayAlbum {
@@ -113,35 +136,21 @@
 }
 
 .detail-pane {
-  grid-column-end: span 7;
-  background-color: var(--bg-alt);
-  overflow-wrap: break-word;
-  word-break: break-word;
-  transition: 0.1s ease-out;
   display: flex;
-  flex-direction: column;
+  grid-column-end: span 7;
+  margin-bottom: 2em;
   padding: 2em;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  background-color: var(--bg-alt);
+  transition: 0.1s ease-out;
 }
 
 .detail-pane-contents {
+  display: flex;
   flex: 1;
-  display: flex;
   flex-direction: column;
-}
-
-.dateBadge {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2em;
-  height: 2em;
-  font-weight: 600;
-  border-radius: 50%;
-  z-index: 1;
-  justify-self: flex-end;
-  margin-left: auto;
-  font-weight: 600;
-  color: var(--text-light);
+  margin-left: 2em;
 }
 
 .daySelected {
@@ -152,27 +161,26 @@
 }
 
 .selectedDate {
-  top: 0;
   position: absolute;
-  font-weight: 600;
+  top: 0;
   width: 100%;
   padding-top: 100%;
+  font-weight: 300;
+  font-family: titling-gothic-fb-wide, sans-serif;
+  font-style: normal;
+  line-height: 1;
   transform: scale(1.6);
   opacity: 0;
   transition: 0.15s ease-out;
-  line-height: 1;
-  font-family: titling-gothic-fb-wide, sans-serif;
-  font-weight: 300;
-  font-style: normal;
   pointer-events: none;
 }
 
 .selectedDate-contents {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  left: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -180,18 +188,18 @@
 }
 
 .selectedDate time {
+  font-weight: 300;
   font-size: 2em;
+  font-family: titling-gothic-fb-wide, sans-serif;
+  font-style: normal;
   line-height: 1.4;
   letter-spacing: -0.05em;
-  font-family: titling-gothic-fb-wide, sans-serif;
-  font-weight: 300;
-  font-style: normal;
 }
 
 .selectedDate svg {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
 }
 
 .DayPicker-Day--today .selectedDate time {
@@ -203,38 +211,33 @@
   opacity: 1;
 }
 
-.dayDetails {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 0.5em 0.5em 1em 0;
-  font-size: 0.8em;
-  transition: 0.15s ease-out;
-}
-
 @media screen and (max-width: 500px) {
   .dayDetails {
     display: none;
+  }
+
+  .detail-pane {
+    flex-direction: column;
   }
 }
 
 .dayDetails__text {
   flex: 1;
   overflow: hidden;
-  font-family: titling-gothic-fb-condensed, sans-serif;
-  font-weight: 300;
   color: var(--text-light);
+  font-weight: 300;
+  font-family: titling-gothic-fb-condensed, sans-serif;
 }
 
 .dayDetails__text > * {
   width: 100%;
   overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
   letter-spacing: 0.02em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .dayDetails__title {
-  font-weight: 400;
   color: var(--text);
+  font-weight: 400;
 }

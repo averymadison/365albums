@@ -1,23 +1,23 @@
 .search-result {
-  background-color: transparent;
   display: flex;
   align-items: center;
-  list-style: none;
+  width: 100%;
   margin: 0;
   padding: 1em 1.5em;
-  cursor: pointer;
-  border: none;
+  color: var(--text-light);
   font-size: 0.8rem;
   text-align: left;
-  width: 100%;
-  color: var(--text-light);
+  list-style: none;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .search-result-album {
   color: var(--text);
+  font-weight: 400;
   font-size: 1.2rem;
   font-family: titling-gothic-fb-condensed, sans-serif;
-  font-weight: 400;
 }
 
 .search-result-artist {
@@ -33,11 +33,8 @@
 }
 
 .search-result-contents {
-  margin-left: 1em;
-}
-
-.search-result-contents {
-  flex: 1;
   display: flex;
+  flex: 1;
   flex-direction: column;
+  margin-left: 1em;
 }

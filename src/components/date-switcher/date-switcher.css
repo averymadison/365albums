@@ -1,0 +1,21 @@
+.date-switcher {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  margin-bottom: 1.5em;
+  font-weight: 400;
+  font-family: input-mono-narrow, monospace;
+  font-style: normal;
+}
+
+.date-switcher-date {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 1em;
+}
+
+.date-switcher-date span {
+  color: var(--text-light);
+  font-size: 0.8em;
+}

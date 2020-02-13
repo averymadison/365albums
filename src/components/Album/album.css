@@ -1,6 +1,6 @@
 .album {
-  width: 100%;
   position: relative;
+  width: 100%;
   background: var(--bg-alt);
 }
 
@@ -8,8 +8,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
   color: var(--border);
+  font-size: 2em;
 }
 
 .albumContent img {
@@ -24,7 +24,7 @@
 .album.square .albumContent {
   position: absolute;
   top: 0;
-  left: 0;
   right: 0;
   bottom: 0;
+  left: 0;
 }

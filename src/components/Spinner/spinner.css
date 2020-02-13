@@ -6,9 +6,9 @@
   height: 2em;
   margin-top: -1em;
   margin-left: -1em;
-  border-radius: 50%;
   border: 2px solid var(--border);
   border-top-color: var(--text);
+  border-radius: 50%;
   animation: spinner 0.5s linear infinite;
 }
 

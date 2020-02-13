@@ -1,8 +1,8 @@
-albumDetails-meta {
+.albumDetails-meta {
   display: block;
 }
 
-.albumDetails-meta-releaseDate + *:before {
+.albumDetails-meta-releaseDate + *::before {
   content: " · ";
 }
 

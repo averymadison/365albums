@@ -1,9 +1,9 @@
 import './album-details.css';
 
-import { Album, AlbumMetadata } from '..';
 import { FiCheckCircle, FiCircle, FiTrash } from 'react-icons/fi';
 import Firebase, { withFirebase } from '../firebase';
 
+import { AlbumMetadata } from '..';
 import React from 'react';
 import { Source } from '../chart/chart';
 import { format } from 'date-fns';
@@ -13,7 +13,6 @@ export interface Props {
   chartId: string;
   title: string;
   artist: string;
-  albumUrl: string;
   uri: string;
   releaseDate: Date;
   tracks: number;
@@ -27,7 +26,6 @@ const AlbumDetails = (props: Props) => {
   const {
     title,
     artist,
-    albumUrl,
     uri,
     releaseDate,
     tracks,
@@ -59,9 +57,6 @@ const AlbumDetails = (props: Props) => {
 
   return (
     <div className="album-details">
-      <div className="albumImage">
-        <Album src={albumUrl} alt={title} />
-      </div>
       <div className="albumDetails-content">
         <h2 className="albumDetails-title">{title}</h2>
         <div className="albumDetails-artist">{artist}</div>
