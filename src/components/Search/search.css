@@ -3,11 +3,6 @@
   position: relative;
 }
 
-.search-wrapper .search-form {
-  background-color: var(--bg);
-  padding: 1em;
-}
-
 .spinner-wrapper {
   background-color: var(--bg-alt);
   position: absolute;
@@ -28,7 +23,7 @@
   border-radius: 0.5rem;
   font-size: 24px;
   border: none;
-  background-color: var(--bg-alt);
+  background-color: var(--bg);
   color: var(--text);
   padding: 0.5em 1em;
 }

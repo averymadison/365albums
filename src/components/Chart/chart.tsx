@@ -7,8 +7,11 @@ import {
   addDays,
   differenceInCalendarMonths,
   format,
+  getWeekOfMonth,
   isAfter,
   isBefore,
+  isEqual,
+  isSameMonth,
   isWithinInterval,
   lastDayOfMonth,
   parse,
@@ -32,11 +35,9 @@ interface State {
   isLoading: boolean;
   error: any;
   albums: any;
-  selectedDay: Date;
+  selectedDay: Date | null;
   fromMonth: Date;
   toMonth: Date;
-  // Mobile only: is detail pane expanded?
-  isDetailExpanded: boolean;
 }
 
 const INITIAL_STATE = {
@@ -46,8 +47,7 @@ const INITIAL_STATE = {
   albums: {},
   selectedDay: new Date(),
   fromMonth: new Date(),
-  toMonth: new Date(),
-  isDetailExpanded: false
+  toMonth: new Date()
 };
 
 class ChartBase extends React.Component<Props, State> {
@@ -116,17 +116,20 @@ class ChartBase extends React.Component<Props, State> {
   };
 
   onDayClick = (day: Date) => {
-    this.setState({ selectedDay: day, isDetailExpanded: true });
+    const { selectedDay } = this.state;
+    isEqual(day, selectedDay!)
+      ? this.setState({ selectedDay: null })
+      : this.setState({ selectedDay: day });
   };
 
   onPreviousDayClick = () => {
     const { selectedDay } = this.state;
-    this.setState({ selectedDay: subDays(selectedDay, 1) });
+    this.setState({ selectedDay: subDays(selectedDay!, 1) });
   };
 
   onNextDayClick = () => {
     const { selectedDay } = this.state;
-    this.setState({ selectedDay: addDays(selectedDay, 1) });
+    this.setState({ selectedDay: addDays(selectedDay!, 1) });
   };
 
   onTodayClick = () => {
@@ -143,12 +146,12 @@ class ChartBase extends React.Component<Props, State> {
 
   isPreviousDayInRange = () => {
     const { selectedDay, fromMonth } = this.state;
-    return isBefore(subDays(selectedDay, 1), fromMonth);
+    return isBefore(subDays(selectedDay!, 1), fromMonth);
   };
 
   isNextDayInRange = () => {
     const { selectedDay, toMonth } = this.state;
-    return isAfter(selectedDay, lastDayOfMonth(toMonth));
+    return isAfter(selectedDay!, lastDayOfMonth(toMonth));
   };
 
   getAlbumInfoForDay = (day: Date) => {
@@ -160,8 +163,14 @@ class ChartBase extends React.Component<Props, State> {
 
   renderMonthHeader = (props: any) => {
     const { date } = props;
+    const { selectedDay } = this.state;
 
-    return <h3 className="month-header">{format(date, 'MMMM YYY')}</h3>;
+    return (
+      <React.Fragment>
+        <h3 className="month-header">{format(date, 'MMMM YYY')}</h3>{' '}
+        {isSameMonth(date, selectedDay!) && this.renderDetails(selectedDay!)}
+      </React.Fragment>
+    );
   };
 
   renderDayDetails = (day: Date) => {
@@ -219,82 +228,69 @@ class ChartBase extends React.Component<Props, State> {
 
   renderCalendar = () => {
     const { chartId } = this.props;
-    const {
-      selectedDay,
-      toMonth,
-      fromMonth,
-      isDetailExpanded,
-      isEditable
-    } = this.state;
+    const { selectedDay, toMonth, fromMonth, isEditable } = this.state;
 
     const monthRange = differenceInCalendarMonths(toMonth, fromMonth) + 1;
-    const classname = classNames('calendar', {
-      detailExpanded: isDetailExpanded
-    });
 
     return (
-      <div className={classname}>
-        <div className="calendar-content">
-          <ChartHeader chartId={chartId} isEditable={isEditable} />
-          <DayPicker
-            fromMonth={fromMonth}
-            toMonth={toMonth}
-            initialMonth={fromMonth}
-            ref={this.calendarRef}
-            numberOfMonths={monthRange}
-            onDayClick={this.onDayClick}
-            selectedDays={selectedDay}
-            renderDay={this.renderDay}
-            captionElement={this.renderMonthHeader}
-            showWeekDays={false}
-            navbarElement={() => null}
-          />
+      <div className="calendar">
+        <ChartHeader chartId={chartId} isEditable={isEditable} />
+        <DayPicker
+          fromMonth={fromMonth}
+          toMonth={toMonth}
+          initialMonth={fromMonth}
+          ref={this.calendarRef}
+          numberOfMonths={monthRange}
+          onDayClick={this.onDayClick}
+          selectedDays={selectedDay!}
+          renderDay={this.renderDay}
+          captionElement={this.renderMonthHeader}
+          showWeekDays={false}
+        />
+      </div>
+    );
+  };
+
+  renderDateSwitcher = (day: Date) => {
+    return (
+      <div className="current-day">
+        <button
+          className="button icon-button"
+          onClick={this.onPreviousDayClick}
+          disabled={this.isPreviousDayInRange()}
+        >
+          <FiArrowLeft />
+        </button>
+        <div className="current-day-date">
+          <time dateTime={format(day, 'yyyy-MM-dd')}>
+            {format(day, 'EEE MMM d')}
+          </time>
+          <span>
+            {`${format(day, 'DDD')} / 
+              ${format(day.getFullYear(), 'DDD')}`}
+          </span>
         </div>
-        {this.renderDetails(selectedDay)}
+        <button
+          className="button icon-button"
+          onClick={this.onNextDayClick}
+          disabled={this.isNextDayInRange()}
+        >
+          <FiArrowRight />
+        </button>
       </div>
     );
   };
 
   renderDetails = (day: Date) => {
     const { chartId } = this.props;
-    const { isDetailExpanded, isEditable } = this.state;
+    const { isEditable } = this.state;
 
     return (
-      <div className="detail-pane">
-        <button
-          className="detail-grabber"
-          onClick={() => this.setState({ isDetailExpanded: !isDetailExpanded })}
-        ></button>
-        <div className="current-day">
-          <button
-            className="button icon-button"
-            onClick={this.onPreviousDayClick}
-            disabled={this.isPreviousDayInRange()}
-          >
-            <FiArrowLeft />
-          </button>
-          <div
-            className="current-day-date"
-            onClick={() =>
-              this.setState({ isDetailExpanded: !isDetailExpanded })
-            }
-          >
-            <time dateTime={format(day, 'yyyy-MM-dd')}>
-              {format(day, 'EEE MMM d')}
-            </time>
-            <span>
-              {`${format(day, 'DDD')} / 
-              ${format(day.getFullYear(), 'DDD')}`}
-            </span>
-          </div>
-          <button
-            className="button icon-button"
-            onClick={this.onNextDayClick}
-            disabled={this.isNextDayInRange()}
-          >
-            <FiArrowRight />
-          </button>
-        </div>
+      <div
+        className="detail-pane"
+        style={{ gridRowStart: getWeekOfMonth(day) + 2 }}
+      >
+        {this.renderDateSwitcher(day)}
         <div className="detail-pane-contents">
           {this.getAlbumInfoForDay(day) ? (
             <AlbumDetails

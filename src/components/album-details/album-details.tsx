@@ -58,7 +58,7 @@ const AlbumDetails = (props: Props) => {
   };
 
   return (
-    <React.Fragment>
+    <div className="album-details">
       <div className="albumImage">
         <Album src={albumUrl} alt={title} />
       </div>
@@ -66,36 +66,36 @@ const AlbumDetails = (props: Props) => {
         <h2 className="albumDetails-title">{title}</h2>
         <div className="albumDetails-artist">{artist}</div>
         <AlbumMetadata releaseDate={releaseDate} tracks={tracks} />
+        <div className="albumDetails-buttons">
+          {isEditable && (
+            <button
+              className="button icon-button button-large"
+              onClick={() => onToggleListenedState(day)}
+            >
+              {isListened ? <FiCheckCircle /> : <FiCircle />}
+            </button>
+          )}
+          {source && (
+            <a
+              className={`button button-fill button-large button-${source}`}
+              href={uri}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {`Listen on ${source.charAt(0).toUpperCase() + source.slice(1)}`}
+            </a>
+          )}
+          {isEditable && (
+            <button
+              className="button icon-button button-large"
+              onClick={() => onDeleteAlbum(day)}
+            >
+              <FiTrash />
+            </button>
+          )}
+        </div>
       </div>
-      <div className="albumDetails-buttons">
-        {isEditable && (
-          <button
-            className="button icon-button button-large"
-            onClick={() => onToggleListenedState(day)}
-          >
-            {isListened ? <FiCheckCircle /> : <FiCircle />}
-          </button>
-        )}
-        {source && (
-          <a
-            className={`button button-fill button-large button-${source}`}
-            href={uri}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {`Listen on ${source.charAt(0).toUpperCase() + source.slice(1)}`}
-          </a>
-        )}
-        {isEditable && (
-          <button
-            className="button icon-button button-large"
-            onClick={() => onDeleteAlbum(day)}
-          >
-            <FiTrash />
-          </button>
-        )}
-      </div>
-    </React.Fragment>
+    </div>
   );
 };
 
