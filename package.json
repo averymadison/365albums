@@ -35,11 +35,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "typecheck": "node node_modules/.bin/tsc --project tsconfig.json --pretty",
     "lint": "eslint './src/**/*.{ts,tsx}'"
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run lint"
+      "pre-push": "npm run lint && npm run typecheck"
     }
   },
   "eslintConfig": {
