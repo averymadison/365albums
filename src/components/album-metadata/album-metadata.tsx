@@ -1,7 +1,7 @@
-import './album-metadata.css';
+import "./album-metadata.css";
 
-import React from 'react';
-import { format } from 'date-fns';
+import React from "react";
+import { format } from "date-fns";
 
 export interface Props {
   releaseDate: Date;
@@ -15,7 +15,7 @@ const AlbumMetadata = (props: Props) => {
     <span className="albumDetails-meta">
       {releaseDate && (
         <span className="albumDetails-meta-releaseDate">
-          {format(Date.parse(releaseDate.toString()), 'yyyy')}
+          {format(Date.parse(releaseDate.toString()), "yyyy")}
         </span>
       )}
       {tracks > 0 && (

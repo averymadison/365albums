@@ -1,9 +1,9 @@
-import Firebase, { withFirebase } from '../../components/firebase';
+import Firebase, { withFirebase } from "../../components/firebase";
 
-import DefaultLoginToggle from './default-login-toggle';
-import React from 'react';
-import SocialLoginToggle from './social-login-toggle';
-import { Spinner } from '../../components';
+import DefaultLoginToggle from "./default-login-toggle";
+import React from "react";
+import SocialLoginToggle from "./social-login-toggle";
+import { Spinner } from "../../components";
 
 interface Props {
   firebase: Firebase;
@@ -18,12 +18,12 @@ interface State {
 
 const SIGN_IN_METHODS = [
   {
-    id: 'password',
+    id: "password",
     provider: null
   },
   {
-    id: 'google.com',
-    provider: 'googleProvider'
+    id: "google.com",
+    provider: "googleProvider"
   }
 ];
 
@@ -90,7 +90,7 @@ class LoginManagementBase extends React.Component<Props, State> {
 
           return (
             <div key={signInMethod.id}>
-              {signInMethod.id === 'password' ? (
+              {signInMethod.id === "password" ? (
                 <DefaultLoginToggle
                   onlyOneLeft={onlyOneLeft}
                   isEnabled={isEnabled}

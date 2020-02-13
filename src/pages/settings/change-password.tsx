@@ -1,6 +1,6 @@
-import Firebase, { withFirebase } from '../../components/firebase';
+import Firebase, { withFirebase } from "../../components/firebase";
 
-import React from 'react';
+import React from "react";
 
 interface Props {
   firebase: Firebase;
@@ -13,8 +13,8 @@ interface State {
 }
 
 const INITIAL_STATE = {
-  passwordOne: '',
-  passwordTwo: '',
+  passwordOne: "",
+  passwordTwo: "",
   error: null
 };
 
@@ -49,7 +49,7 @@ class ChangePasswordForm extends React.Component<Props, State> {
   render() {
     const { passwordOne, passwordTwo, error } = this.state;
 
-    const isInvalid = passwordOne !== passwordTwo || passwordOne === '';
+    const isInvalid = passwordOne !== passwordTwo || passwordOne === "";
 
     return (
       <form onSubmit={this.onSubmit}>

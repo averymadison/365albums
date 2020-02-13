@@ -1,6 +1,6 @@
-import './empty.css';
+import "./empty.css";
 
-import React from 'react';
+import React from "react";
 
 export interface Props {
   title: string;

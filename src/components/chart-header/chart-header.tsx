@@ -1,13 +1,13 @@
-import './chart-header.css';
+import "./chart-header.css";
 
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
-import Firebase, { withFirebase } from '../firebase';
+import Firebase, { withFirebase } from "../firebase";
 
-import { FiSettings } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
-import React from 'react';
-import { formatDistanceToNow } from 'date-fns';
+import { FiSettings } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import React from "react";
+import { formatDistanceToNow } from "date-fns";
 
 interface Props {
   firebase: Firebase;
@@ -24,8 +24,8 @@ interface State {
 
 const INITIAL_STATE = {
   isEditing: false,
-  title: '',
-  description: '',
+  title: "",
+  description: "",
   updatedAt: null
 };
 
@@ -41,13 +41,13 @@ class ChartHeaderBase extends React.Component<Props, State> {
   componentDidMount() {
     const { firebase, chartId } = this.props;
 
-    firebase.chart(chartId).on('value', snapshot => {
+    firebase.chart(chartId).on("value", snapshot => {
       const chart = snapshot.val();
 
       if (chart) {
         this.setState({
-          title: chart.title ? chart.title : '',
-          description: chart.description ? chart.description : '',
+          title: chart.title ? chart.title : "",
+          description: chart.description ? chart.description : "",
           updatedAt: chart.updatedAt ? chart.updatedAt : null
         });
       } else {
@@ -95,7 +95,7 @@ class ChartHeaderBase extends React.Component<Props, State> {
         {!isEditing ? (
           <React.Fragment>
             <h1 onClick={this.onToggleEditMode} className="chart-title">
-              {title ? title : 'Add a title…'}
+              {title ? title : "Add a title…"}
             </h1>
             {description && (
               <p onClick={this.onToggleEditMode} className="chart-description">

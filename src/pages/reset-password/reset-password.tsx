@@ -1,9 +1,9 @@
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
-import Firebase, { withFirebase } from '../../components/firebase';
+import Firebase, { withFirebase } from "../../components/firebase";
 
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Link } from "react-router-dom";
+import React from "react";
 
 const ResetPassword = () => (
   <div>
@@ -22,7 +22,7 @@ interface State {
 }
 
 const INITIAL_STATE = {
-  email: '',
+  email: "",
   error: null
 };
 
@@ -57,7 +57,7 @@ class ResetPasswordFormBase extends React.Component<Props, State> {
   render() {
     const { email, error } = this.state;
 
-    const isInvalid = email === '';
+    const isInvalid = email === "";
 
     return (
       <form onSubmit={this.onSubmit}>

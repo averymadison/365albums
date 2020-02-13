@@ -1,10 +1,10 @@
-import * as ROLES from '../../constants/roles';
+import * as ROLES from "../../constants/roles";
 
-import Firebase, { withFirebase } from '../../components/firebase';
+import Firebase, { withFirebase } from "../../components/firebase";
 
-import React from 'react';
-import { compose } from 'recompose';
-import { withPermissions } from '../../components/session';
+import React from "react";
+import { compose } from "recompose";
+import { withPermissions } from "../../components/session";
 
 interface Props {
   firebase: Firebase;
@@ -29,7 +29,7 @@ class Admin extends React.Component<Props, State> {
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.users().on('value', (snapshot: any) => {
+    this.props.firebase.users().on("value", (snapshot: any) => {
       const usersObject = snapshot.val();
 
       const usersList = Object.keys(usersObject).map(key => ({

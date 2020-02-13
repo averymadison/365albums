@@ -1,7 +1,7 @@
-import Firebase, { withFirebase } from '../firebase';
+import Firebase, { withFirebase } from "../firebase";
 
-import { AuthUserContext } from '../session';
-import React from 'react';
+import { AuthUserContext } from "../session";
+import React from "react";
 
 interface Props {
   firebase: Firebase;
@@ -17,18 +17,18 @@ const withAuthentication = (Component: any) => {
       super(props);
 
       this.state = {
-        authUser: JSON.parse(localStorage.getItem('authUser') as string)
+        authUser: JSON.parse(localStorage.getItem("authUser") as string)
       };
     }
 
     componentDidMount() {
       this.props.firebase.onAuthUserListener(
         (authUser: any) => {
-          localStorage.setItem('authUser', JSON.stringify(authUser));
+          localStorage.setItem("authUser", JSON.stringify(authUser));
           this.setState({ authUser });
         },
         () => {
-          localStorage.removeItem('authUser');
+          localStorage.removeItem("authUser");
           this.setState({ authUser: null });
         }
       );

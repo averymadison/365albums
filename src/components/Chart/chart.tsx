@@ -1,7 +1,7 @@
-import './chart.css';
+import "./chart.css";
 
-import { Album, AlbumDetails, ChartHeader, Empty, Search, Spinner } from '..';
-import Firebase, { withFirebase } from '../firebase';
+import { Album, AlbumDetails, ChartHeader, Empty, Search, Spinner } from "..";
+import Firebase, { withFirebase } from "../firebase";
 import {
   addDays,
   differenceInCalendarMonths,
@@ -12,14 +12,14 @@ import {
   isWithinInterval,
   parse,
   subDays
-} from 'date-fns';
+} from "date-fns";
 
-import DateSwitcher from '../date-switcher/date-switcher';
-import DayPicker from 'react-day-picker';
-import React from 'react';
-import classNames from 'classnames';
+import DateSwitcher from "../date-switcher/date-switcher";
+import DayPicker from "react-day-picker";
+import React from "react";
+import classNames from "classnames";
 
-export type Source = 'bandcamp' | 'spotify' | 'discogs';
+export type Source = "bandcamp" | "spotify" | "discogs";
 
 interface Props {
   firebase: Firebase;
@@ -40,7 +40,7 @@ interface State {
 const INITIAL_STATE = {
   isEditable: false,
   isLoading: false,
-  error: '',
+  error: "",
   albums: {},
   selectedDay: new Date(),
   fromMonth: new Date(),
@@ -65,15 +65,15 @@ class ChartBase extends React.Component<Props, State> {
 
     let chart;
 
-    firebase.chart(chartId).on('value', async snapshot => {
+    firebase.chart(chartId).on("value", async snapshot => {
       chart = snapshot.val();
 
       if (chart) {
         await this.setState({
           isLoading: false,
           albums: chart.albums ? chart.albums : {},
-          fromMonth: parse(chart.fromMonth, 'yyyy-M', new Date()),
-          toMonth: parse(chart.toMonth, 'yyyy-M', new Date())
+          fromMonth: parse(chart.fromMonth, "yyyy-M", new Date()),
+          toMonth: parse(chart.toMonth, "yyyy-M", new Date())
         });
       } else {
         await this.setState({ ...INITIAL_STATE });
@@ -84,14 +84,14 @@ class ChartBase extends React.Component<Props, State> {
       }
     });
 
-    firebase.chart(chartId).once('value', snapshot => {
+    firebase.chart(chartId).once("value", snapshot => {
       chart = snapshot.val();
 
       if (chart) {
         this.setState({
           selectedDay: this.isTodayInRange
             ? new Date()
-            : parse(chart.fromMonth, 'yyyy-M', new Date())
+            : parse(chart.fromMonth, "yyyy-M", new Date())
         });
       }
     });
@@ -143,7 +143,7 @@ class ChartBase extends React.Component<Props, State> {
 
   getAlbumInfoForDay = (day: Date) => {
     const { albums } = this.state;
-    const dateAsString = format(day, 'yyyy-MM-dd');
+    const dateAsString = format(day, "yyyy-MM-dd");
 
     return albums[dateAsString];
   };
@@ -154,7 +154,7 @@ class ChartBase extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <h3 className="month-header">{format(date, 'MMMM YYY')}</h3>{' '}
+        <h3 className="month-header">{format(date, "MMMM YYY")}</h3>{" "}
         {isSameMonth(date, selectedDay!) && this.renderDetails(selectedDay!)}
       </React.Fragment>
     );
@@ -171,15 +171,15 @@ class ChartBase extends React.Component<Props, State> {
             <div>{this.getAlbumInfoForDay(day).artist}</div>
           </div>
         )}
-        <time dateTime={format(day, 'yyyy-MM-dd')} className="dateBadge">
-          {format(day, 'd')}
+        <time dateTime={format(day, "yyyy-MM-dd")} className="dateBadge">
+          {format(day, "d")}
         </time>
       </div>
     );
   };
 
   renderDay = (day: Date) => {
-    const classname = classNames('dayContents');
+    const classname = classNames("dayContents");
 
     return (
       <div className={classname}>
@@ -195,7 +195,7 @@ class ChartBase extends React.Component<Props, State> {
         {this.renderDayDetails(day)}
         <div className="selectedDate">
           <div className="selectedDate-contents">
-            <time dateTime={format(day, 'yyyy-MM-dd')}>
+            <time dateTime={format(day, "yyyy-MM-dd")}>
               <svg viewBox="0 0 100 100" fill="currentColor">
                 <text
                   x="50%"
@@ -203,7 +203,7 @@ class ChartBase extends React.Component<Props, State> {
                   dominantBaseline="middle"
                   textAnchor="middle"
                 >
-                  {format(day, 'd')}
+                  {format(day, "d")}
                 </text>
               </svg>
             </time>
@@ -250,7 +250,7 @@ class ChartBase extends React.Component<Props, State> {
     return (
       <div
         className="detail-pane"
-        style={{ gridRowStart: getweekofmonth(day) + 2, }}
+        style={{ gridRowStart: getWeekOfMonth(day) + 2 }}
       >
         <div className="albumImage">
           <Album src={albumSrc} />

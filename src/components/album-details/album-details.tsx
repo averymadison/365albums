@@ -1,12 +1,12 @@
-import './album-details.css';
+import "./album-details.css";
 
-import { FiCheckCircle, FiCircle, FiTrash } from 'react-icons/fi';
-import Firebase, { withFirebase } from '../firebase';
+import { FiCheckCircle, FiCircle, FiTrash } from "react-icons/fi";
+import Firebase, { withFirebase } from "../firebase";
 
-import { AlbumMetadata } from '..';
-import React from 'react';
-import { Source } from '../chart/chart';
-import { format } from 'date-fns';
+import { AlbumMetadata } from "..";
+import React from "react";
+import { Source } from "../chart/chart";
+import { format } from "date-fns";
 
 export interface Props {
   firebase: Firebase;
@@ -37,7 +37,7 @@ const AlbumDetails = (props: Props) => {
 
   const onToggleListenedState = (day: Date) => {
     const { firebase, chartId, isListened } = props;
-    const dateAsString = format(day, 'yyyy-MM-dd');
+    const dateAsString = format(day, "yyyy-MM-dd");
     firebase
       .chart(chartId)
       .child(`albums/${dateAsString}`)
@@ -48,7 +48,7 @@ const AlbumDetails = (props: Props) => {
 
   const onDeleteAlbum = (day: Date) => {
     const { firebase, chartId } = props;
-    const dateAsString = format(day, 'yyyy-MM-dd');
+    const dateAsString = format(day, "yyyy-MM-dd");
     firebase
       .chart(chartId)
       .child(`albums/${dateAsString}`)

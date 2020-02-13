@@ -1,8 +1,8 @@
-import { Chart, Empty, Spinner } from '../../components/';
-import Firebase, { withFirebase } from '../../components/firebase';
+import { Chart, Empty, Spinner } from "../../components/";
+import Firebase, { withFirebase } from "../../components/firebase";
 
-import React from 'react';
-import { RouteComponentProps } from 'react-router';
+import React from "react";
+import { RouteComponentProps } from "react-router";
 
 interface Props {
   firebase: Firebase;

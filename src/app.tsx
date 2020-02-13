@@ -1,6 +1,6 @@
-import './app.css';
+import "./app.css";
 
-import * as ROUTES from './constants/routes';
+import * as ROUTES from "./constants/routes";
 
 import {
   Admin,
@@ -12,11 +12,11 @@ import {
   Settings,
   SignIn,
   SignUp
-} from './pages';
-import { Route, BrowserRouter as Router } from 'react-router-dom';
+} from "./pages";
+import { Route, BrowserRouter as Router } from "react-router-dom";
 
-import React from 'react';
-import { withAuthentication } from './components/session';
+import React from "react";
+import { withAuthentication } from "./components/session";
 
 const App = () => (
   <Router>

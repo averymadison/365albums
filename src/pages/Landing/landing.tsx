@@ -1,11 +1,11 @@
-import './landing.css';
+import "./landing.css";
 
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect } from "react-router-dom";
 
-import { AuthUserContext } from '../../components/session';
-import React from 'react';
+import { AuthUserContext } from "../../components/session";
+import React from "react";
 
 const Landing = () => (
   <div className="landing">

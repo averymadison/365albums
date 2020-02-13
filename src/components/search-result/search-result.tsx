@@ -1,7 +1,7 @@
-import './search-result.css';
+import "./search-result.css";
 
-import { AlbumMetadata } from '..';
-import React from 'react';
+import { AlbumMetadata } from "..";
+import React from "react";
 
 export interface Props {
   imageUrl: string;

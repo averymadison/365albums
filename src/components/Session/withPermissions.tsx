@@ -1,12 +1,12 @@
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
-import Firebase, { withFirebase } from '../firebase';
+import Firebase, { withFirebase } from "../firebase";
 
-import AuthUserContext from './context';
-import { History } from 'history';
-import React from 'react';
-import { compose } from 'recompose';
-import { withRouter } from 'react-router-dom';
+import AuthUserContext from "./context";
+import { History } from "history";
+import React from "react";
+import { compose } from "recompose";
+import { withRouter } from "react-router-dom";
 
 interface Props {
   firebase: Firebase;

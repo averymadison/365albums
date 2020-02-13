@@ -1,8 +1,8 @@
-import Firebase, { withFirebase } from '../../components/firebase';
+import Firebase, { withFirebase } from "../../components/firebase";
 
-import { Link } from 'react-router-dom';
-import React from 'react';
-import { Spinner } from '../../components';
+import { Link } from "react-router-dom";
+import React from "react";
+import { Spinner } from "../../components";
 
 interface Props {
   firebase: Firebase;
@@ -27,7 +27,7 @@ class Charts extends React.Component<Props, State> {
   componentDidMount() {
     this.setState({ loading: true });
 
-    this.props.firebase.charts().on('value', (snapshot: any) => {
+    this.props.firebase.charts().on("value", (snapshot: any) => {
       const chartsObject = snapshot.val();
 
       const chartsList = Object.keys(chartsObject).map(key => ({

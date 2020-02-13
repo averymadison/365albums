@@ -1,7 +1,7 @@
-import './album.css';
+import "./album.css";
 
-import React from 'react';
-import classNames from 'classnames';
+import React from "react";
+import classNames from "classnames";
 
 export interface Props {
   src: string | null;
@@ -10,7 +10,7 @@ export interface Props {
 }
 
 const Album = ({ src, alt, isAlwaysSquare }: Props) => {
-  const classname = classNames('album', { square: isAlwaysSquare });
+  const classname = classNames("album", { square: isAlwaysSquare });
   const albumSrc = src ? src : undefined;
 
   return (

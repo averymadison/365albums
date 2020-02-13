@@ -1,7 +1,7 @@
-import 'firebase/auth';
-import 'firebase/database';
+import "firebase/auth";
+import "firebase/database";
 
-import app from 'firebase/app';
+import app from "firebase/app";
 
 const config = {
   apiKey: process.env.REACT_APP_API_KEY,
@@ -60,7 +60,7 @@ class Firebase {
     this.auth.onAuthStateChanged(authUser => {
       if (authUser) {
         this.user(authUser.uid)
-          .once('value')
+          .once("value")
           .then(snapshot => {
             const dbUser = snapshot.val();
 
@@ -89,12 +89,12 @@ class Firebase {
 
   // User API
 
-  users = () => this.db.ref('users');
+  users = () => this.db.ref("users");
   user = (uid: string) => this.db.ref(`users/${uid}`);
 
   // Charts API
 
-  charts = () => this.db.ref('charts');
+  charts = () => this.db.ref("charts");
   chart = (uid: string) => this.db.ref(`charts/${uid}`);
 }
 

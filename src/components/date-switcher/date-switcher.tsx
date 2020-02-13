@@ -1,9 +1,9 @@
-import './date-switcher.css';
+import "./date-switcher.css";
 
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
-import { format, isAfter, isBefore, lastDayOfMonth, subDays } from 'date-fns';
+import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import { format, isAfter, isBefore, lastDayOfMonth, subDays } from "date-fns";
 
-import React from 'react';
+import React from "react";
 
 export interface Props {
   day: Date;
@@ -34,12 +34,12 @@ const DateSwitcher = (props: Props) => {
         <FiArrowLeft />
       </button>
       <div className="date-switcher-date">
-        <time dateTime={format(day, 'yyyy-MM-dd')}>
-          {format(day, 'EEE MMM d')}
+        <time dateTime={format(day, "yyyy-MM-dd")}>
+          {format(day, "EEE MMM d")}
         </time>
         <span>
-          {`${format(day, 'DDD')} / 
-              ${format(day.getFullYear(), 'DDD')}`}
+          {`${format(day, "DDD")} / 
+              ${format(day.getFullYear(), "DDD")}`}
         </span>
       </div>
       <button

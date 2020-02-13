@@ -1,15 +1,15 @@
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
-import { AuthUserContext, withPermissions } from '../../components/session';
+import { AuthUserContext, withPermissions } from "../../components/session";
 
-import ChangePasswordForm from './change-password';
-import { FiArrowLeft } from 'react-icons/fi';
-import { Link } from 'react-router-dom';
-import LoginManagement from './login-manager';
-import React from 'react';
-import { ResetPasswordForm } from '../reset-password/reset-password';
-import SignOutButton from '../../components/sign-out-button/sign-out-button';
-import { compose } from 'recompose';
+import ChangePasswordForm from "./change-password";
+import { FiArrowLeft } from "react-icons/fi";
+import { Link } from "react-router-dom";
+import LoginManagement from "./login-manager";
+import React from "react";
+import { ResetPasswordForm } from "../reset-password/reset-password";
+import SignOutButton from "../../components/sign-out-button/sign-out-button";
+import { compose } from "recompose";
 
 const Settings = () => (
   <AuthUserContext.Consumer>

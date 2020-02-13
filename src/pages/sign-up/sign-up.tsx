@@ -1,12 +1,12 @@
-import * as ROUTES from '../../constants/routes';
+import * as ROUTES from "../../constants/routes";
 
-import Firebase, { withFirebase } from '../../components/firebase';
-import { Link, withRouter } from 'react-router-dom';
+import Firebase, { withFirebase } from "../../components/firebase";
+import { Link, withRouter } from "react-router-dom";
 
-import { History } from 'history';
-import React from 'react';
-import { SignInGoogle } from '../sign-in/sign-in';
-import { compose } from 'recompose';
+import { History } from "history";
+import React from "react";
+import { SignInGoogle } from "../sign-in/sign-in";
+import { compose } from "recompose";
 
 const SignUp = () => (
   <div className="sign-in-page">
@@ -31,10 +31,10 @@ interface State {
 }
 
 const INITIAL_STATE = {
-  name: '',
-  email: '',
-  passwordOne: '',
-  passwordTwo: '',
+  name: "",
+  email: "",
+  passwordOne: "",
+  passwordTwo: "",
   error: null
 };
 
@@ -84,9 +84,9 @@ class SignUpFormBase extends React.Component<Props, State> {
 
     const isInvalid =
       passwordOne !== passwordTwo ||
-      passwordOne === '' ||
-      email === '' ||
-      name === '';
+      passwordOne === "" ||
+      email === "" ||
+      name === "";
 
     return (
       <div className="sign-in-form">
