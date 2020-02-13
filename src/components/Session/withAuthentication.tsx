@@ -1,6 +1,6 @@
 import Firebase, { withFirebase } from "../firebase";
 
-import { AuthUserContext } from "../session";
+import { AuthUserContext } from ".";
 import React from "react";
 
 interface Props {
